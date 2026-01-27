@@ -1,0 +1,65 @@
+# Dependency directories
+/vendor/
+
+# WordPress core (installed via Composer)
+/web/wp/
+
+# Local development repos (cloned separately, symlinked)
+/repos/
+
+# Themes - ignore all, whitelist custom
+/web/app/themes/*
+!/web/app/themes/.gitkeep
+# !/web/app/themes/my-custom-theme/
+
+# Plugins - ignore all, whitelist custom
+/web/app/plugins/*
+!/web/app/plugins/.gitkeep
+# !/web/app/plugins/my-custom-plugin/
+
+# mu-plugins - ignore all, whitelist custom
+/web/app/mu-plugins/*
+!/web/app/mu-plugins/.gitkeep
+# !/web/app/mu-plugins/my-custom-mu-plugin/
+
+# Uploads
+/web/app/uploads/*
+!/web/app/uploads/.gitignore
+!/web/app/uploads/.htaccess
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+/web/app/debug.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# PHP
+*.cache
+*.tmp
+
+# Composer
+composer.phar
+
+# Build artifacts
+/dist/
+/build/
+
+# Deploy
+.deploy-cache/
+
+# Database dumps
+*.sql
+*.sql.gz

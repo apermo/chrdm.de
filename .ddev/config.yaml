@@ -1,0 +1,21 @@
+name: cd-de
+type: wordpress
+docroot: web
+php_version: "8.3"
+webserver_type: apache-fpm
+database:
+  type: mariadb
+  version: "10.11"
+
+# Multisite subdomain support
+additional_hostnames:
+  - "*.cd-de"
+  - "cd-com"
+  - "*.cd-com"
+
+web_environment:
+  - WP_ENV=development
+
+hooks:
+  post-start:
+    - exec: "test -f .env || cp .env.example .env"

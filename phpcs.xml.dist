@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ruleset name="chrdm.de">
+    <description>PHP CodeSniffer configuration for chrdm.de</description>
+
+    <!-- Scan these files -->
+    <file>./config</file>
+    <file>./web/app/mu-plugins</file>
+
+    <!-- Exclude Composer managed directories -->
+    <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./web/wp/*</exclude-pattern>
+    <exclude-pattern>./web/app/plugins/*</exclude-pattern>
+    <exclude-pattern>./web/app/themes/*</exclude-pattern>
+
+    <!-- Show progress -->
+    <arg value="p"/>
+    <arg name="colors"/>
+
+    <!-- Use PSR-12 as base -->
+    <rule ref="PSR12">
+        <!-- WordPress uses tabs -->
+        <exclude name="Generic.WhiteSpace.DisallowTabIndent"/>
+    </rule>
+
+    <!-- PHP compatibility -->
+    <config name="testVersion" value="8.3-"/>
+</ruleset>

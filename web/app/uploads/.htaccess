@@ -1,0 +1,7 @@
+# Redirect missing uploads to production
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ https://christoph-daum.de/wp-content/uploads/$1 [R=302,L]
+</IfModule>
