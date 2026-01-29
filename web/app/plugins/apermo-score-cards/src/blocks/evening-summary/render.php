@@ -28,8 +28,11 @@ if ( empty( $games ) ) {
 	return;
 }
 
-// Filter to only completed games.
-$completed_games = array_filter( $games, fn( $game ) => 'completed' === ( $game['status'] ?? '' ) );
+// Filter to only completed games with positions (actual results).
+$completed_games = array_filter(
+	$games,
+	fn( $game ) => 'completed' === ( $game['status'] ?? '' ) && ! empty( $game['positions'] )
+);
 
 if ( empty( $completed_games ) ) {
 	return;

@@ -150,6 +150,17 @@ class REST_API {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		// Duplicate block endpoint.
+		register_rest_route(
+			self::NAMESPACE,
+			'/posts/(?P<post_id>\d+)/duplicate-block/(?P<block_id>[a-zA-Z0-9-]+)',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( self::class, 'duplicate_block' ),
+				'permission_callback' => array( self::class, 'can_manage_scorecard' ),
+			)
+		);
 	}
 
 	/**
@@ -440,5 +451,106 @@ class REST_API {
 		$game = Games::get( $post_id, $block_id );
 
 		return new WP_REST_Response( $game, 200 );
+	}
+
+	/**
+	 * Duplicate a score card block in a post.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|WP_Error Response object or error.
+	 */
+	public static function duplicate_block( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$post_id  = (int) $request->get_param( 'post_id' );
+		$block_id = sanitize_text_field( $request->get_param( 'block_id' ) );
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return new WP_Error(
+				'post_not_found',
+				__( 'Post not found.', 'apermo-score-cards' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		// Parse the post content into blocks.
+		$blocks = parse_blocks( $post->post_content );
+
+		// Find and duplicate the block.
+		$new_block_id = wp_generate_uuid4();
+		$found        = false;
+		$new_blocks   = array();
+
+		foreach ( $blocks as $block ) {
+			$new_blocks[] = $block;
+
+			// Check if this is our target block.
+			if ( self::is_target_block( $block, $block_id ) ) {
+				$found = true;
+				// Create a duplicate with new block ID.
+				$duplicate                          = $block;
+				$duplicate['attrs']['blockId']      = $new_block_id;
+				$duplicate['innerHTML']             = '';
+				$duplicate['innerContent']          = array();
+				$new_blocks[]                       = $duplicate;
+			}
+		}
+
+		if ( ! $found ) {
+			return new WP_Error(
+				'block_not_found',
+				__( 'Block not found in post.', 'apermo-score-cards' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		// Serialize blocks back to content.
+		$new_content = serialize_blocks( $new_blocks );
+
+		// Update the post.
+		$result = wp_update_post(
+			array(
+				'ID'           => $post_id,
+				'post_content' => $new_content,
+			),
+			true
+		);
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return new WP_REST_Response(
+			array(
+				'success'    => true,
+				'newBlockId' => $new_block_id,
+			),
+			200
+		);
+	}
+
+	/**
+	 * Check if a block matches the target block ID.
+	 *
+	 * @param array  $block    Block data.
+	 * @param string $block_id Target block ID.
+	 * @return bool True if block matches.
+	 */
+	private static function is_target_block( array $block, string $block_id ): bool {
+		// Check if this block has the matching blockId attribute.
+		if ( isset( $block['attrs']['blockId'] ) && $block['attrs']['blockId'] === $block_id ) {
+			return true;
+		}
+
+		// Check inner blocks recursively.
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			foreach ( $block['innerBlocks'] as $inner_block ) {
+				if ( self::is_target_block( $inner_block, $block_id ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

@@ -153,9 +153,16 @@
 	}
 }
 
-.asc-darts__edit-btn {
-	display: block;
-	margin: 20px auto 0;
+.asc-darts__actions {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 20px;
+	flex-wrap: wrap;
+}
+
+.asc-darts__edit-btn,
+.asc-darts__duplicate-btn {
 	padding: 10px 24px;
 	background: transparent;
 	color: #666;
@@ -165,10 +172,15 @@
 	cursor: pointer;
 	transition: all 0.2s;
 
-	&:hover {
+	&:hover:not(:disabled) {
 		background: #f8f9fa;
 		border-color: #e74c3c;
 		color: #e74c3c;
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
 	}
 
 	&__player {

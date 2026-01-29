@@ -183,9 +183,14 @@ $wrapper_attributes = get_block_wrapper_attributes(
 			<?php endif; ?>
 
 			<?php if ( $can_edit ) : ?>
-				<button type="button" class="asc-darts__edit-btn">
-					<?php esc_html_e( 'Edit Results', 'apermo-score-cards' ); ?>
-				</button>
+				<div class="asc-darts__actions">
+					<button type="button" class="asc-darts__edit-btn">
+						<?php esc_html_e( 'Edit Results', 'apermo-score-cards' ); ?>
+					</button>
+					<button type="button" class="asc-darts__duplicate-btn">
+						<?php esc_html_e( 'Add Another Darts Game', 'apermo-score-cards' ); ?>
+					</button>
+				</div>
 				<div class="asc-darts-form-container" hidden></div>
 			<?php endif; ?>
 		</div>
