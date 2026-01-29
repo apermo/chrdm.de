@@ -25,8 +25,8 @@ class Blocks {
 	 */
 	public static function init(): void {
 		add_action( 'init', array( self::class, 'register_blocks' ) );
-		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_editor_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend_assets' ) );
+		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_editor_data' ) );
+		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend_data' ) );
 	}
 
 	/**
@@ -53,79 +53,54 @@ class Blocks {
 	}
 
 	/**
-	 * Enqueue editor assets.
+	 * Enqueue editor data as inline script.
+	 * This provides REST API info to all score card blocks.
 	 *
 	 * @return void
 	 */
-	public static function enqueue_editor_assets(): void {
-		$asset_file = ASC_PLUGIN_DIR . 'build/index.asset.php';
-
-		if ( ! file_exists( $asset_file ) ) {
-			return;
-		}
-
-		$asset = require $asset_file;
-
-		wp_enqueue_script(
-			'apermo-score-cards-editor',
-			ASC_PLUGIN_URL . 'build/index.js',
-			$asset['dependencies'],
-			$asset['version'],
-			true
+	public static function enqueue_editor_data(): void {
+		$data = array(
+			'restUrl'   => rest_url( REST_API::NAMESPACE ),
+			'restNonce' => wp_create_nonce( 'wp_rest' ),
+			'canManage' => current_user_can( Capabilities::CAPABILITY ),
+			'gameTypes' => self::get_registered_game_types(),
 		);
 
-		if ( file_exists( ASC_PLUGIN_DIR . 'build/index.css' ) ) {
-			wp_enqueue_style(
-				'apermo-score-cards-editor',
-				ASC_PLUGIN_URL . 'build/index.css',
-				array( 'wp-components' ),
-				$asset['version']
-			);
-		}
-
-		wp_localize_script(
-			'apermo-score-cards-editor',
-			'apermoScoreCards',
-			array(
-				'restUrl'      => rest_url( REST_API::NAMESPACE ),
-				'restNonce'    => wp_create_nonce( 'wp_rest' ),
-				'canManage'    => current_user_can( Capabilities::CAPABILITY ),
-				'gameTypes'    => self::get_registered_game_types(),
-			)
+		wp_add_inline_script(
+			'wp-blocks',
+			'window.apermoScoreCards = ' . wp_json_encode( $data ) . ';',
+			'before'
 		);
 	}
 
 	/**
-	 * Enqueue frontend assets.
+	 * Enqueue frontend data for interactive blocks.
 	 *
 	 * @return void
 	 */
-	public static function enqueue_frontend_assets(): void {
-		$asset_file = ASC_PLUGIN_DIR . 'build/frontend.asset.php';
+	public static function enqueue_frontend_data(): void {
+		global $post;
 
-		if ( ! file_exists( $asset_file ) ) {
+		// Check if post content contains any score card blocks.
+		if ( ! $post || ! has_block( 'apermo-score-cards/darts', $post ) ) {
 			return;
 		}
 
-		$asset = require $asset_file;
-
-		wp_enqueue_script(
-			'apermo-score-cards-frontend',
-			ASC_PLUGIN_URL . 'build/frontend.js',
-			$asset['dependencies'],
-			$asset['version'],
-			true
+		$data = array(
+			'restUrl'    => rest_url( REST_API::NAMESPACE ),
+			'restNonce'  => wp_create_nonce( 'wp_rest' ),
+			'canManage'  => current_user_can( Capabilities::CAPABILITY ),
+			'isLoggedIn' => is_user_logged_in(),
+			'postId'     => $post->ID,
 		);
 
-		wp_localize_script(
-			'apermo-score-cards-frontend',
-			'apermoScoreCards',
-			array(
-				'restUrl'      => rest_url( REST_API::NAMESPACE ),
-				'restNonce'    => wp_create_nonce( 'wp_rest' ),
-				'canManage'    => current_user_can( Capabilities::CAPABILITY ),
-				'isLoggedIn'   => is_user_logged_in(),
-			)
+		// Add data as a script tag for frontend interactivity.
+		wp_register_script( 'apermo-score-cards-frontend-data', false, array(), ASC_VERSION, true );
+		wp_enqueue_script( 'apermo-score-cards-frontend-data' );
+		wp_add_inline_script(
+			'apermo-score-cards-frontend-data',
+			'window.apermoScoreCards = ' . wp_json_encode( $data ) . ';',
+			'before'
 		);
 	}
 
