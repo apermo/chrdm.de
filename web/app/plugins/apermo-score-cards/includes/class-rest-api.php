@@ -222,31 +222,38 @@ class REST_API {
 	 */
 	private static function get_game_args(): array {
 		return array(
-			'gameType'    => array(
+			'gameType'      => array(
 				'type'              => 'string',
 				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			),
-			'playerIds'   => array(
+			'playerIds'     => array(
 				'type'     => 'array',
 				'required' => true,
 				'items'    => array( 'type' => 'integer' ),
 			),
-			'status'      => array(
+			'status'        => array(
 				'type'              => 'string',
 				'enum'              => array( 'in_progress', 'completed', 'cancelled' ),
 				'sanitize_callback' => 'sanitize_text_field',
 			),
-			'rounds'      => array(
-				'type'  => 'array',
-				'items' => array( 'type' => 'object' ),
-			),
-			'finalScores' => array(
+			'scores'        => array(
 				'type' => 'object',
 			),
-			'winnerId'    => array(
+			'finalScores'   => array(
+				'type' => 'object',
+			),
+			'finishedRound' => array(
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
+			),
+			'winnerId'      => array(
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			),
+			'winnerIds'     => array(
+				'type'  => 'array',
+				'items' => array( 'type' => 'integer' ),
 			),
 		);
 	}
@@ -299,12 +306,14 @@ class REST_API {
 		$block_id = sanitize_text_field( $request->get_param( 'block_id' ) );
 
 		$data = array(
-			'gameType'    => $request->get_param( 'gameType' ),
-			'playerIds'   => $request->get_param( 'playerIds' ),
-			'status'      => $request->get_param( 'status' ) ?? 'in_progress',
-			'rounds'      => $request->get_param( 'rounds' ) ?? array(),
-			'finalScores' => $request->get_param( 'finalScores' ) ?? array(),
-			'winnerId'    => $request->get_param( 'winnerId' ),
+			'gameType'      => $request->get_param( 'gameType' ),
+			'playerIds'     => $request->get_param( 'playerIds' ),
+			'status'        => $request->get_param( 'status' ) ?? 'in_progress',
+			'scores'        => $request->get_param( 'scores' ) ?? array(),
+			'finalScores'   => $request->get_param( 'finalScores' ) ?? array(),
+			'finishedRound' => $request->get_param( 'finishedRound' ),
+			'winnerId'      => $request->get_param( 'winnerId' ),
+			'winnerIds'     => $request->get_param( 'winnerIds' ) ?? array(),
 		);
 
 		$result = Games::save( $post_id, $block_id, $data );

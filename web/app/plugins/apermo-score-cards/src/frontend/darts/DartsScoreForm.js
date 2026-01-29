@@ -12,11 +12,7 @@ export default class DartsScoreForm {
 		this.startingScore = parseInt( blockData.startingScore, 10 ) || 501;
 		this.playerIds = JSON.parse( blockData.playerIds || '[]' );
 		this.players = JSON.parse( blockData.players || '[]' );
-
-		this.scores = {};
-		this.playerIds.forEach( ( id ) => {
-			this.scores[ id ] = { finalScore: '', finishedRound: '' };
-		} );
+		this.existingGame = blockData.game ? JSON.parse( blockData.game ) : null;
 
 		this.render();
 		this.bindEvents();
@@ -24,9 +20,13 @@ export default class DartsScoreForm {
 
 	render() {
 		const { __ } = window.wp?.i18n || { __: ( s ) => s };
+		const existingScores = this.existingGame?.scores || {};
+		const existingRound = this.existingGame?.finishedRound || '';
+		const isEditing = !! this.existingGame;
 
 		this.container.innerHTML = `
 			<form class="asc-darts-form">
+				${ isEditing ? `<h4 class="asc-darts-form__title">${ __( 'Edit Results', 'apermo-score-cards' ) }</h4>` : '' }
 				<table class="asc-darts-form__table">
 					<thead>
 						<tr>
@@ -35,7 +35,9 @@ export default class DartsScoreForm {
 						</tr>
 					</thead>
 					<tbody>
-						${ this.players.map( ( player ) => `
+						${ this.players.map( ( player ) => {
+							const existingScore = existingScores[ player.id ]?.finalScore ?? '';
+							return `
 							<tr class="asc-darts-form__row" data-player-id="${ player.id }">
 								<td class="asc-darts-form__player">
 									${ player.avatarUrl ? `<img src="${ player.avatarUrl }" alt="" class="asc-darts-form__avatar" />` : '' }
@@ -49,12 +51,13 @@ export default class DartsScoreForm {
 										max="${ this.startingScore }"
 										placeholder="0-${ this.startingScore }"
 										class="asc-darts-form__input"
+										value="${ existingScore }"
 										required
 									/>
 									<span class="asc-darts-form__error" hidden></span>
 								</td>
 							</tr>
-						` ).join( '' ) }
+						`; } ).join( '' ) }
 					</tbody>
 				</table>
 
@@ -67,6 +70,7 @@ export default class DartsScoreForm {
 						min="1"
 						placeholder="${ __( 'Optional', 'apermo-score-cards' ) }"
 						class="asc-darts-form__input"
+						value="${ existingRound }"
 					/>
 				</div>
 
@@ -76,7 +80,7 @@ export default class DartsScoreForm {
 
 				<div class="asc-darts-form__actions">
 					<button type="submit" class="asc-darts-form__submit">
-						${ __( 'Save Results', 'apermo-score-cards' ) }
+						${ isEditing ? __( 'Update Results', 'apermo-score-cards' ) : __( 'Save Results', 'apermo-score-cards' ) }
 					</button>
 				</div>
 
@@ -137,8 +141,6 @@ export default class DartsScoreForm {
 
 			formattedScores[ playerId ] = {
 				finalScore: score,
-				// Only set finishedRound if player finished (score = 0)
-				finishedRound: score === 0 ? gameRound : null,
 			};
 		} );
 
@@ -146,7 +148,7 @@ export default class DartsScoreForm {
 			return;
 		}
 
-		// Determine winners
+		// Determine winners (lowest score wins)
 		const winnerIds = this.determineWinners( formattedScores );
 		const finalScores = {};
 		Object.entries( formattedScores ).forEach( ( [ id, data ] ) => {
@@ -162,9 +164,9 @@ export default class DartsScoreForm {
 				gameType: 'darts',
 				playerIds: this.playerIds,
 				status: 'completed',
-				rounds: [],
 				scores: formattedScores,
 				finalScores,
+				finishedRound: gameRound,
 				winnerIds,
 				winnerId: winnerIds[ 0 ] || null,
 			} );
@@ -185,25 +187,7 @@ export default class DartsScoreForm {
 	determineWinners( scores ) {
 		const entries = Object.entries( scores );
 
-		// Find players who finished (score = 0)
-		const finishers = entries.filter( ( [ , data ] ) => data.finalScore === 0 );
-
-		if ( finishers.length > 0 ) {
-			// Sort by round (lower is better)
-			finishers.sort( ( a, b ) => {
-				const roundA = a[ 1 ].finishedRound || Infinity;
-				const roundB = b[ 1 ].finishedRound || Infinity;
-				return roundA - roundB;
-			} );
-
-			// Winners are those with the lowest round
-			const bestRound = finishers[ 0 ][ 1 ].finishedRound || Infinity;
-			return finishers
-				.filter( ( [ , data ] ) => ( data.finishedRound || Infinity ) === bestRound )
-				.map( ( [ id ] ) => parseInt( id, 10 ) );
-		}
-
-		// No one finished - lowest score wins
+		// Lowest score wins
 		const minScore = Math.min( ...entries.map( ( [ , data ] ) => data.finalScore ) );
 		return entries
 			.filter( ( [ , data ] ) => data.finalScore === minScore )
