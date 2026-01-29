@@ -11,7 +11,7 @@ import {
 	SearchControl,
 } from '@wordpress/components';
 import { useState, useMemo } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { STORE_NAME } from '../stores';
 
 export default function PlayerSelector( {
