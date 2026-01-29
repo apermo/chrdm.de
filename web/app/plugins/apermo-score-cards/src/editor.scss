@@ -1,0 +1,141 @@
+/**
+ * Editor styles for Apermo Score Cards
+ */
+
+.asc-player-selector {
+	&--loading {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 16px;
+		color: #757575;
+	}
+
+	&--empty {
+		padding: 16px;
+		background: #f0f0f0;
+		border-radius: 4px;
+		text-align: center;
+	}
+
+	&__header {
+		margin-bottom: 12px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid #ddd;
+	}
+
+	&__count {
+		font-size: 13px;
+		color: #757575;
+	}
+
+	&__list {
+		max-height: 300px;
+		overflow-y: auto;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+	}
+
+	&__item {
+		padding: 8px 12px;
+		border-bottom: 1px solid #eee;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		&.is-selected {
+			background: #e7f3ff;
+		}
+
+		&.is-disabled {
+			opacity: 0.5;
+		}
+	}
+
+	&__player {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__avatar {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__name {
+		font-weight: 500;
+	}
+
+	&__warning {
+		margin-top: 12px;
+		padding: 8px 12px;
+		background: #fcf0f0;
+		border-left: 4px solid #d94f4f;
+		color: #8b2525;
+		font-size: 13px;
+	}
+}
+
+.asc-score-table-wrapper {
+	overflow-x: auto;
+}
+
+.asc-score-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+
+	th,
+	td {
+		padding: 8px 12px;
+		border: 1px solid #ddd;
+		text-align: center;
+	}
+
+	th {
+		background: #f5f5f5;
+		font-weight: 600;
+	}
+
+	&__round-header,
+	&__round-number,
+	&__total-label {
+		text-align: left;
+		width: 80px;
+	}
+
+	&__player-header {
+		min-width: 120px;
+	}
+
+	&__player {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+	}
+
+	&__avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__name {
+		font-size: 12px;
+	}
+
+	&__total-row {
+		font-weight: 600;
+		background: #f9f9f9;
+
+		td {
+			border-top: 2px solid #333;
+		}
+	}
+}

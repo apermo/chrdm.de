@@ -1,0 +1,165 @@
+/**
+ * Frontend styles for Apermo Score Cards
+ */
+
+.asc-score-card {
+	margin: 24px 0;
+	font-family: inherit;
+
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 16px;
+		padding-bottom: 12px;
+		border-bottom: 2px solid #333;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 1.5em;
+		font-weight: 700;
+	}
+
+	&__status {
+		padding: 4px 12px;
+		border-radius: 4px;
+		font-size: 0.85em;
+		font-weight: 500;
+
+		&--in-progress {
+			background: #fff3cd;
+			color: #856404;
+		}
+
+		&--completed {
+			background: #d4edda;
+			color: #155724;
+		}
+	}
+
+	&__winner {
+		margin-top: 16px;
+		padding: 12px 16px;
+		background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+		border-radius: 8px;
+		text-align: center;
+		font-weight: 600;
+	}
+}
+
+.asc-score-table-wrapper {
+	overflow-x: auto;
+	margin: 16px 0;
+}
+
+.asc-score-table {
+	width: 100%;
+	border-collapse: collapse;
+	background: #fff;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+	th,
+	td {
+		padding: 10px 14px;
+		border: 1px solid #e0e0e0;
+		text-align: center;
+	}
+
+	thead th {
+		background: #f8f9fa;
+		font-weight: 600;
+		color: #333;
+	}
+
+	tbody tr {
+		&:nth-child(even) {
+			background: #fafafa;
+		}
+
+		&:hover {
+			background: #f0f7ff;
+		}
+	}
+
+	&__round-header,
+	&__round-number,
+	&__total-label {
+		text-align: left;
+		font-weight: 500;
+		background: #f0f0f0;
+	}
+
+	&__player {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+	}
+
+	&__avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 2px solid #fff;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	&__name {
+		font-size: 0.9em;
+		font-weight: 500;
+	}
+
+	&__total-row {
+		font-weight: 700;
+		font-size: 1.1em;
+
+		td {
+			background: #333;
+			color: #fff;
+			border-color: #333;
+		}
+
+		.asc-score-table__total-label {
+			background: #333;
+			color: #fff;
+		}
+	}
+
+	&__cell {
+		&--positive {
+			color: #28a745;
+		}
+
+		&--negative {
+			color: #dc3545;
+		}
+
+		&--winner {
+			background: #ffd700 !important;
+			color: #333 !important;
+		}
+	}
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+	.asc-score-table {
+		font-size: 0.9em;
+
+		th,
+		td {
+			padding: 6px 8px;
+		}
+
+		&__avatar {
+			width: 30px;
+			height: 30px;
+		}
+
+		&__name {
+			font-size: 0.8em;
+		}
+	}
+}
