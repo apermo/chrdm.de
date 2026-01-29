@@ -39,8 +39,9 @@ $can_manage = Capabilities::user_can_manage( (int) $post_id );
 // Get game data.
 $game = Games::get( (int) $post_id, $block_id );
 
-// Show form if user can manage (for both new and editing existing)
-$show_form = $can_manage;
+// Show form only if no game exists yet and user can manage
+$show_form   = ! $game && $can_manage;
+$can_edit    = $game && $can_manage;
 
 $scores        = $game['scores'] ?? array();
 $status        = $game['status'] ?? 'pending';
@@ -179,6 +180,13 @@ $wrapper_attributes = get_block_wrapper_attributes(
 					);
 					?>
 				</p>
+			<?php endif; ?>
+
+			<?php if ( $can_edit ) : ?>
+				<button type="button" class="asc-darts__edit-btn">
+					<?php esc_html_e( 'Edit Results', 'apermo-score-cards' ); ?>
+				</button>
+				<div class="asc-darts-form-container" hidden></div>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>

@@ -151,6 +151,25 @@
 		color: #666;
 		font-size: 0.95em;
 	}
+}
+
+.asc-darts__edit-btn {
+	display: block;
+	margin: 20px auto 0;
+	padding: 10px 24px;
+	background: transparent;
+	color: #666;
+	border: 2px solid #ddd;
+	border-radius: 6px;
+	font-size: 0.95em;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	&:hover {
+		background: #f8f9fa;
+		border-color: #e74c3c;
+		color: #e74c3c;
+	}
 
 	&__player {
 		display: flex;
