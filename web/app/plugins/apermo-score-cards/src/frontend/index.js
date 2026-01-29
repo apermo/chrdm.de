@@ -5,6 +5,7 @@
  */
 
 import DartsScoreForm from './darts/DartsScoreForm';
+import PlayerSelector from './components/PlayerSelector';
 
 /**
  * Initialize all score card forms on the page.
@@ -16,6 +17,8 @@ function init() {
 		const formContainer = block.querySelector( '.asc-darts-form-container' );
 		const editBtn = block.querySelector( '.asc-darts__edit-btn' );
 		const duplicateBtn = block.querySelector( '.asc-darts__duplicate-btn' );
+		const editPlayersBtn = block.querySelector( '.asc-darts__edit-players-btn' );
+		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
 
 		if ( formContainer && ! formContainer.hidden ) {
 			// Form is visible (no existing game) - initialize immediately
@@ -36,6 +39,24 @@ function init() {
 		if ( duplicateBtn ) {
 			duplicateBtn.addEventListener( 'click', () => {
 				duplicateBlock( block.dataset.postId, block.dataset.blockId, duplicateBtn );
+			} );
+		}
+
+		// Handle edit players button
+		if ( editPlayersBtn && playerSelectorContainer ) {
+			editPlayersBtn.addEventListener( 'click', () => {
+				editPlayersBtn.hidden = true;
+				playerSelectorContainer.hidden = false;
+
+				const playerIds = JSON.parse( block.dataset.playerIds || '[]' );
+				new PlayerSelector( playerSelectorContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					selectedPlayerIds: playerIds,
+					minPlayers: 2,
+					maxPlayers: 8,
+					onSave: () => window.location.reload(),
+				} );
 			} );
 		}
 	} );

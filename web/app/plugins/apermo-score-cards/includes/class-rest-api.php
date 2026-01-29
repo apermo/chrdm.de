@@ -161,6 +161,24 @@ class REST_API {
 				'permission_callback' => array( self::class, 'can_manage_scorecard' ),
 			)
 		);
+
+		// Update block players endpoint.
+		register_rest_route(
+			self::NAMESPACE,
+			'/posts/(?P<post_id>\d+)/blocks/(?P<block_id>[a-zA-Z0-9-]+)/players',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( self::class, 'update_block_players' ),
+				'permission_callback' => array( self::class, 'can_manage_scorecard' ),
+				'args'                => array(
+					'playerIds' => array(
+						'type'     => 'array',
+						'required' => true,
+						'items'    => array( 'type' => 'integer' ),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -527,6 +545,105 @@ class REST_API {
 			),
 			200
 		);
+	}
+
+	/**
+	 * Update players for a block.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|WP_Error Response object or error.
+	 */
+	public static function update_block_players( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$post_id    = (int) $request->get_param( 'post_id' );
+		$block_id   = sanitize_text_field( $request->get_param( 'block_id' ) );
+		$player_ids = $request->get_param( 'playerIds' );
+
+		// Check if game has results - don't allow changing players if so.
+		$game = Games::get( $post_id, $block_id );
+		if ( $game && 'completed' === ( $game['status'] ?? '' ) ) {
+			return new WP_Error(
+				'game_completed',
+				__( 'Cannot change players after game has results.', 'apermo-score-cards' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return new WP_Error(
+				'post_not_found',
+				__( 'Post not found.', 'apermo-score-cards' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		// Parse the post content into blocks.
+		$blocks = parse_blocks( $post->post_content );
+
+		// Update the block's playerIds attribute.
+		$found      = false;
+		$new_blocks = self::update_block_attribute( $blocks, $block_id, 'playerIds', $player_ids, $found );
+
+		if ( ! $found ) {
+			return new WP_Error(
+				'block_not_found',
+				__( 'Block not found in post.', 'apermo-score-cards' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		// Serialize blocks back to content.
+		$new_content = serialize_blocks( $new_blocks );
+
+		// Update the post.
+		$result = wp_update_post(
+			array(
+				'ID'           => $post_id,
+				'post_content' => $new_content,
+			),
+			true
+		);
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return new WP_REST_Response(
+			array(
+				'success'   => true,
+				'playerIds' => $player_ids,
+			),
+			200
+		);
+	}
+
+	/**
+	 * Recursively update a block attribute.
+	 *
+	 * @param array  $blocks    Array of blocks.
+	 * @param string $block_id  Target block ID.
+	 * @param string $attr_name Attribute name to update.
+	 * @param mixed  $value     New attribute value.
+	 * @param bool   $found     Reference to found flag.
+	 * @return array Updated blocks.
+	 */
+	private static function update_block_attribute( array $blocks, string $block_id, string $attr_name, $value, bool &$found ): array {
+		foreach ( $blocks as &$block ) {
+			if ( isset( $block['attrs']['blockId'] ) && $block['attrs']['blockId'] === $block_id ) {
+				$block['attrs'][ $attr_name ] = $value;
+				// Clear innerHTML/innerContent to force re-render.
+				$block['innerHTML']    = '';
+				$block['innerContent'] = array();
+				$found                 = true;
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$block['innerBlocks'] = self::update_block_attribute( $block['innerBlocks'], $block_id, $attr_name, $value, $found );
+			}
+		}
+
+		return $blocks;
 	}
 
 	/**

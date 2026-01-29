@@ -153,7 +153,8 @@
 	}
 }
 
-.asc-darts__actions {
+.asc-darts__actions,
+.asc-darts__player-actions {
 	display: flex;
 	justify-content: center;
 	gap: 12px;
@@ -162,7 +163,8 @@
 }
 
 .asc-darts__edit-btn,
-.asc-darts__duplicate-btn {
+.asc-darts__duplicate-btn,
+.asc-darts__edit-players-btn {
 	padding: 10px 24px;
 	background: transparent;
 	color: #666;

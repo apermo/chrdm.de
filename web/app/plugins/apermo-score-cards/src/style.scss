@@ -143,6 +143,175 @@
 	}
 }
 
+// Frontend Player Selector (reusable component)
+.asc-player-selector {
+	padding: 16px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin: 16px 0;
+
+	&--loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		padding: 24px;
+		color: #666;
+	}
+
+	&__spinner {
+		width: 20px;
+		height: 20px;
+		border: 2px solid #ddd;
+		border-top-color: #e74c3c;
+		border-radius: 50%;
+		animation: asc-spin 0.8s linear infinite;
+	}
+
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 12px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid #ddd;
+	}
+
+	&__title {
+		font-weight: 600;
+		font-size: 1em;
+	}
+
+	&__count {
+		font-size: 0.9em;
+		color: #666;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		max-height: 300px;
+		overflow-y: auto;
+		margin-bottom: 16px;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 8px 12px;
+		background: #fff;
+		border: 2px solid transparent;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: all 0.2s;
+
+		&:hover:not(.is-disabled) {
+			border-color: #e74c3c;
+		}
+
+		&.is-selected {
+			background: #fff9e6;
+			border-color: #f1c40f;
+		}
+
+		&.is-disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	&__checkbox {
+		margin: 0;
+		width: 18px;
+		height: 18px;
+		cursor: inherit;
+	}
+
+	&__player {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex: 1;
+	}
+
+	&__avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__name {
+		font-weight: 500;
+	}
+
+	&__actions {
+		display: flex;
+		gap: 12px;
+		justify-content: center;
+	}
+
+	&__save,
+	&__cancel {
+		padding: 10px 24px;
+		border: none;
+		border-radius: 6px;
+		font-size: 0.95em;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	&__save {
+		background: #e74c3c;
+		color: #fff;
+
+		&:hover:not(:disabled) {
+			background: #c0392b;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	&__cancel {
+		background: #ddd;
+		color: #333;
+
+		&:hover {
+			background: #ccc;
+		}
+	}
+
+	&__hint {
+		margin: 12px 0 0;
+		text-align: center;
+		color: #666;
+		font-size: 0.9em;
+	}
+
+	&__message {
+		margin-top: 12px;
+		padding: 10px 14px;
+		border-radius: 6px;
+		text-align: center;
+
+		&--error {
+			background: #f8d7da;
+			color: #721c24;
+		}
+	}
+}
+
+@keyframes asc-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 // Responsive adjustments
 @media (max-width: 600px) {
 	.asc-score-table {

@@ -199,6 +199,14 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	<?php if ( $show_form ) : ?>
 		<!-- Score form container - hydrated by frontend JS -->
 		<div class="asc-darts-form-container"></div>
+		<?php if ( $can_manage ) : ?>
+			<div class="asc-darts__player-actions">
+				<button type="button" class="asc-darts__edit-players-btn">
+					<?php esc_html_e( 'Edit Players', 'apermo-score-cards' ); ?>
+				</button>
+			</div>
+			<div class="asc-player-selector-container" hidden></div>
+		<?php endif; ?>
 	<?php elseif ( ! $game ) : ?>
 		<!-- No game data and user cannot manage -->
 		<div class="asc-darts__pending">
