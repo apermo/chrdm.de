@@ -199,8 +199,8 @@ const selectors = {
 };
 
 const resolvers = {
-	*getPlayers() {
-		yield actions.fetchPlayers();
+	getPlayers() {
+		return actions.fetchPlayers();
 	},
 };
 
