@@ -90,7 +90,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 				<PanelBody
 					title={ __( 'Players', 'apermo-score-cards' ) }
-					initialOpen={ ! hasPlayers }
+					initialOpen={ true }
 				>
 					<PlayerSelector
 						selectedPlayerIds={ playerIds }
