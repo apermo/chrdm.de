@@ -49,10 +49,7 @@ const actions = {
 				} );
 				dispatch.setGame( postId, blockId, game );
 			} catch ( error ) {
-				// Game doesn't exist yet, that's fine
-				if ( error.code !== 'not_found' ) {
-					console.error( 'Failed to fetch game:', error );
-				}
+				// Game doesn't exist yet - this is expected, not an error
 			}
 		};
 	},
@@ -122,7 +119,7 @@ const actions = {
 				dispatch.setPermissions( postId, permissions );
 				return permissions;
 			} catch ( error ) {
-				console.error( 'Failed to fetch permissions:', error );
+				// Permission check failed - user likely can't manage
 				return null;
 			}
 		};
