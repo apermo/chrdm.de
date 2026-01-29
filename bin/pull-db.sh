@@ -41,17 +41,20 @@ ddev import-db --file=/tmp/prod-db.sql
 
 echo "Running search-replace for local development..."
 
+# Skip user tables to preserve email addresses and user data
+SKIP_TABLES="wp_users,wp_usermeta"
+
 # Main domain
-ddev wp search-replace 'christoph-daum.de' 'cd-de.ddev.site' --network --all-tables --skip-columns=guid --quiet
+ddev wp search-replace 'christoph-daum.de' 'cd-de.ddev.site' --network --all-tables --skip-columns=guid --skip-tables="$SKIP_TABLES" --quiet
 
 # English domain
-ddev wp search-replace 'christoph-daum.com' 'cd-com.ddev.site' --network --all-tables --skip-columns=guid --quiet
+ddev wp search-replace 'christoph-daum.com' 'cd-com.ddev.site' --network --all-tables --skip-columns=guid --skip-tables="$SKIP_TABLES" --quiet
 
 # Short domain (kb.chrdm.de etc)
-ddev wp search-replace 'chrdm.de' 'cd-de.ddev.site' --network --all-tables --skip-columns=guid --quiet
+ddev wp search-replace 'chrdm.de' 'cd-de.ddev.site' --network --all-tables --skip-columns=guid --skip-tables="$SKIP_TABLES" --quiet
 
 # Content path (wp-content -> app for Bedrock)
-ddev wp search-replace '/wp-content/uploads/' '/app/uploads/' --network --all-tables --skip-columns=guid --quiet
+ddev wp search-replace '/wp-content/uploads/' '/app/uploads/' --network --all-tables --skip-columns=guid --skip-tables="$SKIP_TABLES" --quiet
 
 # Cleanup
 rm -f /tmp/prod-db.sql /tmp/prod-db.sql.bak
