@@ -27,18 +27,6 @@ export default class DartsScoreForm {
 
 		this.container.innerHTML = `
 			<form class="asc-darts-form">
-				<div class="asc-darts-form__round-input">
-					<label for="asc-game-round">${ __( 'Finished after round', 'apermo-score-cards' ) }</label>
-					<input
-						type="number"
-						id="asc-game-round"
-						name="game-round"
-						min="1"
-						placeholder="${ __( 'Optional', 'apermo-score-cards' ) }"
-						class="asc-darts-form__input"
-					/>
-				</div>
-
 				<table class="asc-darts-form__table">
 					<thead>
 						<tr>
@@ -70,15 +58,27 @@ export default class DartsScoreForm {
 					</tbody>
 				</table>
 
-				<div class="asc-darts-form__actions">
-					<button type="submit" class="asc-darts-form__submit">
-						${ __( 'Save Results', 'apermo-score-cards' ) }
-					</button>
+				<div class="asc-darts-form__round-input">
+					<label for="asc-game-round">${ __( 'Finished after round', 'apermo-score-cards' ) }</label>
+					<input
+						type="number"
+						id="asc-game-round"
+						name="game-round"
+						min="1"
+						placeholder="${ __( 'Optional', 'apermo-score-cards' ) }"
+						class="asc-darts-form__input"
+					/>
 				</div>
 
 				<p class="asc-darts-form__help">
 					${ __( 'Enter 0 for players who finished. The winner is determined by lowest remaining score.', 'apermo-score-cards' ) }
 				</p>
+
+				<div class="asc-darts-form__actions">
+					<button type="submit" class="asc-darts-form__submit">
+						${ __( 'Save Results', 'apermo-score-cards' ) }
+					</button>
+				</div>
 
 				<div class="asc-darts-form__message" hidden></div>
 			</form>
