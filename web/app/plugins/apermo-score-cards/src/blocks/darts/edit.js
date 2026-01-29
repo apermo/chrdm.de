@@ -1,5 +1,8 @@
 /**
  * Darts Score Card - Editor Component
+ *
+ * Backend only handles player selection and game settings.
+ * Score input happens on the frontend.
  */
 
 import { __ } from '@wordpress/i18n';
@@ -8,7 +11,7 @@ import {
 	PanelBody,
 	SelectControl,
 	Placeholder,
-	Button,
+	Notice,
 	Spinner,
 } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
@@ -17,7 +20,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { STORE_NAME } from '../../stores';
 import { PlayerSelector } from '../../components';
-import DartsScoreForm from './components/DartsScoreForm';
 import DartsScoreDisplay from './components/DartsScoreDisplay';
 
 const STARTING_SCORE_OPTIONS = [
@@ -40,28 +42,28 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	}, [ blockId, setAttributes ] );
 
 	// Fetch players and game data
-	const { players, isLoading, game, canManage } = useSelect(
+	const { players, isLoading, game } = useSelect(
 		( select ) => {
 			const store = select( STORE_NAME );
+			// Call getPlayers() to trigger the resolver that fetches all players
+			store.getPlayers();
 			return {
 				players: store.getPlayersByIds( playerIds ),
 				isLoading: ! store.arePlayersLoaded(),
 				game: blockId ? store.getGame( postId, blockId ) : null,
-				canManage: store.canManageScorecard( postId ),
 			};
 		},
 		[ playerIds, postId, blockId ]
 	);
 
-	const { fetchGame, fetchPermissions } = useDispatch( STORE_NAME );
+	const { fetchGame } = useDispatch( STORE_NAME );
 
-	// Fetch game data and permissions on mount
+	// Fetch game data on mount
 	useEffect( () => {
 		if ( postId && blockId ) {
 			fetchGame( postId, blockId );
-			fetchPermissions( postId );
 		}
-	}, [ postId, blockId, fetchGame, fetchPermissions ] );
+	}, [ postId, blockId, fetchGame ] );
 
 	const hasPlayers = playerIds.length >= 2;
 	const hasGame = !! game;
@@ -97,7 +99,13 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						}
 						minPlayers={ 2 }
 						maxPlayers={ 8 }
+						disabled={ hasGame }
 					/>
+					{ hasGame && (
+						<p className="components-base-control__help">
+							{ __( 'Cannot change players after game started.', 'apermo-score-cards' ) }
+						</p>
+					) }
 				</PanelBody>
 			</InspectorControls>
 
@@ -140,18 +148,41 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							game={ game }
 							players={ players }
 							startingScore={ startingScore }
-							postId={ postId }
-							blockId={ blockId }
-							isEditor={ true }
 						/>
 					) : (
-						<DartsScoreForm
-							playerIds={ playerIds }
-							players={ players }
-							startingScore={ startingScore }
-							postId={ postId }
-							blockId={ blockId }
-						/>
+						<div className="asc-darts__pending">
+							<Notice status="info" isDismissible={ false }>
+								{ __(
+									'Players selected. Save/publish the post, then enter scores on the frontend.',
+									'apermo-score-cards'
+								) }
+							</Notice>
+							<table className="asc-darts-display__table">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>{ __( 'Player', 'apermo-score-cards' ) }</th>
+									</tr>
+								</thead>
+								<tbody>
+									{ players.map( ( player, index ) => (
+										<tr key={ player.id }>
+											<td>{ index + 1 }</td>
+											<td className="asc-darts-display__player">
+												{ player.avatarUrl && (
+													<img
+														src={ player.avatarUrl }
+														alt=""
+														className="asc-darts-display__avatar"
+													/>
+												) }
+												<span>{ player.name }</span>
+											</td>
+										</tr>
+									) ) }
+								</tbody>
+							</table>
+						</div>
 					) }
 				</div>
 			) }
