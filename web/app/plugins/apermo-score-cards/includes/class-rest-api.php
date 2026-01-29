@@ -243,6 +243,9 @@ class REST_API {
 			'finalScores'   => array(
 				'type' => 'object',
 			),
+			'positions'     => array(
+				'type' => 'object',
+			),
 			'finishedRound' => array(
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
@@ -311,6 +314,7 @@ class REST_API {
 			'status'        => $request->get_param( 'status' ) ?? 'in_progress',
 			'scores'        => $request->get_param( 'scores' ) ?? array(),
 			'finalScores'   => $request->get_param( 'finalScores' ) ?? array(),
+			'positions'     => $request->get_param( 'positions' ) ?? array(),
 			'finishedRound' => $request->get_param( 'finishedRound' ),
 			'winnerId'      => $request->get_param( 'winnerId' ),
 			'winnerIds'     => $request->get_param( 'winnerIds' ) ?? array(),

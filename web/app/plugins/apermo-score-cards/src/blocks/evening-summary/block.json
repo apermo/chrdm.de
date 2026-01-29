@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "apermo-score-cards/evening-summary",
+	"version": "1.0.0",
+	"title": "Score Card (Evening Summary)",
+	"category": "widgets",
+	"icon": "awards",
+	"description": "Shows a summary of all games played and calculates the evening winner.",
+	"textdomain": "apermo-score-cards",
+	"attributes": {
+		"blockId": {
+			"type": "string"
+		}
+	},
+	"usesContext": [ "postId" ],
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"render": "file:./render.php"
+}

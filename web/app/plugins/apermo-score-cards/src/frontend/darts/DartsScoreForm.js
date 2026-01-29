@@ -148,8 +148,8 @@ export default class DartsScoreForm {
 			return;
 		}
 
-		// Determine winners (lowest score wins)
-		const winnerIds = this.determineWinners( formattedScores );
+		// Calculate positions and winners (lowest score wins)
+		const { positions, winnerIds } = this.calculatePositions( formattedScores );
 		const finalScores = {};
 		Object.entries( formattedScores ).forEach( ( [ id, data ] ) => {
 			finalScores[ id ] = data.finalScore;
@@ -166,6 +166,7 @@ export default class DartsScoreForm {
 				status: 'completed',
 				scores: formattedScores,
 				finalScores,
+				positions,
 				finishedRound: gameRound,
 				winnerIds,
 				winnerId: winnerIds[ 0 ] || null,
@@ -184,14 +185,30 @@ export default class DartsScoreForm {
 		}
 	}
 
-	determineWinners( scores ) {
+	calculatePositions( scores ) {
 		const entries = Object.entries( scores );
 
-		// Lowest score wins
-		const minScore = Math.min( ...entries.map( ( [ , data ] ) => data.finalScore ) );
-		return entries
-			.filter( ( [ , data ] ) => data.finalScore === minScore )
+		// Sort by score (lowest first for darts)
+		entries.sort( ( a, b ) => a[ 1 ].finalScore - b[ 1 ].finalScore );
+
+		const positions = {};
+		let currentPosition = 1;
+		let previousScore = null;
+
+		entries.forEach( ( [ id, data ], index ) => {
+			if ( data.finalScore !== previousScore ) {
+				currentPosition = index + 1;
+				previousScore = data.finalScore;
+			}
+			positions[ id ] = currentPosition;
+		} );
+
+		// Winners are all players in position 1
+		const winnerIds = Object.entries( positions )
+			.filter( ( [ , pos ] ) => pos === 1 )
 			.map( ( [ id ] ) => parseInt( id, 10 ) );
+
+		return { positions, winnerIds };
 	}
 
 	async saveGame( gameData ) {

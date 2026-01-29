@@ -55,6 +55,39 @@ class Games {
 	}
 
 	/**
+	 * Get all games for a post.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array Array of games keyed by block ID.
+	 */
+	public static function get_all_for_post( int $post_id ): array {
+		global $wpdb;
+
+		$prefix = self::META_PREFIX;
+		$games  = array();
+
+		// Get all meta keys that match our prefix.
+		$meta_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key LIKE %s",
+				$post_id,
+				$wpdb->esc_like( $prefix ) . '%'
+			)
+		);
+
+		foreach ( $meta_rows as $row ) {
+			$block_id = substr( $row->meta_key, strlen( $prefix ) );
+			$data     = maybe_unserialize( $row->meta_value );
+
+			if ( is_array( $data ) ) {
+				$games[ $block_id ] = $data;
+			}
+		}
+
+		return $games;
+	}
+
+	/**
 	 * Save game data for a specific block on a post.
 	 *
 	 * @param int    $post_id  Post ID.
