@@ -5,6 +5,7 @@ module.exports = {
 	...defaultConfig,
 	entry: {
 		index: path.resolve( __dirname, 'src/index.js' ),
+		frontend: path.resolve( __dirname, 'src/frontend/index.js' ),
 	},
 	output: {
 		...defaultConfig.output,
