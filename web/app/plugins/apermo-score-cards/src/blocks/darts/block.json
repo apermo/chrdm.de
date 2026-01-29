@@ -30,8 +30,5 @@
 		"html": false,
 		"align": [ "wide", "full" ]
 	},
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
 	"render": "file:./render.php"
 }

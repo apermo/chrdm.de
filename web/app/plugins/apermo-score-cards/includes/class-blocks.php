@@ -25,17 +25,18 @@ class Blocks {
 	 */
 	public static function init(): void {
 		add_action( 'init', array( self::class, 'register_blocks' ) );
-		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_editor_data' ) );
+		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_editor_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend_data' ) );
 	}
 
 	/**
-	 * Register all blocks.
+	 * Register all blocks from block.json files.
+	 * Blocks are registered for metadata only - scripts come from main bundle.
 	 *
 	 * @return void
 	 */
 	public static function register_blocks(): void {
-		$blocks_dir = ASC_PLUGIN_DIR . 'build/blocks';
+		$blocks_dir = ASC_PLUGIN_DIR . 'src/blocks';
 
 		if ( ! is_dir( $blocks_dir ) ) {
 			return;
@@ -47,29 +48,68 @@ class Blocks {
 			$block_json = $block_folder . '/block.json';
 
 			if ( file_exists( $block_json ) ) {
-				register_block_type( $block_folder );
+				register_block_type(
+					$block_json,
+					array(
+						// Override script/style since we bundle everything.
+						'editor_script' => 'apermo-score-cards-editor',
+						'editor_style'  => 'apermo-score-cards-editor',
+						'style'         => 'apermo-score-cards-style',
+					)
+				);
 			}
 		}
 	}
 
 	/**
-	 * Enqueue editor data as inline script.
-	 * This provides REST API info to all score card blocks.
+	 * Enqueue editor assets.
 	 *
 	 * @return void
 	 */
-	public static function enqueue_editor_data(): void {
-		$data = array(
-			'restUrl'   => rest_url( REST_API::NAMESPACE ),
-			'restNonce' => wp_create_nonce( 'wp_rest' ),
-			'canManage' => current_user_can( Capabilities::CAPABILITY ),
-			'gameTypes' => self::get_registered_game_types(),
+	public static function enqueue_editor_assets(): void {
+		$asset_file = ASC_PLUGIN_DIR . 'build/index.asset.php';
+
+		if ( ! file_exists( $asset_file ) ) {
+			return;
+		}
+
+		$asset = require $asset_file;
+
+		wp_enqueue_script(
+			'apermo-score-cards-editor',
+			ASC_PLUGIN_URL . 'build/index.js',
+			$asset['dependencies'],
+			$asset['version'],
+			true
 		);
 
-		wp_add_inline_script(
-			'wp-blocks',
-			'window.apermoScoreCards = ' . wp_json_encode( $data ) . ';',
-			'before'
+		if ( file_exists( ASC_PLUGIN_DIR . 'build/index.css' ) ) {
+			wp_enqueue_style(
+				'apermo-score-cards-editor',
+				ASC_PLUGIN_URL . 'build/index.css',
+				array( 'wp-components' ),
+				$asset['version']
+			);
+		}
+
+		if ( file_exists( ASC_PLUGIN_DIR . 'build/style-index.css' ) ) {
+			wp_enqueue_style(
+				'apermo-score-cards-style',
+				ASC_PLUGIN_URL . 'build/style-index.css',
+				array(),
+				$asset['version']
+			);
+		}
+
+		wp_localize_script(
+			'apermo-score-cards-editor',
+			'apermoScoreCards',
+			array(
+				'restUrl'   => rest_url( REST_API::NAMESPACE ),
+				'restNonce' => wp_create_nonce( 'wp_rest' ),
+				'canManage' => current_user_can( Capabilities::CAPABILITY ),
+				'gameTypes' => self::get_registered_game_types(),
+			)
 		);
 	}
 
@@ -81,11 +121,33 @@ class Blocks {
 	public static function enqueue_frontend_data(): void {
 		global $post;
 
-		// Check if post content contains any score card blocks.
-		if ( ! $post || ! has_block( 'apermo-score-cards/darts', $post ) ) {
+		if ( ! $post ) {
 			return;
 		}
 
+		// Check if post content contains any score card blocks.
+		$has_scorecard = has_block( 'apermo-score-cards/darts', $post );
+
+		if ( ! $has_scorecard ) {
+			return;
+		}
+
+		// Enqueue frontend styles.
+		$asset_file = ASC_PLUGIN_DIR . 'build/index.asset.php';
+		if ( file_exists( $asset_file ) ) {
+			$asset = require $asset_file;
+
+			if ( file_exists( ASC_PLUGIN_DIR . 'build/style-index.css' ) ) {
+				wp_enqueue_style(
+					'apermo-score-cards-style',
+					ASC_PLUGIN_URL . 'build/style-index.css',
+					array(),
+					$asset['version']
+				);
+			}
+		}
+
+		// Add data for frontend interactivity.
 		$data = array(
 			'restUrl'    => rest_url( REST_API::NAMESPACE ),
 			'restNonce'  => wp_create_nonce( 'wp_rest' ),
@@ -94,13 +156,11 @@ class Blocks {
 			'postId'     => $post->ID,
 		);
 
-		// Add data as a script tag for frontend interactivity.
 		wp_register_script( 'apermo-score-cards-frontend-data', false, array(), ASC_VERSION, true );
 		wp_enqueue_script( 'apermo-score-cards-frontend-data' );
 		wp_add_inline_script(
 			'apermo-score-cards-frontend-data',
-			'window.apermoScoreCards = ' . wp_json_encode( $data ) . ';',
-			'before'
+			'window.apermoScoreCards = ' . wp_json_encode( $data ) . ';'
 		);
 	}
 
