@@ -6,6 +6,7 @@ import { createReduxStore, register } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 
 const STORE_NAME = 'apermo-score-cards';
+const API_NAMESPACE = '/apermo-score-cards/v1';
 
 const DEFAULT_STATE = {
 	players: [],
@@ -34,7 +35,7 @@ const actions = {
 	fetchPlayers() {
 		return async ( { dispatch } ) => {
 			const players = await apiFetch( {
-				path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/players`,
+				path: `${ API_NAMESPACE }/players`,
 			} );
 			dispatch.setPlayers( players );
 		};
@@ -44,7 +45,7 @@ const actions = {
 		return async ( { dispatch } ) => {
 			try {
 				const game = await apiFetch( {
-					path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/posts/${ postId }/games/${ blockId }`,
+					path: `${ API_NAMESPACE }/posts/${ postId }/games/${ blockId }`,
 				} );
 				dispatch.setGame( postId, blockId, game );
 			} catch ( error ) {
@@ -59,7 +60,7 @@ const actions = {
 	saveGame( postId, blockId, gameData ) {
 		return async ( { dispatch } ) => {
 			const game = await apiFetch( {
-				path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/posts/${ postId }/games/${ blockId }`,
+				path: `${ API_NAMESPACE }/posts/${ postId }/games/${ blockId }`,
 				method: 'POST',
 				data: gameData,
 			} );
@@ -71,7 +72,7 @@ const actions = {
 	addRound( postId, blockId, roundData ) {
 		return async ( { dispatch } ) => {
 			const game = await apiFetch( {
-				path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/posts/${ postId }/games/${ blockId }/rounds`,
+				path: `${ API_NAMESPACE }/posts/${ postId }/games/${ blockId }/rounds`,
 				method: 'POST',
 				data: { roundData },
 			} );
@@ -83,7 +84,7 @@ const actions = {
 	updateRound( postId, blockId, roundIndex, roundData ) {
 		return async ( { dispatch } ) => {
 			const game = await apiFetch( {
-				path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/posts/${ postId }/games/${ blockId }/rounds/${ roundIndex }`,
+				path: `${ API_NAMESPACE }/posts/${ postId }/games/${ blockId }/rounds/${ roundIndex }`,
 				method: 'PUT',
 				data: { roundData },
 			} );
@@ -95,7 +96,7 @@ const actions = {
 	completeGame( postId, blockId, finalScores, winnerId ) {
 		return async ( { dispatch } ) => {
 			const game = await apiFetch( {
-				path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/posts/${ postId }/games/${ blockId }/complete`,
+				path: `${ API_NAMESPACE }/posts/${ postId }/games/${ blockId }/complete`,
 				method: 'POST',
 				data: { finalScores, winnerId },
 			} );
@@ -116,7 +117,7 @@ const actions = {
 		return async ( { dispatch } ) => {
 			try {
 				const permissions = await apiFetch( {
-					path: `${ window.apermoScoreCards?.restUrl || '/wp-json/apermo-score-cards/v1' }/posts/${ postId }/can-manage`,
+					path: `${ API_NAMESPACE }/posts/${ postId }/can-manage`,
 				} );
 				dispatch.setPermissions( postId, permissions );
 				return permissions;
