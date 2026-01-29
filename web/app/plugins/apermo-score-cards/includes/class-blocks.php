@@ -132,6 +132,9 @@ class Blocks {
 			return;
 		}
 
+		// Check if user can manage - only load frontend JS if they can.
+		$can_manage = Capabilities::user_can_manage( $post->ID );
+
 		// Enqueue frontend styles.
 		$asset_file = ASC_PLUGIN_DIR . 'build/index.asset.php';
 		if ( file_exists( $asset_file ) ) {
@@ -151,7 +154,7 @@ class Blocks {
 		$data = array(
 			'restUrl'    => rest_url( REST_API::NAMESPACE ),
 			'restNonce'  => wp_create_nonce( 'wp_rest' ),
-			'canManage'  => current_user_can( Capabilities::CAPABILITY ),
+			'canManage'  => $can_manage,
 			'isLoggedIn' => is_user_logged_in(),
 			'postId'     => $post->ID,
 		);
@@ -162,6 +165,22 @@ class Blocks {
 			'apermo-score-cards-frontend-data',
 			'window.apermoScoreCards = ' . wp_json_encode( $data ) . ';'
 		);
+
+		// Enqueue frontend JS if user can manage scores.
+		if ( $can_manage ) {
+			$frontend_asset = ASC_PLUGIN_DIR . 'build/frontend.asset.php';
+			if ( file_exists( $frontend_asset ) ) {
+				$frontend = require $frontend_asset;
+
+				wp_enqueue_script(
+					'apermo-score-cards-frontend',
+					ASC_PLUGIN_URL . 'build/frontend.js',
+					array_merge( $frontend['dependencies'], array( 'apermo-score-cards-frontend-data' ) ),
+					$frontend['version'],
+					true
+				);
+			}
+		}
 	}
 
 	/**
