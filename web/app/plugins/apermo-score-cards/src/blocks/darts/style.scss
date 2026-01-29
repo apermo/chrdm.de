@@ -206,6 +206,25 @@
 
 // Frontend score form
 .asc-darts-form {
+	&__round-input {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 20px;
+		padding: 16px;
+		background: #f8f9fa;
+		border-radius: 8px;
+
+		label {
+			font-weight: 600;
+			white-space: nowrap;
+		}
+
+		input {
+			max-width: 100px;
+		}
+	}
+
 	&__table {
 		width: 100%;
 		border-collapse: collapse;

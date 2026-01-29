@@ -27,12 +27,23 @@ export default class DartsScoreForm {
 
 		this.container.innerHTML = `
 			<form class="asc-darts-form">
+				<div class="asc-darts-form__round-input">
+					<label for="asc-game-round">${ __( 'Finished after round', 'apermo-score-cards' ) }</label>
+					<input
+						type="number"
+						id="asc-game-round"
+						name="game-round"
+						min="1"
+						placeholder="${ __( 'Optional', 'apermo-score-cards' ) }"
+						class="asc-darts-form__input"
+					/>
+				</div>
+
 				<table class="asc-darts-form__table">
 					<thead>
 						<tr>
 							<th>${ __( 'Player', 'apermo-score-cards' ) }</th>
-							<th>${ __( 'Final Score', 'apermo-score-cards' ) }</th>
-							<th>${ __( 'Finished Round', 'apermo-score-cards' ) }</th>
+							<th>${ __( 'Remaining Score', 'apermo-score-cards' ) }</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -54,15 +65,6 @@ export default class DartsScoreForm {
 									/>
 									<span class="asc-darts-form__error" hidden></span>
 								</td>
-								<td class="asc-darts-form__round">
-									<input
-										type="number"
-										name="round-${ player.id }"
-										min="1"
-										placeholder="${ __( 'Optional', 'apermo-score-cards' ) }"
-										class="asc-darts-form__input"
-									/>
-								</td>
 							</tr>
 						` ).join( '' ) }
 					</tbody>
@@ -75,7 +77,7 @@ export default class DartsScoreForm {
 				</div>
 
 				<p class="asc-darts-form__help">
-					${ __( 'Enter 0 for players who finished. Winners are determined by who reached 0 first (lowest round number).', 'apermo-score-cards' ) }
+					${ __( 'Enter 0 for players who finished. The winner is determined by lowest remaining score.', 'apermo-score-cards' ) }
 				</p>
 
 				<div class="asc-darts-form__message" hidden></div>
@@ -101,17 +103,19 @@ export default class DartsScoreForm {
 		const submitBtn = form.querySelector( '.asc-darts-form__submit' );
 		const messageEl = form.querySelector( '.asc-darts-form__message' );
 
+		// Get the global round number
+		const gameRoundInput = form.querySelector( 'input[name="game-round"]' );
+		const gameRound = gameRoundInput.value.trim() ? parseInt( gameRoundInput.value.trim(), 10 ) : null;
+
 		// Collect and validate scores
 		const formattedScores = {};
 		let hasError = false;
 
 		this.playerIds.forEach( ( playerId ) => {
 			const scoreInput = form.querySelector( `input[name="score-${ playerId }"]` );
-			const roundInput = form.querySelector( `input[name="round-${ playerId }"]` );
 			const errorEl = scoreInput.parentElement.querySelector( '.asc-darts-form__error' );
 
 			const scoreValue = scoreInput.value.trim();
-			const roundValue = roundInput.value.trim();
 
 			// Validate
 			if ( scoreValue === '' ) {
@@ -133,7 +137,8 @@ export default class DartsScoreForm {
 
 			formattedScores[ playerId ] = {
 				finalScore: score,
-				finishedRound: roundValue ? parseInt( roundValue, 10 ) : null,
+				// Only set finishedRound if player finished (score = 0)
+				finishedRound: score === 0 ? gameRound : null,
 			};
 		} );
 
