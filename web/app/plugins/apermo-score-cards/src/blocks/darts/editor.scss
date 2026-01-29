@@ -1,0 +1,215 @@
+/**
+ * Darts block editor styles
+ */
+
+.asc-darts {
+	padding: 16px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background: #fff;
+
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 16px;
+		padding-bottom: 12px;
+		border-bottom: 2px solid #333;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 1.25em;
+		font-weight: 700;
+	}
+
+	&__status {
+		padding: 4px 12px;
+		border-radius: 4px;
+		font-size: 0.85em;
+		font-weight: 500;
+
+		&--completed {
+			background: #d4edda;
+			color: #155724;
+		}
+	}
+}
+
+.asc-darts-form {
+	&__table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 16px;
+
+		th,
+		td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+		}
+
+		th {
+			font-weight: 600;
+			font-size: 0.9em;
+			color: #666;
+		}
+	}
+
+	&__row {
+		&:hover {
+			background: #f9f9f9;
+		}
+	}
+
+	&__player {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-weight: 500;
+	}
+
+	&__avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__score,
+	&__round {
+		.components-text-control__input {
+			width: 100px;
+			text-align: center;
+		}
+
+		.has-error .components-text-control__input {
+			border-color: #d94f4f;
+			background: #fcf0f0;
+		}
+	}
+
+	&__error {
+		display: block;
+		color: #d94f4f;
+		font-size: 0.8em;
+		margin-top: 4px;
+	}
+
+	&__actions {
+		display: flex;
+		gap: 12px;
+		margin-bottom: 12px;
+
+		.components-spinner {
+			margin-right: 8px;
+		}
+	}
+
+	&__help {
+		color: #666;
+		font-size: 0.85em;
+		font-style: italic;
+	}
+}
+
+.asc-darts-display {
+	&__table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 16px;
+
+		th,
+		td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+		}
+
+		th {
+			font-weight: 600;
+			font-size: 0.9em;
+			color: #666;
+			background: #f5f5f5;
+		}
+	}
+
+	&__rank-header {
+		width: 50px;
+	}
+
+	&__row {
+		&--winner {
+			background: #fffbe6;
+		}
+
+		&--finished {
+			.asc-darts-display__score {
+				font-weight: 700;
+			}
+		}
+	}
+
+	&__rank {
+		font-weight: 600;
+		text-align: center;
+	}
+
+	&__trophy {
+		margin-right: 4px;
+	}
+
+	&__player {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	&__avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__name {
+		font-weight: 500;
+	}
+
+	&__draw-label {
+		margin-left: 8px;
+		font-size: 0.85em;
+		color: #666;
+		font-weight: normal;
+	}
+
+	&__score {
+		font-family: monospace;
+		font-size: 1.1em;
+
+		&--zero {
+			color: #28a745;
+			font-weight: 700;
+		}
+	}
+
+	&__round {
+		color: #666;
+	}
+
+	&__winner-banner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		padding: 12px 16px;
+		background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+		border-radius: 8px;
+		font-size: 1.1em;
+		font-weight: 600;
+	}
+
+	&__winner-icon {
+		font-size: 1.5em;
+	}
+}

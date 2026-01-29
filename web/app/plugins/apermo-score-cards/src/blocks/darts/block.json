@@ -1,0 +1,37 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "apermo-score-cards/darts",
+	"version": "1.0.0",
+	"title": "Darts Score Card",
+	"category": "widgets",
+	"icon": "marker",
+	"description": "Score card for darts games. Track final scores and determine winners.",
+	"textdomain": "apermo-score-cards",
+	"attributes": {
+		"blockId": {
+			"type": "string"
+		},
+		"playerIds": {
+			"type": "array",
+			"default": []
+		},
+		"startingScore": {
+			"type": "integer",
+			"default": 501
+		}
+	},
+	"usesContext": [ "postId" ],
+	"providesContext": {
+		"apermo-score-cards/blockId": "blockId",
+		"apermo-score-cards/gameType": "darts"
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}
