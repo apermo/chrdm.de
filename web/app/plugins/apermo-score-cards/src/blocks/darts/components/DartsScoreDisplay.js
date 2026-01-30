@@ -1,44 +1,29 @@
 /**
  * Darts Score Display Component
  *
- * Displays the final scores and winners.
+ * Displays the final scores and winners in the editor.
  */
 
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { determineWinners } from '../scoring';
 
 export default function DartsScoreDisplay( {
 	game,
 	players,
-	startingScore,
-	isEditor = false,
+	canEdit = false,
 } ) {
-	const { scores, winnerIds = [], status } = game;
+	const { scores, winnerIds = [], status, finishedRound } = game;
 
-	// Sort players by finish order (0 scores first, then by round)
+	// Sort players by position (from game.positions if available, otherwise by score).
+	const positions = game.positions || {};
 	const sortedPlayers = [ ...players ].sort( ( a, b ) => {
-		const scoreA = scores?.[ a.id ];
-		const scoreB = scores?.[ b.id ];
-
-		if ( ! scoreA || ! scoreB ) return 0;
-
-		// Players with 0 (finished) come first
-		if ( scoreA.finalScore === 0 && scoreB.finalScore !== 0 ) return -1;
-		if ( scoreB.finalScore === 0 && scoreA.finalScore !== 0 ) return 1;
-
-		// Among finished players, sort by round (lower is better)
-		if ( scoreA.finalScore === 0 && scoreB.finalScore === 0 ) {
-			const roundA = scoreA.finishedRound || Infinity;
-			const roundB = scoreB.finishedRound || Infinity;
-			return roundA - roundB;
-		}
-
-		// Among unfinished, sort by remaining score (lower is better)
-		return scoreA.finalScore - scoreB.finalScore;
+		const posA = positions[ a.id ] ?? 999;
+		const posB = positions[ b.id ] ?? 999;
+		return posA - posB;
 	} );
 
 	const actualWinnerIds = winnerIds.length > 0 ? winnerIds : determineWinners( scores || {} );
-	const isDraw = actualWinnerIds.length > 1;
+	const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
 	return (
 		<div className="asc-darts-display">
@@ -48,27 +33,32 @@ export default function DartsScoreDisplay( {
 						<th className="asc-darts-display__rank-header">#</th>
 						<th>{ __( 'Player', 'apermo-score-cards' ) }</th>
 						<th>{ __( 'Remaining', 'apermo-score-cards' ) }</th>
-						<th>{ __( 'Round', 'apermo-score-cards' ) }</th>
 					</tr>
 				</thead>
 				<tbody>
-					{ sortedPlayers.map( ( player, index ) => {
+					{ sortedPlayers.map( ( player ) => {
 						const playerScore = scores?.[ player.id ];
-						const isWinner = actualWinnerIds.includes( player.id );
+						const position = positions[ player.id ] ?? 0;
+						const medal = medals[ position ] || '';
 						const isFinished = playerScore?.finalScore === 0;
 
+						const rowClasses = [ 'asc-darts-display__row' ];
+						if ( position <= 3 ) {
+							rowClasses.push( 'asc-darts-display__row--podium' );
+							rowClasses.push( `asc-darts-display__row--position-${ position }` );
+						}
+						if ( isFinished ) {
+							rowClasses.push( 'asc-darts-display__row--finished' );
+						}
+
 						return (
-							<tr
-								key={ player.id }
-								className={ `asc-darts-display__row ${
-									isWinner ? 'asc-darts-display__row--winner' : ''
-								} ${ isFinished ? 'asc-darts-display__row--finished' : '' }` }
-							>
+							<tr key={ player.id } className={ rowClasses.join( ' ' ) }>
 								<td className="asc-darts-display__rank">
-									{ isWinner && (
-										<span className="asc-darts-display__trophy">🏆</span>
+									{ medal ? (
+										<span className="asc-darts-display__medal">{ medal }</span>
+									) : (
+										position
 									) }
-									{ index + 1 }
 								</td>
 								<td className="asc-darts-display__player">
 									{ player.avatarUrl && (
@@ -80,24 +70,14 @@ export default function DartsScoreDisplay( {
 									) }
 									<span className="asc-darts-display__name">
 										{ player.name }
-										{ isWinner && isDraw && (
-											<span className="asc-darts-display__draw-label">
-												{ __( '(Draw)', 'apermo-score-cards' ) }
-											</span>
-										) }
 									</span>
 								</td>
 								<td
 									className={ `asc-darts-display__score ${
-										isFinished
-											? 'asc-darts-display__score--zero'
-											: ''
+										isFinished ? 'asc-darts-display__score--zero' : ''
 									}` }
 								>
 									{ playerScore?.finalScore ?? '-' }
-								</td>
-								<td className="asc-darts-display__round">
-									{ playerScore?.finishedRound || '-' }
 								</td>
 							</tr>
 						);
@@ -105,26 +85,22 @@ export default function DartsScoreDisplay( {
 				</tbody>
 			</table>
 
-			{ status === 'completed' && actualWinnerIds.length > 0 && (
-				<div className="asc-darts-display__winner-banner">
-					{ isDraw ? (
-						<>
-							<span className="asc-darts-display__winner-icon">🎯</span>
-							{ __( 'Draw!', 'apermo-score-cards' ) }
-						</>
-					) : (
-						<>
-							<span className="asc-darts-display__winner-icon">🎯</span>
-							{ sprintf(
-								/* translators: %s: winner name */
-								__( '%s wins!', 'apermo-score-cards' ),
-								players.find( ( p ) => p.id === actualWinnerIds[ 0 ] )?.name ||
-									__( 'Unknown', 'apermo-score-cards' )
-							) }
-						</>
+			{ finishedRound && (
+				<p className="asc-darts-display__round-info">
+					{ sprintf(
+						/* translators: %d: round number */
+						__( 'Finished after round %d', 'apermo-score-cards' ),
+						finishedRound
 					) }
-				</div>
+				</p>
 			) }
+
+			<p className="asc-darts-display__edit-hint">
+				{ canEdit
+					? __( 'Edit results on the frontend.', 'apermo-score-cards' )
+					: __( 'Results can no longer be edited.', 'apermo-score-cards' )
+				}
+			</p>
 		</div>
 	);
 }

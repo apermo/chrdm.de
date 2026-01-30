@@ -19,6 +19,10 @@
 		"startingScore": {
 			"type": "integer",
 			"default": 501
+		},
+		"customTitle": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"usesContext": [ "postId" ],

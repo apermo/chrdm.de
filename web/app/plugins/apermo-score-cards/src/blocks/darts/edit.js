@@ -10,6 +10,7 @@ import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	SelectControl,
+	TextControl,
 	Placeholder,
 	Notice,
 	Spinner,
@@ -30,7 +31,7 @@ const STARTING_SCORE_OPTIONS = [
 ];
 
 export default function Edit( { attributes, setAttributes, context } ) {
-	const { blockId, playerIds, startingScore } = attributes;
+	const { blockId, playerIds, startingScore, customTitle } = attributes;
 	const postId = context.postId;
 	const blockProps = useBlockProps();
 
@@ -67,11 +68,19 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 	const hasPlayers = playerIds.length >= 2;
 	const hasGame = !! game;
+	const canManage = window.apermoScoreCards?.canManage ?? false;
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
 				<PanelBody title={ __( 'Game Settings', 'apermo-score-cards' ) }>
+					<TextControl
+						label={ __( 'Custom Title', 'apermo-score-cards' ) }
+						value={ customTitle }
+						onChange={ ( value ) => setAttributes( { customTitle: value } ) }
+						placeholder={ `Darts – ${ startingScore }` }
+						help={ __( 'Leave empty to use auto-generated title.', 'apermo-score-cards' ) }
+					/>
 					<SelectControl
 						label={ __( 'Starting Score', 'apermo-score-cards' ) }
 						value={ startingScore }
@@ -134,7 +143,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				<div className="asc-darts">
 					<div className="asc-darts__header">
 						<h3 className="asc-darts__title">
-							{ __( 'Darts', 'apermo-score-cards' ) } – { startingScore }
+							{ customTitle || `${ __( 'Darts', 'apermo-score-cards' ) } – ${ startingScore }` }
 						</h3>
 						{ game?.status === 'completed' && (
 							<span className="asc-darts__status asc-darts__status--completed">
@@ -147,7 +156,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						<DartsScoreDisplay
 							game={ game }
 							players={ players }
-							startingScore={ startingScore }
+							canEdit={ canManage }
 						/>
 					) : (
 						<div className="asc-darts__pending">

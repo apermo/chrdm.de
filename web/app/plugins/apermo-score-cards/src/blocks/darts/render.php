@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $block_id       = $attributes['blockId'] ?? '';
 $player_ids     = $attributes['playerIds'] ?? array();
 $starting_score = $attributes['startingScore'] ?? 501;
+$custom_title   = $attributes['customTitle'] ?? '';
 $post_id        = $block->context['postId'] ?? get_the_ID();
 
 if ( empty( $block_id ) || empty( $player_ids ) ) {
@@ -100,11 +101,15 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	<div class="asc-darts__header">
 		<h3 class="asc-darts__title">
 			<?php
-			printf(
-				/* translators: %d: starting score */
-				esc_html__( 'Darts – %d', 'apermo-score-cards' ),
-				$starting_score
-			);
+			if ( $custom_title ) {
+				echo esc_html( $custom_title );
+			} else {
+				printf(
+					/* translators: %d: starting score */
+					esc_html__( 'Darts – %d', 'apermo-score-cards' ),
+					$starting_score
+				);
+			}
 			?>
 		</h3>
 		<?php if ( 'completed' === $status ) : ?>

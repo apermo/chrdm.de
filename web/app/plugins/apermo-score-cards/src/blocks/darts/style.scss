@@ -151,6 +151,14 @@
 		color: #666;
 		font-size: 0.95em;
 	}
+
+	&__edit-hint {
+		margin: 12px 0 0;
+		text-align: center;
+		color: #888;
+		font-size: 0.85em;
+		font-style: italic;
+	}
 }
 
 .asc-darts__actions,
