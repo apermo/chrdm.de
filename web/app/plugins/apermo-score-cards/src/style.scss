@@ -293,6 +293,20 @@
 		font-size: 0.9em;
 	}
 
+	&__locked-hint {
+		margin: 0 0 12px;
+		padding: 8px 12px;
+		background: #fff3cd;
+		border-radius: 4px;
+		color: #856404;
+		font-size: 0.85em;
+	}
+
+	&__lock {
+		margin-left: auto;
+		font-size: 0.9em;
+	}
+
 	&__message {
 		margin-top: 12px;
 		padding: 10px 14px;
