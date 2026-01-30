@@ -178,9 +178,6 @@ function initPoolBlocks() {
 		// Handle complete/finish button
 		if ( completeBtn ) {
 			completeBtn.addEventListener( 'click', () => {
-				if ( ! confirm( window.wp?.i18n?.__( 'Finish the pool session? Players without games will be removed.', 'apermo-score-cards' ) || 'Finish the pool session? Players without games will be removed.' ) ) {
-					return;
-				}
 				completePoolSession( block.dataset.postId, block.dataset.blockId, players, games, completeBtn );
 			} );
 		}
