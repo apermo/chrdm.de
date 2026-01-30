@@ -1,0 +1,34 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "apermo-score-cards/pool",
+	"version": "1.0.0",
+	"title": "Pool Billiard",
+	"category": "widgets",
+	"icon": "awards",
+	"description": "Track pool billiard game results.",
+	"textdomain": "apermo-score-cards",
+	"attributes": {
+		"blockId": {
+			"type": "string"
+		},
+		"playerIds": {
+			"type": "array",
+			"default": []
+		},
+		"customTitle": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [ "postId" ],
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./editor.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

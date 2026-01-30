@@ -1,0 +1,17 @@
+/**
+ * Pool Billiard block editor styles
+ */
+
+.wp-block-apermo-score-cards-pool {
+	.components-notice {
+		margin: 0 0 16px;
+	}
+}
+
+.asc-pool {
+	&__pending {
+		.asc-pool-standings__table {
+			opacity: 0.7;
+		}
+	}
+}
