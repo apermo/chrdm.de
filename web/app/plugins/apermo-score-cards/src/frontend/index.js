@@ -5,13 +5,21 @@
  */
 
 import DartsScoreForm from './darts/DartsScoreForm';
+import PoolGameForm from './pool/PoolGameForm';
 import PlayerSelector from './components/PlayerSelector';
 
 /**
  * Initialize all score card forms on the page.
  */
 function init() {
-	// Initialize Darts blocks
+	initDartsBlocks();
+	initPoolBlocks();
+}
+
+/**
+ * Initialize Darts blocks.
+ */
+function initDartsBlocks() {
 	const dartsBlocks = document.querySelectorAll( '.asc-darts[data-can-manage="true"]' );
 	dartsBlocks.forEach( ( block ) => {
 		const formContainer = block.querySelector( '.asc-darts-form-container' );
@@ -60,6 +68,466 @@ function init() {
 			} );
 		}
 	} );
+}
+
+/**
+ * Initialize Pool blocks.
+ */
+function initPoolBlocks() {
+	const poolBlocks = document.querySelectorAll( '.asc-pool[data-can-manage="true"]' );
+	poolBlocks.forEach( ( block ) => {
+		const formContainer = block.querySelector( '.asc-pool-form-container' );
+		const addGameBtn = block.querySelector( '.asc-pool__add-game-btn' );
+		const editPlayersBtn = block.querySelector( '.asc-pool__edit-players-btn' );
+		const completeBtn = block.querySelector( '.asc-pool__complete-btn' );
+		const continueBtn = block.querySelector( '.asc-pool__continue-btn' );
+		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+
+		const players = JSON.parse( block.dataset.players || '[]' );
+		const gameData = block.dataset.game ? JSON.parse( block.dataset.game ) : null;
+		const games = gameData?.games || [];
+
+		// Get locked player IDs from container data attribute
+		const lockedPlayerIds = playerSelectorContainer
+			? JSON.parse( playerSelectorContainer.dataset.lockedPlayerIds || '[]' )
+			: [];
+
+		// Add game button
+		if ( addGameBtn && formContainer ) {
+			addGameBtn.addEventListener( 'click', () => {
+				addGameBtn.hidden = true;
+				formContainer.hidden = false;
+				new PoolGameForm( formContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					players,
+					games,
+					editIndex: null,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						formContainer.hidden = true;
+						formContainer.innerHTML = '';
+						addGameBtn.hidden = false;
+					},
+				} );
+			} );
+		}
+
+		// Edit/Delete buttons on individual games
+		block.querySelectorAll( '.asc-pool-games__item' ).forEach( ( item ) => {
+			const gameIndex = parseInt( item.dataset.gameIndex, 10 );
+			const editBtn = item.querySelector( '[data-action="edit"]' );
+			const deleteBtn = item.querySelector( '[data-action="delete"]' );
+
+			if ( editBtn ) {
+				editBtn.addEventListener( 'click', () => {
+					if ( addGameBtn ) {
+						addGameBtn.hidden = true;
+					}
+					formContainer.hidden = false;
+					new PoolGameForm( formContainer, {
+						postId: block.dataset.postId,
+						blockId: block.dataset.blockId,
+						players,
+						games,
+						editIndex: gameIndex,
+						onSave: () => window.location.reload(),
+						onCancel: () => {
+							formContainer.hidden = true;
+							formContainer.innerHTML = '';
+							if ( addGameBtn ) {
+								addGameBtn.hidden = false;
+							}
+						},
+					} );
+				} );
+			}
+
+			if ( deleteBtn ) {
+				deleteBtn.addEventListener( 'click', () => {
+					if ( ! confirm( window.wp?.i18n?.__( 'Delete this game?', 'apermo-score-cards' ) || 'Delete this game?' ) ) {
+						return;
+					}
+					deletePoolGame( block.dataset.postId, block.dataset.blockId, players, games, gameIndex );
+				} );
+			}
+		} );
+
+		// Handle edit players button
+		if ( editPlayersBtn && playerSelectorContainer ) {
+			editPlayersBtn.addEventListener( 'click', () => {
+				editPlayersBtn.hidden = true;
+				playerSelectorContainer.hidden = false;
+
+				const playerIds = JSON.parse( block.dataset.playerIds || '[]' );
+				new PlayerSelector( playerSelectorContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					selectedPlayerIds: playerIds,
+					lockedPlayerIds,
+					minPlayers: 2,
+					maxPlayers: 8,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						editPlayersBtn.hidden = false;
+					},
+				} );
+			} );
+		}
+
+		// Handle complete/finish button
+		if ( completeBtn ) {
+			completeBtn.addEventListener( 'click', () => {
+				if ( ! confirm( window.wp?.i18n?.__( 'Finish the pool session? Players without games will be removed.', 'apermo-score-cards' ) || 'Finish the pool session? Players without games will be removed.' ) ) {
+					return;
+				}
+				completePoolSession( block.dataset.postId, block.dataset.blockId, players, games, completeBtn );
+			} );
+		}
+
+		// Handle continue button
+		if ( continueBtn ) {
+			continueBtn.addEventListener( 'click', () => {
+				continuePoolSession( block.dataset.postId, block.dataset.blockId, players, games, continueBtn );
+			} );
+		}
+	} );
+}
+
+/**
+ * Delete a pool game.
+ */
+async function deletePoolGame( postId, blockId, players, games, gameIndex ) {
+	const config = window.apermoScoreCards || {};
+	const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
+	const nonce = config.restNonce;
+
+	const updatedGames = games.filter( ( _, i ) => i !== gameIndex );
+
+	// Recalculate positions
+	const positions = calculatePoolPositions( players, updatedGames );
+
+	// Extract player IDs from players array
+	const playerIds = players.map( ( p ) => p.id );
+
+	try {
+		const response = await fetch(
+			`${ restUrl }/posts/${ postId }/games/${ blockId }`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce,
+				},
+				body: JSON.stringify( {
+					gameType: 'pool',
+					playerIds,
+					games: updatedGames,
+					positions,
+					status: updatedGames.length > 0 ? 'in_progress' : 'pending',
+				} ),
+			}
+		);
+
+		if ( ! response.ok ) {
+			const error = await response.json().catch( () => ( {} ) );
+			throw new Error( error.message || 'Failed to delete game' );
+		}
+
+		window.location.reload();
+	} catch ( error ) {
+		console.error( 'Failed to delete pool game:', error );
+		alert( error.message || 'Failed to delete game. Please try again.' );
+	}
+}
+
+/**
+ * Complete/finish a pool session.
+ * Removes players without games and marks as completed.
+ * Stores final scores so future formula changes don't affect past games.
+ */
+async function completePoolSession( postId, blockId, players, games, button ) {
+	const config = window.apermoScoreCards || {};
+	const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
+	const nonce = config.restNonce;
+
+	const originalText = button.textContent;
+	button.disabled = true;
+	button.textContent = window.wp?.i18n?.__( 'Finishing...', 'apermo-score-cards' ) || 'Finishing...';
+
+	// Find players who participated in at least one game
+	const playersWithGames = new Set();
+	games.forEach( ( g ) => {
+		playersWithGames.add( g.player1 );
+		playersWithGames.add( g.player2 );
+	} );
+
+	// Filter to only players with games
+	const activePlayers = players.filter( ( p ) => playersWithGames.has( p.id ) );
+	const activePlayerIds = activePlayers.map( ( p ) => p.id );
+
+	// Calculate positions and final scores with filtered players
+	const { positions, finalScores } = calculatePoolFinalResults( activePlayers, games );
+
+	try {
+		// First update block attributes to remove players without games
+		// (Must be done before marking as completed, as completed status blocks player updates)
+		const playersResponse = await fetch(
+			`${ restUrl }/posts/${ postId }/blocks/${ blockId }/players`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce,
+				},
+				body: JSON.stringify( { playerIds: activePlayerIds } ),
+			}
+		);
+
+		if ( ! playersResponse.ok ) {
+			const error = await playersResponse.json().catch( () => ( {} ) );
+			throw new Error( error.message || 'Failed to update players' );
+		}
+
+		// Then update the game data with status completed and store final scores
+		const response = await fetch(
+			`${ restUrl }/posts/${ postId }/games/${ blockId }`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce,
+				},
+				body: JSON.stringify( {
+					gameType: 'pool',
+					playerIds: activePlayerIds,
+					games,
+					positions,
+					finalScores,
+					status: 'completed',
+				} ),
+			}
+		);
+
+		if ( ! response.ok ) {
+			const error = await response.json().catch( () => ( {} ) );
+			throw new Error( error.message || 'Failed to complete session' );
+		}
+
+		window.location.reload();
+	} catch ( error ) {
+		console.error( 'Failed to complete pool session:', error );
+		alert( error.message || 'Failed to complete session. Please try again.' );
+		button.disabled = false;
+		button.textContent = originalText;
+	}
+}
+
+/**
+ * Continue a completed pool session.
+ * Sets status back to in_progress.
+ */
+async function continuePoolSession( postId, blockId, players, games, button ) {
+	const config = window.apermoScoreCards || {};
+	const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
+	const nonce = config.restNonce;
+
+	const originalText = button.textContent;
+	button.disabled = true;
+	button.textContent = window.wp?.i18n?.__( 'Continuing...', 'apermo-score-cards' ) || 'Continuing...';
+
+	const playerIds = players.map( ( p ) => p.id );
+	const positions = calculatePoolPositions( players, games );
+
+	try {
+		const response = await fetch(
+			`${ restUrl }/posts/${ postId }/games/${ blockId }`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce,
+				},
+				body: JSON.stringify( {
+					gameType: 'pool',
+					playerIds,
+					games,
+					positions,
+					status: 'in_progress',
+				} ),
+			}
+		);
+
+		if ( ! response.ok ) {
+			const error = await response.json().catch( () => ( {} ) );
+			throw new Error( error.message || 'Failed to continue session' );
+		}
+
+		window.location.reload();
+	} catch ( error ) {
+		console.error( 'Failed to continue pool session:', error );
+		alert( error.message || 'Failed to continue session. Please try again.' );
+		button.disabled = false;
+		button.textContent = originalText;
+	}
+}
+
+/**
+ * Calculate pool final results including positions and scores.
+ * Used when completing a session to store final scores.
+ * Scoring: 1 point per game + 2 bonus for winning (win = 3pts, loss = 1pt).
+ *
+ * @param {Array} players Array of player objects.
+ * @param {Array} games   Array of game objects.
+ * @return {Object} Object with positions and finalScores.
+ */
+function calculatePoolFinalResults( players, games ) {
+	const stats = {};
+	players.forEach( ( p ) => {
+		stats[ p.id ] = { wins: 0, losses: 0, points: 0, headToHead: {} };
+	} );
+
+	games.forEach( ( g ) => {
+		const winnerId = g.winnerId;
+		const loserId = g.winnerId === g.player1 ? g.player2 : g.player1;
+
+		if ( stats[ winnerId ] ) {
+			stats[ winnerId ].wins++;
+			stats[ winnerId ].points += 3;
+			if ( ! stats[ winnerId ].headToHead[ loserId ] ) {
+				stats[ winnerId ].headToHead[ loserId ] = { wins: 0, losses: 0 };
+			}
+			stats[ winnerId ].headToHead[ loserId ].wins++;
+		}
+
+		if ( stats[ loserId ] ) {
+			stats[ loserId ].losses++;
+			stats[ loserId ].points += 1;
+			if ( ! stats[ loserId ].headToHead[ winnerId ] ) {
+				stats[ loserId ].headToHead[ winnerId ] = { wins: 0, losses: 0 };
+			}
+			stats[ loserId ].headToHead[ winnerId ].losses++;
+		}
+	} );
+
+	const sorted = Object.entries( stats ).sort( ( [ aId, a ], [ bId, b ] ) => {
+		if ( a.points !== b.points ) {
+			return b.points - a.points;
+		}
+		const aTotal = a.wins + a.losses;
+		const bTotal = b.wins + b.losses;
+		const aPct = aTotal > 0 ? a.wins / aTotal : 0;
+		const bPct = bTotal > 0 ? b.wins / bTotal : 0;
+		if ( aPct !== bPct ) {
+			return bPct - aPct;
+		}
+		const h2h = a.headToHead[ bId ];
+		if ( h2h ) {
+			const diff = h2h.wins - h2h.losses;
+			if ( diff !== 0 ) {
+				return -diff;
+			}
+		}
+		return 0;
+	} );
+
+	const positions = {};
+	const finalScores = {};
+	let currentPos = 1;
+	let prevKey = null;
+
+	sorted.forEach( ( [ playerId, s ], index ) => {
+		const total = s.wins + s.losses;
+		const pct = total > 0 ? Math.round( ( s.wins / total ) * 10000 ) : 0;
+		const key = `${ s.points }-${ pct }`;
+
+		if ( key !== prevKey ) {
+			currentPos = index + 1;
+			prevKey = key;
+		}
+
+		positions[ playerId ] = currentPos;
+		finalScores[ playerId ] = s.points;
+	} );
+
+	return { positions, finalScores };
+}
+
+/**
+ * Calculate pool positions for evening summary.
+ * Scoring: 1 point per game + 2 bonus for winning (win = 3pts, loss = 1pt).
+ */
+function calculatePoolPositions( players, games ) {
+	const stats = {};
+	players.forEach( ( p ) => {
+		stats[ p.id ] = { wins: 0, losses: 0, points: 0, headToHead: {} };
+	} );
+
+	games.forEach( ( g ) => {
+		const winnerId = g.winnerId;
+		const loserId = g.winnerId === g.player1 ? g.player2 : g.player1;
+
+		if ( stats[ winnerId ] ) {
+			stats[ winnerId ].wins++;
+			stats[ winnerId ].points += 3; // 1 point for playing + 2 for winning = 3.
+			if ( ! stats[ winnerId ].headToHead[ loserId ] ) {
+				stats[ winnerId ].headToHead[ loserId ] = { wins: 0, losses: 0 };
+			}
+			stats[ winnerId ].headToHead[ loserId ].wins++;
+		}
+
+		if ( stats[ loserId ] ) {
+			stats[ loserId ].losses++;
+			stats[ loserId ].points += 1; // 1 point for playing.
+			if ( ! stats[ loserId ].headToHead[ winnerId ] ) {
+				stats[ loserId ].headToHead[ winnerId ] = { wins: 0, losses: 0 };
+			}
+			stats[ loserId ].headToHead[ winnerId ].losses++;
+		}
+	} );
+
+	const sorted = Object.entries( stats ).sort( ( [ aId, a ], [ bId, b ] ) => {
+		// 1. Points descending.
+		if ( a.points !== b.points ) {
+			return b.points - a.points;
+		}
+		// 2. Win percentage descending.
+		const aTotal = a.wins + a.losses;
+		const bTotal = b.wins + b.losses;
+		const aPct = aTotal > 0 ? a.wins / aTotal : 0;
+		const bPct = bTotal > 0 ? b.wins / bTotal : 0;
+		if ( aPct !== bPct ) {
+			return bPct - aPct;
+		}
+		// 3. Head-to-head.
+		const h2h = a.headToHead[ bId ];
+		if ( h2h ) {
+			const diff = h2h.wins - h2h.losses;
+			if ( diff !== 0 ) {
+				return -diff;
+			}
+		}
+		return 0;
+	} );
+
+	const positions = {};
+	let currentPos = 1;
+	let prevKey = null;
+
+	sorted.forEach( ( [ playerId, s ], index ) => {
+		const total = s.wins + s.losses;
+		const pct = total > 0 ? Math.round( ( s.wins / total ) * 10000 ) : 0;
+		const key = `${ s.points }-${ pct }`;
+
+		if ( key !== prevKey ) {
+			currentPos = index + 1;
+			prevKey = key;
+		}
+
+		positions[ playerId ] = currentPos;
+	} );
+
+	return positions;
 }
 
 /**

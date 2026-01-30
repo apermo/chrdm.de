@@ -13,4 +13,5 @@ import './stores';
 
 // Import blocks - each game has its own block
 import './blocks/darts';
+import './blocks/pool';
 import './blocks/evening-summary';

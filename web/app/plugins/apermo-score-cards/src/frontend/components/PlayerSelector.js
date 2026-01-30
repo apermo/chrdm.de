@@ -10,9 +10,11 @@ export default class PlayerSelector {
 		this.postId = options.postId;
 		this.blockId = options.blockId;
 		this.selectedPlayerIds = options.selectedPlayerIds || [];
+		this.lockedPlayerIds = options.lockedPlayerIds || []; // Players that cannot be removed
 		this.minPlayers = options.minPlayers || 2;
 		this.maxPlayers = options.maxPlayers || 10;
 		this.onSave = options.onSave || ( () => window.location.reload() );
+		this.onCancel = options.onCancel || null;
 
 		this.players = [];
 		this.isLoading = true;
@@ -72,6 +74,8 @@ export default class PlayerSelector {
 		const canSelectMore = selectedCount < this.maxPlayers;
 		const canSave = selectedCount >= this.minPlayers;
 
+		const hasLockedPlayers = this.lockedPlayerIds.length > 0;
+
 		this.container.innerHTML = `
 			<div class="asc-player-selector">
 				<div class="asc-player-selector__header">
@@ -80,12 +84,18 @@ export default class PlayerSelector {
 						${ selectedCount } / ${ this.minPlayers }-${ this.maxPlayers }
 					</span>
 				</div>
+				${ hasLockedPlayers ? `
+					<p class="asc-player-selector__locked-hint">
+						${ __( 'Players with games cannot be removed.', 'apermo-score-cards' ) }
+					</p>
+				` : '' }
 				<div class="asc-player-selector__list">
 					${ this.players.map( ( player ) => {
 						const isSelected = this.selectedPlayerIds.includes( player.id );
-						const isDisabled = ! isSelected && ! canSelectMore;
+						const isLocked = this.lockedPlayerIds.includes( player.id );
+						const isDisabled = ( ! isSelected && ! canSelectMore ) || ( isSelected && isLocked );
 						return `
-							<label class="asc-player-selector__item ${ isSelected ? 'is-selected' : '' } ${ isDisabled ? 'is-disabled' : '' }">
+							<label class="asc-player-selector__item ${ isSelected ? 'is-selected' : '' } ${ isDisabled ? 'is-disabled' : '' } ${ isLocked ? 'is-locked' : '' }">
 								<input
 									type="checkbox"
 									value="${ player.id }"
@@ -96,6 +106,7 @@ export default class PlayerSelector {
 								<span class="asc-player-selector__player">
 									${ player.avatarUrl ? `<img src="${ player.avatarUrl }" alt="" class="asc-player-selector__avatar" />` : '' }
 									<span class="asc-player-selector__name">${ this.escapeHtml( player.name ) }</span>
+									${ isLocked ? `<span class="asc-player-selector__lock">🔒</span>` : '' }
 								</span>
 							</label>
 						`;
@@ -154,6 +165,9 @@ export default class PlayerSelector {
 			cancelBtn.addEventListener( 'click', () => {
 				this.container.hidden = true;
 				this.container.innerHTML = '';
+				if ( this.onCancel ) {
+					this.onCancel();
+				}
 			} );
 		}
 	}
