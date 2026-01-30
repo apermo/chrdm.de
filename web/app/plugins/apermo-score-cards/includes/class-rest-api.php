@@ -287,6 +287,10 @@ class REST_API {
 				'type'  => 'array',
 				'items' => array( 'type' => 'integer' ),
 			),
+			'games'         => array(
+				'type'  => 'array',
+				'items' => array( 'type' => 'object' ),
+			),
 		);
 	}
 
@@ -347,6 +351,7 @@ class REST_API {
 			'finishedRound' => $request->get_param( 'finishedRound' ),
 			'winnerId'      => $request->get_param( 'winnerId' ),
 			'winnerIds'     => $request->get_param( 'winnerIds' ) ?? array(),
+			'games'         => $request->get_param( 'games' ) ?? array(),
 		);
 
 		$result = Games::save( $post_id, $block_id, $data );
@@ -494,27 +499,18 @@ class REST_API {
 		// Parse the post content into blocks.
 		$blocks = parse_blocks( $post->post_content );
 
-		// Find and duplicate the block.
-		$new_block_id = wp_generate_uuid4();
-		$found        = false;
-		$new_blocks   = array();
+		// Find the source block and create a duplicate to append at the end.
+		$new_block_id  = wp_generate_uuid4();
+		$source_block  = null;
 
 		foreach ( $blocks as $block ) {
-			$new_blocks[] = $block;
-
-			// Check if this is our target block.
 			if ( self::is_target_block( $block, $block_id ) ) {
-				$found = true;
-				// Create a duplicate with new block ID.
-				$duplicate                          = $block;
-				$duplicate['attrs']['blockId']      = $new_block_id;
-				$duplicate['innerHTML']             = '';
-				$duplicate['innerContent']          = array();
-				$new_blocks[]                       = $duplicate;
+				$source_block = $block;
+				break;
 			}
 		}
 
-		if ( ! $found ) {
+		if ( ! $source_block ) {
 			return new WP_Error(
 				'block_not_found',
 				__( 'Block not found in post.', 'apermo-score-cards' ),
@@ -522,8 +518,19 @@ class REST_API {
 			);
 		}
 
+		// Create a duplicate with new block ID and append to end.
+		$duplicate                     = $source_block;
+		$duplicate['attrs']['blockId'] = $new_block_id;
+		$duplicate['innerHTML']        = '';
+		$duplicate['innerContent']     = array();
+
+		// Remove customTitle from duplicate so it gets auto-generated title.
+		unset( $duplicate['attrs']['customTitle'] );
+
+		$blocks[] = $duplicate;
+
 		// Serialize blocks back to content.
-		$new_content = serialize_blocks( $new_blocks );
+		$new_content = serialize_blocks( $blocks );
 
 		// Update the post.
 		$result = wp_update_post(
@@ -559,7 +566,7 @@ class REST_API {
 		$block_id   = sanitize_text_field( $request->get_param( 'block_id' ) );
 		$player_ids = $request->get_param( 'playerIds' );
 
-		// Check if game has results - don't allow changing players if so.
+		// Check if game has results - don't allow changing players if completed.
 		$game = Games::get( $post_id, $block_id );
 		if ( $game && 'completed' === ( $game['status'] ?? '' ) ) {
 			return new WP_Error(
@@ -567,6 +574,26 @@ class REST_API {
 				__( 'Cannot change players after game has results.', 'apermo-score-cards' ),
 				array( 'status' => 400 )
 			);
+		}
+
+		// If game has started (has games), validate that players with games are not being removed.
+		$games_list = $game['games'] ?? array();
+		if ( ! empty( $games_list ) ) {
+			$players_with_games = array();
+			foreach ( $games_list as $g ) {
+				$players_with_games[ $g['player1'] ?? 0 ] = true;
+				$players_with_games[ $g['player2'] ?? 0 ] = true;
+			}
+
+			foreach ( array_keys( $players_with_games ) as $player_id ) {
+				if ( ! in_array( $player_id, $player_ids, true ) ) {
+					return new WP_Error(
+						'cannot_remove_active_player',
+						__( 'Cannot remove players who have already played games.', 'apermo-score-cards' ),
+						array( 'status' => 400 )
+					);
+				}
+			}
 		}
 
 		$post = get_post( $post_id );
