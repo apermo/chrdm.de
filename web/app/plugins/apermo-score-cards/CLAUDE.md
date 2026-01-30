@@ -197,6 +197,9 @@ fix(apermo-score-cards): resolve scoring bug
 
 **Important**: Never add `Co-Authored-By` lines to commits.
 
+### General
+- Every file must end with exactly one newline (no more, no less), unless technically required otherwise
+
 ### PHP
 - PHP 8.3+ required
 - Strict typing enabled
