@@ -16,7 +16,8 @@
 	"usesContext": [ "postId" ],
 	"supports": {
 		"html": false,
-		"align": [ "wide", "full" ]
+		"align": [ "wide", "full" ],
+		"inserter": false
 	},
 	"render": "file:./render.php"
 }

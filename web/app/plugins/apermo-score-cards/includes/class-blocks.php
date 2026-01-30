@@ -19,6 +19,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Blocks {
 
 	/**
+	 * Game block types (excluding evening-summary).
+	 *
+	 * @var array
+	 */
+	private static array $game_block_types = array(
+		'apermo-score-cards/darts',
+		'apermo-score-cards/pool',
+	);
+
+	/**
 	 * Initialize blocks.
 	 *
 	 * @return void
@@ -27,6 +37,7 @@ class Blocks {
 		add_action( 'init', array( self::class, 'register_blocks' ) );
 		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_editor_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend_data' ) );
+		add_filter( 'the_content', array( self::class, 'append_evening_summary' ), 20 );
 	}
 
 	/**
@@ -126,7 +137,7 @@ class Blocks {
 		}
 
 		// Check if post content contains any score card blocks.
-		$has_scorecard = has_block( 'apermo-score-cards/darts', $post );
+		$has_scorecard = self::post_has_game_blocks( $post );
 
 		if ( ! $has_scorecard ) {
 			return;
@@ -222,5 +233,51 @@ class Blocks {
 				return $game_types;
 			}
 		);
+	}
+
+	/**
+	 * Check if a post contains any game blocks.
+	 *
+	 * @param \WP_Post $post The post to check.
+	 * @return bool True if post has game blocks.
+	 */
+	public static function post_has_game_blocks( \WP_Post $post ): bool {
+		foreach ( self::$game_block_types as $block_type ) {
+			if ( has_block( $block_type, $post ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Append evening summary to post content if game blocks are present.
+	 *
+	 * @param string $content The post content.
+	 * @return string Modified content with evening summary appended.
+	 */
+	public static function append_evening_summary( string $content ): string {
+		// Only on singular posts/pages in the main query.
+		if ( ! is_singular() || ! in_the_loop() || ! is_main_query() ) {
+			return $content;
+		}
+
+		global $post;
+
+		if ( ! $post || ! self::post_has_game_blocks( $post ) ) {
+			return $content;
+		}
+
+		// Don't append if evening summary block is already in the content.
+		if ( has_block( 'apermo-score-cards/evening-summary', $post ) ) {
+			return $content;
+		}
+
+		// Render the evening summary block.
+		$summary_block = '<!-- wp:apermo-score-cards/evening-summary /-->';
+		$rendered      = do_blocks( $summary_block );
+
+		return $content . $rendered;
 	}
 }
