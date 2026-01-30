@@ -106,12 +106,10 @@ foreach ( $all_player_ids as $player_id ) {
 }
 
 $game_labels = array();
-$game_index  = 0;
 
 foreach ( $completed_games as $block_id => $game ) {
-	$game_index++;
 	$game_type     = $game['gameType'] ?? 'game';
-	$game_labels[] = ucfirst( $game_type ) . ' ' . $game_index;
+	$game_labels[] = ucfirst( $game_type );
 
 	$game_player_ids = $game['playerIds'] ?? array();
 	$positions       = $game['positions'] ?? array();
@@ -243,7 +241,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 					<th class="asc-evening-summary__player-col"><?php esc_html_e( 'Player', 'apermo-score-cards' ); ?></th>
 					<?php if ( $has_completed_games ) : ?>
 						<?php foreach ( $game_labels as $label ) : ?>
-							<th class="asc-evening-summary__game-col"><?php echo esc_html( $label ); ?></th>
+							<th class="asc-evening-summary__game-col"><span><?php echo esc_html( $label ); ?></span></th>
 						<?php endforeach; ?>
 						<th class="asc-evening-summary__total-col"><?php esc_html_e( 'Total', 'apermo-score-cards' ); ?></th>
 					<?php endif; ?>

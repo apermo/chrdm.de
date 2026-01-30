@@ -88,7 +88,19 @@
 	}
 
 	&__game-col {
-		min-width: 80px;
+		min-width: 50px;
+		max-width: 60px;
+		height: 80px;
+		vertical-align: bottom;
+		padding-bottom: 8px !important;
+
+		span {
+			display: block;
+			writing-mode: vertical-rl;
+			text-orientation: mixed;
+			transform: rotate(180deg);
+			white-space: nowrap;
+		}
 	}
 
 	&__total-col {
@@ -203,7 +215,9 @@
 		}
 
 		&__game-col {
-			min-width: 60px;
+			min-width: 40px;
+			max-width: 50px;
+			height: 70px;
 		}
 	}
 }
