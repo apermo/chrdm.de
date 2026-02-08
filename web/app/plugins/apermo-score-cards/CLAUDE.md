@@ -257,6 +257,23 @@ Test the plugin by:
 4. Playing through a game
 5. Verifying scores save and display correctly
 
+## Multisite & WP-CLI
+
+This plugin runs on a WordPress **multisite** installation. When using WP-CLI commands, always use the `--url` parameter to target the correct site:
+
+```bash
+# Example: Query game data for post 170 on freunde.cd-de.ddev.site
+ddev wp post meta list 170 --url=freunde.cd-de.ddev.site
+
+# Example: Get specific meta value
+ddev wp post meta get 170 '_asc_game_BLOCK-ID' --url=freunde.cd-de.ddev.site
+
+# Example: Database query (multisite uses prefixed tables like 8dzT4_2_postmeta)
+ddev wp db query "SELECT * FROM 8dzT4_2_postmeta WHERE post_id = 170" --url=freunde.cd-de.ddev.site
+```
+
+**Important**: Without `--url`, WP-CLI defaults to the main site which may not have the data you're looking for.
+
 ## Troubleshooting
 
 **Block not appearing**: Run `npm run build` and check for JS errors
