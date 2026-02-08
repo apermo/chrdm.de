@@ -261,18 +261,19 @@ Test the plugin by:
 
 This plugin runs on a WordPress **multisite** installation. When using WP-CLI commands, always use the `--url` parameter to target the correct site:
 
+**Sites:**
+- Site 1 (main): christoph-daum.de / cd-de.ddev.site
+- Site 3: freunde.christoph-daum.de / freunde.cd-de.ddev.site (used for score cards testing)
+
 ```bash
-# Example: Query game data for post 170 on freunde.cd-de.ddev.site
+# Example: Query game data for post 170 on freunde site (site 3)
 ddev wp post meta list 170 --url=freunde.cd-de.ddev.site
 
 # Example: Get specific meta value
 ddev wp post meta get 170 '_asc_game_BLOCK-ID' --url=freunde.cd-de.ddev.site
-
-# Example: Database query (multisite uses prefixed tables like 8dzT4_2_postmeta)
-ddev wp db query "SELECT * FROM 8dzT4_2_postmeta WHERE post_id = 170" --url=freunde.cd-de.ddev.site
 ```
 
-**Important**: Without `--url`, WP-CLI defaults to the main site which may not have the data you're looking for.
+**Important**: Without `--url`, WP-CLI defaults to site 1 which may not have the data you're looking for. Do NOT use raw SQL queries with table prefixes as they vary per site.
 
 ## Troubleshooting
 

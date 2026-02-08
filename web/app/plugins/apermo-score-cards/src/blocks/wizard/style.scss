@@ -302,10 +302,50 @@
 	background: #f8f9fa;
 	border-radius: 8px;
 
+	// Step indicator
+	&__step-indicator {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin-bottom: 20px;
+		padding-bottom: 16px;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	&__step {
+		padding: 4px 12px;
+		font-size: 0.85em;
+		color: #999;
+		background: #f0f0f0;
+		border-radius: 4px;
+
+		&--active {
+			background: #8e44ad;
+			color: #fff;
+			font-weight: 600;
+		}
+
+		&--done {
+			background: #27ae60;
+			color: #fff;
+		}
+	}
+
+	&__step-separator {
+		color: #ccc;
+	}
+
 	&__title {
 		margin: 0 0 16px;
 		font-size: 1.1em;
 		font-weight: 600;
+	}
+
+	&__max-tricks {
+		font-weight: 400;
+		color: #666;
+		font-size: 0.85em;
 	}
 
 	&__grid {
@@ -341,6 +381,11 @@
 		font-weight: 500;
 	}
 
+	&__player-bid {
+		color: #666;
+		font-size: 0.9em;
+	}
+
 	&__inputs {
 		display: flex;
 		gap: 12px;
@@ -372,6 +417,31 @@
 			border-color: #8e44ad;
 			box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
 		}
+
+		&--invalid {
+			border-color: #e74c3c;
+			background: rgba(231, 76, 60, 0.1);
+
+			&:focus {
+				border-color: #e74c3c;
+				box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+			}
+		}
+	}
+
+	// Bid display (for results step)
+	&__bid-display {
+		font-size: 1.1em;
+		font-weight: 500;
+		padding: 8px;
+		min-width: 40px;
+		text-align: center;
+	}
+
+	&__werewolf-indicator {
+		color: #8e44ad;
+		font-weight: 600;
+		margin-left: 2px;
 	}
 
 	&__score-preview {
@@ -390,6 +460,182 @@
 		}
 	}
 
+	// Bid summary
+	&__bid-summary {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 16px;
+		padding: 12px;
+		border-radius: 6px;
+		font-weight: 500;
+
+		&--balanced {
+			background: rgba(39, 174, 96, 0.15);
+			color: #27ae60;
+		}
+
+		&--unbalanced {
+			background: rgba(231, 76, 60, 0.15);
+			color: #e74c3c;
+		}
+	}
+
+	&__bid-difference {
+		padding: 2px 8px;
+		background: rgba(0, 0, 0, 0.1);
+		border-radius: 4px;
+		font-weight: 600;
+	}
+
+	// Results summary
+	&__results-summary {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		margin-top: 16px;
+		padding: 12px;
+		border-radius: 6px;
+		font-weight: 500;
+
+		&--valid {
+			background: rgba(39, 174, 96, 0.15);
+			color: #27ae60;
+		}
+
+		&--invalid {
+			background: rgba(231, 76, 60, 0.15);
+			color: #e74c3c;
+		}
+	}
+
+	&__results-error {
+		font-size: 0.85em;
+		font-weight: 400;
+	}
+
+	// Werewolf step
+	&__werewolf-grid {
+		display: grid;
+		gap: 12px;
+	}
+
+	&__werewolf-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 12px;
+		background: #fff;
+		border-radius: 6px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+		&--no-werewolf {
+			justify-content: center;
+			margin-top: 8px;
+			background: transparent;
+			box-shadow: none;
+		}
+	}
+
+	&__werewolf-buttons {
+		display: flex;
+		gap: 8px;
+	}
+
+	&__werewolf-btn {
+		width: 44px;
+		height: 44px;
+		border: 2px solid #ddd;
+		border-radius: 8px;
+		background: #fff;
+		font-size: 1em;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s;
+
+		&:hover:not(:disabled) {
+			border-color: #8e44ad;
+		}
+
+		&:disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+			background: #f5f5f5;
+		}
+
+		&--selected {
+			background: #8e44ad;
+			border-color: #8e44ad;
+			color: #fff;
+		}
+
+		&--minus {
+			color: #e74c3c;
+
+			&.asc-wizard-form__werewolf-btn--selected {
+				background: #e74c3c;
+				border-color: #e74c3c;
+				color: #fff;
+			}
+		}
+
+		&--plus {
+			color: #27ae60;
+
+			&.asc-wizard-form__werewolf-btn--selected {
+				background: #27ae60;
+				border-color: #27ae60;
+				color: #fff;
+			}
+		}
+	}
+
+	&__no-werewolf-btn {
+		width: 100%;
+		padding: 12px 24px;
+		border: 2px solid #ddd;
+		border-radius: 6px;
+		background: #fff;
+		font-size: 0.95em;
+		cursor: pointer;
+		transition: all 0.2s;
+
+		&:hover {
+			border-color: #8e44ad;
+		}
+
+		&--selected {
+			background: #8e44ad;
+			border-color: #8e44ad;
+			color: #fff;
+		}
+	}
+
+	// Bomb option
+	&__bomb-option {
+		margin-top: 16px;
+		padding: 12px;
+		background: #fff;
+		border-radius: 6px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	}
+
+	&__bomb-label {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		cursor: pointer;
+		font-size: 0.95em;
+	}
+
+	&__bomb-checkbox {
+		width: 18px;
+		height: 18px;
+		cursor: pointer;
+	}
+
 	&__actions {
 		display: flex;
 		gap: 12px;
@@ -398,7 +644,8 @@
 	}
 
 	&__submit,
-	&__cancel {
+	&__cancel,
+	&__back {
 		padding: 12px 28px;
 		border: none;
 		border-radius: 6px;
@@ -421,7 +668,8 @@
 		}
 	}
 
-	&__cancel {
+	&__cancel,
+	&__back {
 		background: #ddd;
 		color: #333;
 
@@ -440,6 +688,39 @@
 			background: #f8d7da;
 			color: #721c24;
 		}
+	}
+}
+
+// Werewolf indicator and incomplete round in display table
+.asc-wizard-display {
+	&__werewolf-indicator {
+		color: #8e44ad;
+		font-weight: 600;
+		font-size: 0.75em;
+		margin-left: 1px;
+	}
+
+	&__row--incomplete {
+		background: #fff9e6 !important;
+		opacity: 0.9;
+
+		td {
+			border-color: #f0e6c8;
+		}
+	}
+
+	&__in-progress {
+		margin-left: 4px;
+		font-size: 0.8em;
+	}
+}
+
+// Continue round button variant
+.asc-wizard__add-round-btn--continue {
+	background: #f39c12 !important;
+
+	&:hover {
+		background: #e67e22 !important;
 	}
 }
 
@@ -465,13 +746,29 @@
 	}
 
 	.asc-wizard-form {
-		&__player-row {
+		&__step-indicator {
+			flex-wrap: wrap;
+			gap: 4px;
+		}
+
+		&__step {
+			font-size: 0.75em;
+			padding: 3px 8px;
+		}
+
+		&__player-row,
+		&__werewolf-row {
 			flex-wrap: wrap;
 		}
 
 		&__player-info {
 			width: 100%;
 			margin-bottom: 8px;
+		}
+
+		&__werewolf-buttons {
+			width: 100%;
+			justify-content: flex-end;
 		}
 	}
 }

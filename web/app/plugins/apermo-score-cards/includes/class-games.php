@@ -113,7 +113,28 @@ class Games {
 			)
 		);
 
-		return (bool) update_post_meta( $post_id, $meta_key, $data );
+		// update_post_meta returns:
+		// - meta_id (int) if meta didn't exist and was created
+		// - true if meta was updated
+		// - false if value is the same OR if update failed
+		// We need to distinguish "same value" from "actual failure".
+		$result = update_post_meta( $post_id, $meta_key, $data );
+
+		// If result is false, check if it's because the value is already correct.
+		if ( false === $result ) {
+			$existing = get_post_meta( $post_id, $meta_key, true );
+			// If existing data matches what we tried to save, consider it success.
+			if ( $existing === $data ) {
+				return true;
+			}
+			// Also check serialized comparison for edge cases with array key types.
+			if ( maybe_serialize( $existing ) === maybe_serialize( $data ) ) {
+				return true;
+			}
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -132,16 +153,38 @@ class Games {
 	/**
 	 * Add a round to a game.
 	 *
+	 * Creates the game if it doesn't exist yet.
+	 *
 	 * @param int    $post_id    Post ID.
 	 * @param string $block_id   Block instance ID.
 	 * @param array  $round_data Round data.
+	 * @param string $game_type  Game type (used when creating new game).
 	 * @return bool True on success, false on failure.
 	 */
-	public static function add_round( int $post_id, string $block_id, array $round_data ): bool {
+	public static function add_round( int $post_id, string $block_id, array $round_data, string $game_type = 'wizard' ): bool {
 		$game = self::get( $post_id, $block_id );
 
+		// Create game if it doesn't exist.
 		if ( ! $game ) {
-			return false;
+			// Extract player IDs from round data.
+			$player_ids = array();
+			foreach ( $round_data as $key => $value ) {
+				if ( is_numeric( $key ) ) {
+					$player_ids[] = (int) $key;
+				}
+			}
+
+			$game = array(
+				'blockId'     => $block_id,
+				'gameType'    => $game_type,
+				'playerIds'   => $player_ids,
+				'status'      => 'in_progress',
+				'rounds'      => array(),
+				'finalScores' => array(),
+				'winnerId'    => null,
+				'startedAt'   => current_time( 'c' ),
+				'completedAt' => null,
+			);
 		}
 
 		$game['rounds'][] = $round_data;

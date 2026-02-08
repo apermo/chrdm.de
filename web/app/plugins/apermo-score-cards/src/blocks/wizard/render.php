@@ -51,15 +51,35 @@ $status  = $game['status'] ?? 'pending';
 /**
  * Calculate score for a single round.
  *
- * @param int $bid Tricks bid.
- * @param int $won Tricks won.
+ * @param int $effective_bid Effective bid (with werewolf adjustment).
+ * @param int $won           Tricks won.
  * @return int Round score.
  */
-function calculate_wizard_round_score( int $bid, int $won ): int {
-	if ( $bid === $won ) {
+function calculate_wizard_round_score( int $effective_bid, int $won ): int {
+	if ( $effective_bid === $won ) {
 		return 20 + ( $won * 10 );
 	}
-	return -10 * abs( $bid - $won );
+	return -10 * abs( $effective_bid - $won );
+}
+
+/**
+ * Get effective bid for a player (including werewolf adjustment).
+ *
+ * @param array $round     Round data.
+ * @param int   $player_id Player ID.
+ * @return int Effective bid.
+ */
+function get_effective_bid( array $round, int $player_id ): int {
+	$data = $round[ $player_id ] ?? null;
+	if ( ! $data || ! isset( $data['bid'] ) ) {
+		return 0;
+	}
+	$base_bid = (int) $data['bid'];
+	$meta     = $round['_meta'] ?? null;
+	if ( $meta && isset( $meta['werewolfPlayerId'] ) && (int) $meta['werewolfPlayerId'] === $player_id ) {
+		return $base_bid + (int) ( $meta['werewolfAdjustment'] ?? 0 );
+	}
+	return $base_bid;
 }
 
 // Calculate running totals and final scores.
@@ -72,8 +92,10 @@ foreach ( $player_ids as $pid ) {
 
 	foreach ( $rounds as $round ) {
 		$data = $round[ $pid ] ?? null;
-		if ( $data && isset( $data['bid'], $data['won'] ) ) {
-			$total += calculate_wizard_round_score( (int) $data['bid'], (int) $data['won'] );
+		// Only calculate score if both bid and won are set and won is not empty.
+		if ( $data && isset( $data['bid'], $data['won'] ) && '' !== $data['won'] && null !== $data['won'] ) {
+			$effective_bid = get_effective_bid( $round, $pid );
+			$total        += calculate_wizard_round_score( $effective_bid, (int) $data['won'] );
 		}
 		$running_totals[ $pid ][] = $total;
 	}
@@ -109,6 +131,23 @@ foreach ( $sorted_players as $index => $player ) {
 }
 
 $current_round = count( $rounds );
+
+// Check if last round is incomplete (has bids but no results).
+$has_incomplete_round = false;
+if ( ! empty( $rounds ) ) {
+	$last_round = end( $rounds );
+	foreach ( $player_ids as $pid ) {
+		$data = $last_round[ $pid ] ?? null;
+		if ( $data && isset( $data['bid'] ) && $data['bid'] !== '' &&
+			( ! isset( $data['won'] ) || $data['won'] === '' || null === $data['won'] ) ) {
+			$has_incomplete_round = true;
+			break;
+		}
+	}
+}
+
+// Count completed rounds for progress display.
+$completed_rounds = $has_incomplete_round ? $current_round - 1 : $current_round;
 
 // Create player map for quick lookup.
 $players_map = array();
@@ -156,12 +195,21 @@ $wrapper_attributes = get_block_wrapper_attributes(
 		<div class="asc-wizard-display">
 			<p class="asc-wizard-display__progress">
 				<?php
-				printf(
-					/* translators: 1: current round, 2: total rounds */
-					esc_html__( 'Round %1$d / %2$d', 'apermo-score-cards' ),
-					$current_round,
-					$total_rounds
-				);
+				if ( $has_incomplete_round ) {
+					printf(
+						/* translators: 1: current round, 2: total rounds */
+						esc_html__( 'Round %1$d / %2$d (in progress)', 'apermo-score-cards' ),
+						$current_round,
+						$total_rounds
+					);
+				} else {
+					printf(
+						/* translators: 1: current round, 2: total rounds */
+						esc_html__( 'Round %1$d / %2$d', 'apermo-score-cards' ),
+						$completed_rounds,
+						$total_rounds
+					);
+				}
 				?>
 			</p>
 
@@ -198,21 +246,53 @@ $wrapper_attributes = get_block_wrapper_attributes(
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ( $rounds as $round_index => $round ) : ?>
-							<tr>
-								<td class="asc-wizard-display__round-num"><?php echo esc_html( $round_index + 1 ); ?></td>
-								<?php foreach ( $player_ids as $pid ) :
-									$data       = $round[ $pid ] ?? null;
-									$bid        = $data['bid'] ?? null;
-									$won        = $data['won'] ?? null;
-									$score      = ( null !== $bid && null !== $won )
-										? calculate_wizard_round_score( (int) $bid, (int) $won )
+						<?php foreach ( $rounds as $round_index => $round ) :
+							// Check if this round is incomplete.
+							$is_incomplete = false;
+							foreach ( $player_ids as $check_pid ) {
+								$check_data = $round[ $check_pid ] ?? null;
+								if ( $check_data && isset( $check_data['bid'] ) && $check_data['bid'] !== '' &&
+									( ! isset( $check_data['won'] ) || $check_data['won'] === '' || null === $check_data['won'] ) ) {
+									$is_incomplete = true;
+									break;
+								}
+							}
+							?>
+							<tr class="<?php echo $is_incomplete ? 'asc-wizard-display__row--incomplete' : ''; ?>">
+								<td class="asc-wizard-display__round-num">
+									<?php echo esc_html( $round_index + 1 ); ?>
+									<?php if ( $is_incomplete ) : ?>
+										<span class="asc-wizard-display__in-progress" title="<?php esc_attr_e( 'In progress', 'apermo-score-cards' ); ?>">⏳</span>
+									<?php endif; ?>
+								</td>
+								<?php
+								foreach ( $player_ids as $pid ) :
+									$data          = $round[ $pid ] ?? null;
+									$bid           = $data['bid'] ?? null;
+									$won           = $data['won'] ?? null;
+									$meta          = $round['_meta'] ?? null;
+									$has_werewolf  = $meta && isset( $meta['werewolfPlayerId'] ) && (int) $meta['werewolfPlayerId'] === $pid;
+									$adjustment    = $has_werewolf ? (int) ( $meta['werewolfAdjustment'] ?? 0 ) : 0;
+									$effective_bid = null !== $bid && '' !== $bid ? ( (int) $bid + $adjustment ) : null;
+									// Only calculate score if won is set and not empty (round is complete).
+									$won_valid     = null !== $won && '' !== $won;
+									$score         = ( null !== $effective_bid && $won_valid )
+										? calculate_wizard_round_score( $effective_bid, (int) $won )
 										: null;
-									$is_correct = null !== $bid && $bid === $won;
+									$is_correct    = null !== $effective_bid && $won_valid && $effective_bid === (int) $won;
 									?>
-									<td class="asc-wizard-display__bid"><?php echo null !== $bid ? esc_html( $bid ) : '-'; ?></td>
+									<td class="asc-wizard-display__bid">
+										<?php if ( null !== $bid ) : ?>
+											<?php echo esc_html( $bid ); ?>
+											<?php if ( $has_werewolf && 0 !== $adjustment ) : ?>
+												<sup class="asc-wizard-display__werewolf-indicator"><?php echo $adjustment > 0 ? '+' : ''; ?><?php echo esc_html( $adjustment ); ?></sup>
+											<?php endif; ?>
+										<?php else : ?>
+											-
+										<?php endif; ?>
+									</td>
 									<td class="asc-wizard-display__won <?php echo $is_correct ? 'asc-wizard-display__won--correct' : ''; ?>">
-										<?php echo null !== $won ? esc_html( $won ) : '-'; ?>
+										<?php echo $won_valid ? esc_html( $won ) : '-'; ?>
 									</td>
 									<td class="asc-wizard-display__pts <?php echo null !== $score && $score < 0 ? 'asc-wizard-display__pts--negative' : ''; ?>">
 										<?php echo null !== $score ? esc_html( $score ) : '-'; ?>
@@ -243,15 +323,21 @@ $wrapper_attributes = get_block_wrapper_attributes(
 
 			<?php if ( $can_edit ) : ?>
 				<div class="asc-wizard__actions">
-					<?php if ( $current_round < $total_rounds ) : ?>
+					<?php if ( $has_incomplete_round ) : ?>
+						<button type="button" class="asc-wizard__add-round-btn asc-wizard__add-round-btn--continue">
+							<?php esc_html_e( 'Continue Round', 'apermo-score-cards' ); ?>
+						</button>
+					<?php elseif ( $current_round < $total_rounds ) : ?>
 						<button type="button" class="asc-wizard__add-round-btn">
 							<?php esc_html_e( 'Add Round', 'apermo-score-cards' ); ?>
 						</button>
 					<?php endif; ?>
-					<button type="button" class="asc-wizard__edit-round-btn" data-round="<?php echo esc_attr( $current_round - 1 ); ?>">
-						<?php esc_html_e( 'Edit Last Round', 'apermo-score-cards' ); ?>
-					</button>
-					<?php if ( 'completed' !== $status && $current_round >= $total_rounds ) : ?>
+					<?php if ( ! $has_incomplete_round ) : ?>
+						<button type="button" class="asc-wizard__edit-round-btn" data-round="<?php echo esc_attr( $current_round - 1 ); ?>">
+							<?php esc_html_e( 'Edit Last Round', 'apermo-score-cards' ); ?>
+						</button>
+					<?php endif; ?>
+					<?php if ( 'completed' !== $status && $completed_rounds >= $total_rounds ) : ?>
 						<button type="button" class="asc-wizard__complete-btn">
 							<?php esc_html_e( 'Complete Game', 'apermo-score-cards' ); ?>
 						</button>
