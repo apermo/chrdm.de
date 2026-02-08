@@ -15,4 +15,5 @@ import './stores';
 import './blocks/darts';
 import './blocks/pool';
 import './blocks/wizard';
+import './blocks/phase10';
 import './blocks/evening-summary';

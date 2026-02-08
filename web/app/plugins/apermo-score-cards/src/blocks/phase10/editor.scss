@@ -1,0 +1,18 @@
+/**
+ * Phase 10 Score Card - Editor Styles
+ */
+
+.asc-phase10 {
+	// Editor-specific overrides if needed
+}
+
+.asc-phase10-display {
+	&__info {
+		margin: 0;
+		padding: 1rem;
+		background: #f0f0f1;
+		border-radius: 4px;
+		text-align: center;
+		color: #666;
+	}
+}

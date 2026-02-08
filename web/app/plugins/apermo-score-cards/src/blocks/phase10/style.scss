@@ -1,0 +1,493 @@
+/**
+ * Phase 10 Score Card - Frontend Styles
+ */
+
+.asc-phase10 {
+	padding: 1rem;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 1.25rem;
+	}
+
+	&__status {
+		padding: 0.25rem 0.5rem;
+		border-radius: 4px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+
+		&--completed {
+			background: #d4edda;
+			color: #155724;
+		}
+	}
+
+	&__pending {
+		text-align: center;
+		padding: 1rem;
+		color: #666;
+
+		p {
+			margin: 0 0 1rem;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		gap: 0.5rem;
+		margin-top: 1rem;
+		flex-wrap: wrap;
+	}
+
+	&__add-round-btn,
+	&__edit-round-btn,
+	&__complete-btn,
+	&__edit-players-btn {
+		padding: 0.5rem 1rem;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.875rem;
+		transition: background-color 0.2s;
+	}
+
+	&__add-round-btn {
+		background: #007cba;
+		color: #fff;
+
+		&:hover {
+			background: #005a87;
+		}
+	}
+
+	&__edit-round-btn {
+		background: #f0f0f1;
+		color: #1e1e1e;
+
+		&:hover {
+			background: #dcdcde;
+		}
+	}
+
+	&__complete-btn {
+		background: #00a32a;
+		color: #fff;
+
+		&:hover {
+			background: #008a20;
+		}
+	}
+
+	&__edit-players-btn {
+		background: #f0f0f1;
+		color: #1e1e1e;
+
+		&:hover {
+			background: #dcdcde;
+		}
+	}
+
+	&__player-actions {
+		margin-top: 1rem;
+	}
+}
+
+// Display table
+.asc-phase10-display {
+	&__progress {
+		margin: 0 0 1rem;
+		font-weight: 600;
+		color: #666;
+	}
+
+	&__table-wrapper {
+		overflow-x: auto;
+		margin: 0 -1rem;
+		padding: 0 1rem;
+	}
+
+	&__table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.875rem;
+		min-width: 300px;
+
+		th,
+		td {
+			padding: 0.5rem;
+			text-align: center;
+			border-bottom: 1px solid #e0e0e0;
+		}
+
+		th {
+			background: #f8f9fa;
+			font-weight: 600;
+			white-space: nowrap;
+		}
+
+		tbody tr:hover {
+			background: #f8f9fa;
+		}
+	}
+
+	&__round-col {
+		width: 60px;
+	}
+
+	&__round-num {
+		font-weight: 600;
+		color: #666;
+	}
+
+	&__player-header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+	}
+
+	&__header-avatar,
+	&__avatar {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__player {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	&__score {
+		position: relative;
+
+		&--zero {
+			.asc-phase10-display__points {
+				color: #00a32a;
+				font-weight: 600;
+			}
+		}
+	}
+
+	&__points {
+		display: block;
+	}
+
+	&__total {
+		display: block;
+		font-size: 0.75rem;
+		color: #999;
+	}
+
+	&__total-row {
+		td {
+			border-top: 2px solid #1e1e1e;
+			background: #f8f9fa;
+			font-weight: 600;
+		}
+	}
+
+	&__total-label {
+		text-align: left !important;
+	}
+
+	&__total-score {
+		&--position-1 {
+			background: #fff3cd !important;
+		}
+
+		&--position-2 {
+			background: #e8e8e8 !important;
+		}
+
+		&--position-3 {
+			background: #f5e6d3 !important;
+		}
+	}
+
+	&__medal {
+		margin-right: 0.25rem;
+	}
+}
+
+// Form styles
+.asc-phase10-form {
+	padding: 1rem;
+	background: #f8f9fa;
+	border-radius: 8px;
+	margin-top: 1rem;
+
+	&__title {
+		margin: 0 0 1rem;
+		font-size: 1rem;
+	}
+
+	&__players {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+	}
+
+	&__player-row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	&__player-info {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-width: 120px;
+		flex: 1;
+	}
+
+	&__player-avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__player-name {
+		font-weight: 500;
+	}
+
+	&__input-group {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	&__input {
+		width: 80px;
+		padding: 0.5rem;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 1rem;
+		text-align: center;
+
+		&:focus {
+			border-color: #007cba;
+			outline: none;
+			box-shadow: 0 0 0 1px #007cba;
+		}
+	}
+
+	&__calc-btn {
+		padding: 0.5rem;
+		background: #f0f0f1;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 1rem;
+		line-height: 1;
+
+		&:hover {
+			background: #dcdcde;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	&__save-btn,
+	&__cancel-btn {
+		padding: 0.5rem 1rem;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.875rem;
+	}
+
+	&__save-btn {
+		background: #007cba;
+		color: #fff;
+
+		&:hover {
+			background: #005a87;
+		}
+
+		&:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+		}
+	}
+
+	&__cancel-btn {
+		background: #f0f0f1;
+		color: #1e1e1e;
+
+		&:hover {
+			background: #dcdcde;
+		}
+	}
+}
+
+// Card calculator modal
+.asc-phase10-calc {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000;
+	padding: 1rem;
+
+	&__modal {
+		background: #fff;
+		border-radius: 8px;
+		max-width: 400px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	}
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1rem;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 1rem;
+	}
+
+	&__close {
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
+		padding: 0;
+		line-height: 1;
+		color: #666;
+
+		&:hover {
+			color: #1e1e1e;
+		}
+	}
+
+	&__body {
+		padding: 1rem;
+	}
+
+	&__card-types {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	&__card-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	&__card-label {
+		flex: 1;
+	}
+
+	&__card-name {
+		display: block;
+		font-weight: 500;
+	}
+
+	&__card-points {
+		display: block;
+		font-size: 0.75rem;
+		color: #666;
+	}
+
+	&__card-input {
+		width: 60px;
+		padding: 0.5rem;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 1rem;
+		text-align: center;
+
+		&:focus {
+			border-color: #007cba;
+			outline: none;
+		}
+	}
+
+	&__total {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1rem;
+		background: #f8f9fa;
+		border-radius: 4px;
+		margin-top: 1rem;
+		font-weight: 600;
+	}
+
+	&__total-value {
+		font-size: 1.25rem;
+		color: #007cba;
+	}
+
+	&__footer {
+		display: flex;
+		gap: 0.5rem;
+		padding: 1rem;
+		border-top: 1px solid #e0e0e0;
+	}
+
+	&__apply-btn,
+	&__cancel-btn {
+		flex: 1;
+		padding: 0.75rem 1rem;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.875rem;
+	}
+
+	&__apply-btn {
+		background: #007cba;
+		color: #fff;
+
+		&:hover {
+			background: #005a87;
+		}
+	}
+
+	&__cancel-btn {
+		background: #f0f0f1;
+		color: #1e1e1e;
+
+		&:hover {
+			background: #dcdcde;
+		}
+	}
+}

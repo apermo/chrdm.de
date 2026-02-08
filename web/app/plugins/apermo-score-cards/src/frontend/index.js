@@ -7,6 +7,7 @@
 import DartsScoreForm from './darts/DartsScoreForm';
 import PoolGameForm from './pool/PoolGameForm';
 import WizardRoundForm from './wizard/WizardRoundForm';
+import Phase10RoundForm from './phase10/Phase10RoundForm';
 import PlayerSelector from './components/PlayerSelector';
 
 /**
@@ -16,6 +17,7 @@ function init() {
 	initDartsBlocks();
 	initPoolBlocks();
 	initWizardBlocks();
+	initPhase10Blocks();
 }
 
 /**
@@ -717,6 +719,189 @@ async function completeWizardGame( postId, blockId, players, rounds, button ) {
 		window.location.reload();
 	} catch ( error ) {
 		console.error( 'Failed to complete wizard game:', error );
+		alert( error.message || 'Failed to complete game. Please try again.' );
+		button.disabled = false;
+		button.textContent = originalText;
+	}
+}
+
+/**
+ * Initialize Phase 10 blocks.
+ */
+function initPhase10Blocks() {
+	const phase10Blocks = document.querySelectorAll( '.asc-phase10[data-can-manage="true"]' );
+	phase10Blocks.forEach( ( block ) => {
+		const formContainer = block.querySelector( '.asc-phase10-form-container' );
+		const addRoundBtn = block.querySelector( '.asc-phase10__add-round-btn' );
+		const editRoundBtns = block.querySelectorAll( '.asc-phase10__edit-round-btn' );
+		const completeBtn = block.querySelector( '.asc-phase10__complete-btn' );
+		const editPlayersBtn = block.querySelector( '.asc-phase10__edit-players-btn' );
+		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+
+		const players = JSON.parse( block.dataset.players || '[]' );
+		const gameData = block.dataset.game ? JSON.parse( block.dataset.game ) : null;
+		const rounds = gameData?.rounds || [];
+
+		// Add round button - show form for new round
+		if ( addRoundBtn && formContainer ) {
+			addRoundBtn.addEventListener( 'click', () => {
+				addRoundBtn.hidden = true;
+				formContainer.hidden = false;
+				new Phase10RoundForm( formContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					players,
+					rounds,
+					editRoundIndex: null,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						formContainer.hidden = true;
+						formContainer.innerHTML = '';
+						addRoundBtn.hidden = false;
+					},
+				} );
+			} );
+		}
+
+		// Edit round buttons
+		editRoundBtns.forEach( ( btn ) => {
+			btn.addEventListener( 'click', () => {
+				const roundIndex = parseInt( btn.dataset.round, 10 );
+				if ( addRoundBtn ) {
+					addRoundBtn.hidden = true;
+				}
+				formContainer.hidden = false;
+				new Phase10RoundForm( formContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					players,
+					rounds,
+					editRoundIndex: roundIndex,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						formContainer.hidden = true;
+						formContainer.innerHTML = '';
+						if ( addRoundBtn ) {
+							addRoundBtn.hidden = false;
+						}
+					},
+				} );
+			} );
+		} );
+
+		// Complete game button
+		if ( completeBtn ) {
+			completeBtn.addEventListener( 'click', () => {
+				completePhase10Game( block.dataset.postId, block.dataset.blockId, players, rounds, completeBtn );
+			} );
+		}
+
+		// No existing game - show form immediately
+		if ( formContainer && ! formContainer.hidden && ! gameData ) {
+			new Phase10RoundForm( formContainer, {
+				postId: block.dataset.postId,
+				blockId: block.dataset.blockId,
+				players,
+				rounds: [],
+				editRoundIndex: null,
+				onSave: () => window.location.reload(),
+			} );
+		}
+
+		// Handle edit players button
+		if ( editPlayersBtn && playerSelectorContainer ) {
+			editPlayersBtn.addEventListener( 'click', () => {
+				editPlayersBtn.hidden = true;
+				playerSelectorContainer.hidden = false;
+
+				const playerIds = JSON.parse( block.dataset.playerIds || '[]' );
+				new PlayerSelector( playerSelectorContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					selectedPlayerIds: playerIds,
+					minPlayers: 2,
+					maxPlayers: 6,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						editPlayersBtn.hidden = false;
+					},
+				} );
+			} );
+		}
+	} );
+}
+
+/**
+ * Complete a Phase 10 game.
+ */
+async function completePhase10Game( postId, blockId, players, rounds, button ) {
+	const config = window.apermoScoreCards || {};
+	const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
+	const nonce = config.restNonce;
+
+	const originalText = button.textContent;
+	button.disabled = true;
+	button.textContent = window.wp?.i18n?.__( 'Completing...', 'apermo-score-cards' ) || 'Completing...';
+
+	// Calculate final scores (sum of all round points - lowest wins)
+	const finalScores = {};
+	const positions = {};
+
+	players.forEach( ( player ) => {
+		let total = 0;
+		rounds.forEach( ( round ) => {
+			total += round[ player.id ]?.points ?? 0;
+		} );
+		finalScores[ player.id ] = total;
+	} );
+
+	// Sort by score ascending (lowest wins) and calculate positions
+	const sorted = Object.entries( finalScores ).sort( ( a, b ) => a[ 1 ] - b[ 1 ] );
+	let currentPos = 1;
+	let prevScore = null;
+
+	sorted.forEach( ( [ playerId, score ], index ) => {
+		if ( score !== prevScore ) {
+			currentPos = index + 1;
+			prevScore = score;
+		}
+		positions[ playerId ] = currentPos;
+	} );
+
+	// Find winner(s) - lowest score
+	const winnerIds = sorted.filter( ( [ _, score ] ) => score === sorted[ 0 ][ 1 ] ).map( ( [ id ] ) => parseInt( id, 10 ) );
+
+	const playerIds = players.map( ( p ) => p.id );
+
+	try {
+		const response = await fetch(
+			`${ restUrl }/posts/${ postId }/games/${ blockId }`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce,
+				},
+				body: JSON.stringify( {
+					gameType: 'phase10',
+					playerIds,
+					rounds,
+					finalScores,
+					positions,
+					winnerIds,
+					status: 'completed',
+				} ),
+			}
+		);
+
+		if ( ! response.ok ) {
+			const error = await response.json().catch( () => ( {} ) );
+			throw new Error( error.message || 'Failed to complete game' );
+		}
+
+		window.location.reload();
+	} catch ( error ) {
+		console.error( 'Failed to complete Phase 10 game:', error );
 		alert( error.message || 'Failed to complete game. Please try again.' );
 		button.disabled = false;
 		button.textContent = originalText;
