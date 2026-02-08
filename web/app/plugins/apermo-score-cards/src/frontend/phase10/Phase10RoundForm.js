@@ -34,13 +34,17 @@ export default class Phase10RoundForm {
 		this.isEditing = this.editRoundIndex !== null && this.editRoundIndex !== undefined;
 		this.roundNumber = this.isEditing ? this.editRoundIndex + 1 : this.rounds.length + 1;
 
-		// Initialize scores from existing round if editing
+		// Initialize scores and finished state from existing round if editing
 		this.scores = {};
+		this.finished = {};
 		this.players.forEach( ( player ) => {
 			if ( this.isEditing && this.rounds[ this.editRoundIndex ] ) {
-				this.scores[ player.id ] = this.rounds[ this.editRoundIndex ][ player.id ]?.points ?? 0;
+				const playerData = this.rounds[ this.editRoundIndex ][ player.id ];
+				this.scores[ player.id ] = playerData?.points ?? 0;
+				this.finished[ player.id ] = playerData?.finished ?? false;
 			} else {
 				this.scores[ player.id ] = '';
+				this.finished[ player.id ] = false;
 			}
 		} );
 
@@ -93,6 +97,7 @@ export default class Phase10RoundForm {
 	renderPlayerRow( player ) {
 		const __ = window.wp?.i18n?.__ || ( ( s ) => s );
 		const score = this.scores[ player.id ];
+		const isFinished = this.finished[ player.id ];
 
 		return `
 			<div class="asc-phase10-form__player-row" data-player-id="${ player.id }">
@@ -104,15 +109,25 @@ export default class Phase10RoundForm {
 					<span class="asc-phase10-form__player-name">${ this.escapeHtml( player.name ) }</span>
 				</div>
 				<div class="asc-phase10-form__input-group">
+					<label class="asc-phase10-form__finished-label">
+						<input
+							type="checkbox"
+							class="asc-phase10-form__finished-checkbox"
+							data-player-id="${ player.id }"
+							${ isFinished ? 'checked' : '' }
+						/>
+						<span class="asc-phase10-form__finished-text">${ __( 'Phase done', 'apermo-score-cards' ) }</span>
+					</label>
 					<input
 						type="number"
 						class="asc-phase10-form__input"
 						data-player-id="${ player.id }"
-						value="${ score }"
+						value="${ isFinished ? 0 : score }"
 						min="0"
 						placeholder="0"
+						${ isFinished ? 'disabled' : '' }
 					/>
-					<button type="button" class="asc-phase10-form__calc-btn" data-player-id="${ player.id }" title="${ __( 'Calculate from cards', 'apermo-score-cards' ) }">
+					<button type="button" class="asc-phase10-form__calc-btn" data-player-id="${ player.id }" title="${ __( 'Calculate from cards', 'apermo-score-cards' ) }" ${ isFinished ? 'disabled' : '' }>
 						🧮
 					</button>
 				</div>
@@ -124,6 +139,30 @@ export default class Phase10RoundForm {
 	 * Bind form events.
 	 */
 	bindEvents() {
+		// Finished checkbox changes
+		this.container.querySelectorAll( '.asc-phase10-form__finished-checkbox' ).forEach( ( checkbox ) => {
+			checkbox.addEventListener( 'change', ( e ) => {
+				const playerId = parseInt( e.target.dataset.playerId, 10 );
+				const isFinished = e.target.checked;
+				this.finished[ playerId ] = isFinished;
+
+				const row = this.container.querySelector( `.asc-phase10-form__player-row[data-player-id="${ playerId }"]` );
+				const input = row.querySelector( '.asc-phase10-form__input' );
+				const calcBtn = row.querySelector( '.asc-phase10-form__calc-btn' );
+
+				if ( isFinished ) {
+					this.scores[ playerId ] = 0;
+					input.value = 0;
+					input.disabled = true;
+					calcBtn.disabled = true;
+				} else {
+					input.disabled = false;
+					calcBtn.disabled = false;
+					input.focus();
+				}
+			} );
+		} );
+
 		// Input changes
 		this.container.querySelectorAll( '.asc-phase10-form__input' ).forEach( ( input ) => {
 			input.addEventListener( 'input', ( e ) => {
@@ -135,6 +174,9 @@ export default class Phase10RoundForm {
 		// Calculator buttons
 		this.container.querySelectorAll( '.asc-phase10-form__calc-btn' ).forEach( ( btn ) => {
 			btn.addEventListener( 'click', ( e ) => {
+				if ( e.target.disabled ) {
+					return;
+				}
 				const playerId = parseInt( e.target.dataset.playerId, 10 );
 				this.openCalculator( playerId );
 			} );
@@ -279,6 +321,7 @@ export default class Phase10RoundForm {
 		this.players.forEach( ( player ) => {
 			roundData[ player.id ] = {
 				points: parseInt( this.scores[ player.id ], 10 ) || 0,
+				finished: this.finished[ player.id ] || false,
 			};
 		} );
 
@@ -301,7 +344,7 @@ export default class Phase10RoundForm {
 							'Content-Type': 'application/json',
 							'X-WP-Nonce': nonce,
 						},
-						body: JSON.stringify( roundData ),
+						body: JSON.stringify( { roundData } ),
 					}
 				);
 			} else {
@@ -315,7 +358,7 @@ export default class Phase10RoundForm {
 							'X-WP-Nonce': nonce,
 						},
 						body: JSON.stringify( {
-							round: roundData,
+							roundData,
 							gameType: 'phase10',
 						} ),
 					}

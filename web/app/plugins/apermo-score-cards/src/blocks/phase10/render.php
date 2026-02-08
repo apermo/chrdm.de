@@ -166,10 +166,14 @@ $wrapper_attributes = get_block_wrapper_attributes(
 									<?php echo esc_html( $round_index + 1 ); ?>
 								</td>
 								<?php foreach ( $player_ids as $pid ) :
-									$points = $round[ $pid ]['points'] ?? 0;
-									$total  = $running_totals[ $pid ][ $round_index ] ?? 0;
+									$points   = $round[ $pid ]['points'] ?? 0;
+									$finished = $round[ $pid ]['finished'] ?? false;
+									$total    = $running_totals[ $pid ][ $round_index ] ?? 0;
 									?>
-									<td class="asc-phase10-display__score <?php echo 0 === (int) $points ? 'asc-phase10-display__score--zero' : ''; ?>">
+									<td class="asc-phase10-display__score <?php echo $finished ? 'asc-phase10-display__score--finished' : ''; ?> <?php echo 0 === (int) $points && ! $finished ? 'asc-phase10-display__score--zero' : ''; ?>">
+										<?php if ( $finished ) : ?>
+											<span class="asc-phase10-display__finished-icon" title="<?php esc_attr_e( 'Phase completed', 'apermo-score-cards' ); ?>">✓</span>
+										<?php endif; ?>
 										<span class="asc-phase10-display__points"><?php echo esc_html( $points ); ?></span>
 										<span class="asc-phase10-display__total">(<?php echo esc_html( $total ); ?>)</span>
 									</td>
