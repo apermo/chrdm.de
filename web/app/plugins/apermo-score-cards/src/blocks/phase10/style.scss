@@ -151,11 +151,36 @@
 		color: #666;
 	}
 
+	&__player-col {
+		vertical-align: bottom;
+		padding-bottom: 0.5rem !important;
+
+		// On small screens, rotate the header content
+		@media (max-width: 479px) {
+			height: 100px;
+			vertical-align: middle;
+			padding: 0.25rem !important;
+		}
+	}
+
 	&__player-header {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
+
+		// On small screens, rotate 90° counter-clockwise
+		@media (max-width: 479px) {
+			writing-mode: vertical-rl;
+			transform: rotate(180deg);
+			flex-direction: row-reverse;
+			gap: 0.25rem;
+			height: 100%;
+		}
+	}
+
+	&__player-name {
+		white-space: nowrap;
 	}
 
 	&__header-avatar,
@@ -164,12 +189,83 @@
 		height: 24px;
 		border-radius: 50%;
 		object-fit: cover;
+		flex-shrink: 0;
+
+		@media (max-width: 479px) {
+			width: 20px;
+			height: 20px;
+		}
 	}
 
 	&__player {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+	}
+
+	&__phase-row {
+		td {
+			background: #f8f9fa;
+			border-bottom: 2px solid #e0e0e0;
+		}
+	}
+
+	&__phase-label {
+		font-weight: 600;
+		color: #666;
+		text-align: left !important;
+	}
+
+	&__phase-cell {
+		padding: 0.5rem !important;
+	}
+
+	&__phase-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		justify-content: center;
+
+		// Wide layout: 2 rows × 5 columns.
+		@media (min-width: 480px) {
+			max-width: 140px;
+			margin: 0 auto;
+		}
+
+		// Narrow layout: 5 rows × 2 columns.
+		@media (max-width: 479px) {
+			max-width: 60px;
+			margin: 0 auto;
+		}
+	}
+
+	&__phase {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: #666;
+		background: #fff;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+
+		&--completed {
+			text-decoration: line-through;
+			color: #999;
+			background: #e8e8e8;
+			border-color: #ccc;
+		}
+
+		&--current {
+			color: #007cba;
+			background: #e6f4fa;
+			border-color: #007cba;
+			font-weight: 700;
+			box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+		}
 	}
 
 	&__score {
@@ -182,7 +278,7 @@
 			}
 		}
 
-		&--finished {
+		&--phase-completed {
 			background: #d4edda !important;
 
 			.asc-phase10-display__points {
@@ -192,7 +288,7 @@
 		}
 	}
 
-	&__finished-icon {
+	&__phase-completed-icon {
 		color: #00a32a;
 		font-weight: bold;
 		margin-right: 0.25rem;
@@ -231,6 +327,18 @@
 
 		&--position-3 {
 			background: #f5e6d3 !important;
+		}
+
+		&--finished {
+			position: relative;
+
+			&::after {
+				content: "✓";
+				display: inline-block;
+				margin-left: 0.25rem;
+				color: #00a32a;
+				font-size: 0.75rem;
+			}
 		}
 	}
 
@@ -284,6 +392,15 @@
 		font-weight: 500;
 	}
 
+	&__player-phase {
+		font-size: 0.75rem;
+		color: #007cba;
+		background: #e6f4fa;
+		padding: 0.125rem 0.5rem;
+		border-radius: 10px;
+		font-weight: 500;
+	}
+
 	&__input-group {
 		display: flex;
 		align-items: center;
@@ -291,7 +408,7 @@
 		flex-wrap: wrap;
 	}
 
-	&__finished-label {
+	&__phase-completed-label {
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
@@ -300,17 +417,17 @@
 		white-space: nowrap;
 	}
 
-	&__finished-checkbox {
+	&__phase-completed-checkbox {
 		width: 18px;
 		height: 18px;
 		cursor: pointer;
 	}
 
-	&__finished-text {
+	&__phase-completed-text {
 		color: #666;
 	}
 
-	&__finished-checkbox:checked + &__finished-text {
+	&__phase-completed-checkbox:checked + &__phase-completed-text {
 		color: #00a32a;
 		font-weight: 500;
 	}

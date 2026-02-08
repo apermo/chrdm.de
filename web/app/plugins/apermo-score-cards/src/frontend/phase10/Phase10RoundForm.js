@@ -8,9 +8,9 @@
  * Card point values for Phase 10.
  */
 const CARD_POINTS = {
-	low: { name: 'Karten 1-9', points: 5 },
-	high: { name: 'Karten 10-12', points: 10 },
-	skip: { name: 'Aussetzen', points: 15 },
+	low: { name: 'Cards 1-9', points: 5 },
+	high: { name: 'Cards 10-12', points: 10 },
+	skip: { name: 'Skip', points: 15 },
 	joker: { name: 'Joker', points: 20 },
 };
 
@@ -34,17 +34,17 @@ export default class Phase10RoundForm {
 		this.isEditing = this.editRoundIndex !== null && this.editRoundIndex !== undefined;
 		this.roundNumber = this.isEditing ? this.editRoundIndex + 1 : this.rounds.length + 1;
 
-		// Initialize scores and finished state from existing round if editing
+		// Initialize scores and phaseCompleted state from existing round if editing
 		this.scores = {};
-		this.finished = {};
+		this.phaseCompleted = {};
 		this.players.forEach( ( player ) => {
 			if ( this.isEditing && this.rounds[ this.editRoundIndex ] ) {
 				const playerData = this.rounds[ this.editRoundIndex ][ player.id ];
 				this.scores[ player.id ] = playerData?.points ?? 0;
-				this.finished[ player.id ] = playerData?.finished ?? false;
+				this.phaseCompleted[ player.id ] = playerData?.phaseCompleted ?? false;
 			} else {
 				this.scores[ player.id ] = '';
-				this.finished[ player.id ] = false;
+				this.phaseCompleted[ player.id ] = false;
 			}
 		} );
 
@@ -89,6 +89,27 @@ export default class Phase10RoundForm {
 	}
 
 	/**
+	 * Calculate the current phase for a player.
+	 *
+	 * @param {number} playerId Player ID.
+	 * @return {number} Current phase (1-10).
+	 */
+	getCurrentPhase( playerId ) {
+		let phase = 1;
+		// When editing, don't count the round being edited
+		const roundsToCheck = this.isEditing
+			? this.rounds.slice( 0, this.editRoundIndex )
+			: this.rounds;
+
+		for ( const round of roundsToCheck ) {
+			if ( round[ playerId ]?.phaseCompleted ) {
+				phase++;
+			}
+		}
+		return Math.min( phase, 10 );
+	}
+
+	/**
 	 * Render a player row.
 	 *
 	 * @param {Object} player Player object.
@@ -97,7 +118,8 @@ export default class Phase10RoundForm {
 	renderPlayerRow( player ) {
 		const __ = window.wp?.i18n?.__ || ( ( s ) => s );
 		const score = this.scores[ player.id ];
-		const isFinished = this.finished[ player.id ];
+		const isPhaseCompleted = this.phaseCompleted[ player.id ];
+		const currentPhase = this.getCurrentPhase( player.id );
 
 		return `
 			<div class="asc-phase10-form__player-row" data-player-id="${ player.id }">
@@ -107,27 +129,27 @@ export default class Phase10RoundForm {
 						: ''
 					}
 					<span class="asc-phase10-form__player-name">${ this.escapeHtml( player.name ) }</span>
+					<span class="asc-phase10-form__player-phase">${ __( 'Phase', 'apermo-score-cards' ) } ${ currentPhase }</span>
 				</div>
 				<div class="asc-phase10-form__input-group">
-					<label class="asc-phase10-form__finished-label">
+					<label class="asc-phase10-form__phase-completed-label">
 						<input
 							type="checkbox"
-							class="asc-phase10-form__finished-checkbox"
+							class="asc-phase10-form__phase-completed-checkbox"
 							data-player-id="${ player.id }"
-							${ isFinished ? 'checked' : '' }
+							${ isPhaseCompleted ? 'checked' : '' }
 						/>
-						<span class="asc-phase10-form__finished-text">${ __( 'Phase done', 'apermo-score-cards' ) }</span>
+						<span class="asc-phase10-form__phase-completed-text">${ __( 'Done', 'apermo-score-cards' ) }</span>
 					</label>
 					<input
 						type="number"
 						class="asc-phase10-form__input"
 						data-player-id="${ player.id }"
-						value="${ isFinished ? 0 : score }"
+						value="${ score }"
 						min="0"
 						placeholder="0"
-						${ isFinished ? 'disabled' : '' }
 					/>
-					<button type="button" class="asc-phase10-form__calc-btn" data-player-id="${ player.id }" title="${ __( 'Calculate from cards', 'apermo-score-cards' ) }" ${ isFinished ? 'disabled' : '' }>
+					<button type="button" class="asc-phase10-form__calc-btn" data-player-id="${ player.id }" title="${ __( 'Calculate from cards', 'apermo-score-cards' ) }">
 						🧮
 					</button>
 				</div>
@@ -139,27 +161,11 @@ export default class Phase10RoundForm {
 	 * Bind form events.
 	 */
 	bindEvents() {
-		// Finished checkbox changes
-		this.container.querySelectorAll( '.asc-phase10-form__finished-checkbox' ).forEach( ( checkbox ) => {
+		// Phase completed checkbox changes (points are independent!)
+		this.container.querySelectorAll( '.asc-phase10-form__phase-completed-checkbox' ).forEach( ( checkbox ) => {
 			checkbox.addEventListener( 'change', ( e ) => {
 				const playerId = parseInt( e.target.dataset.playerId, 10 );
-				const isFinished = e.target.checked;
-				this.finished[ playerId ] = isFinished;
-
-				const row = this.container.querySelector( `.asc-phase10-form__player-row[data-player-id="${ playerId }"]` );
-				const input = row.querySelector( '.asc-phase10-form__input' );
-				const calcBtn = row.querySelector( '.asc-phase10-form__calc-btn' );
-
-				if ( isFinished ) {
-					this.scores[ playerId ] = 0;
-					input.value = 0;
-					input.disabled = true;
-					calcBtn.disabled = true;
-				} else {
-					input.disabled = false;
-					calcBtn.disabled = false;
-					input.focus();
-				}
+				this.phaseCompleted[ playerId ] = e.target.checked;
 			} );
 		} );
 
@@ -321,7 +327,7 @@ export default class Phase10RoundForm {
 		this.players.forEach( ( player ) => {
 			roundData[ player.id ] = {
 				points: parseInt( this.scores[ player.id ], 10 ) || 0,
-				finished: this.finished[ player.id ] || false,
+				phaseCompleted: this.phaseCompleted[ player.id ] || false,
 			};
 		} );
 
