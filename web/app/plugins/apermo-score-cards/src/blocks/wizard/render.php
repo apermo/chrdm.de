@@ -48,38 +48,42 @@ $can_edit  = $game && $can_manage;
 $rounds  = $game['rounds'] ?? array();
 $status  = $game['status'] ?? 'pending';
 
-/**
- * Calculate score for a single round.
- *
- * @param int $effective_bid Effective bid (with werewolf adjustment).
- * @param int $won           Tricks won.
- * @return int Round score.
- */
-function calculate_wizard_round_score( int $effective_bid, int $won ): int {
-	if ( $effective_bid === $won ) {
-		return 20 + ( $won * 10 );
+if ( ! function_exists( __NAMESPACE__ . '\\calculate_wizard_round_score' ) ) {
+	/**
+	 * Calculate score for a single round.
+	 *
+	 * @param int $effective_bid Effective bid (with werewolf adjustment).
+	 * @param int $won           Tricks won.
+	 * @return int Round score.
+	 */
+	function calculate_wizard_round_score( int $effective_bid, int $won ): int {
+		if ( $effective_bid === $won ) {
+			return 20 + ( $won * 10 );
+		}
+		return -10 * abs( $effective_bid - $won );
 	}
-	return -10 * abs( $effective_bid - $won );
 }
 
-/**
- * Get effective bid for a player (including werewolf adjustment).
- *
- * @param array $round     Round data.
- * @param int   $player_id Player ID.
- * @return int Effective bid.
- */
-function get_effective_bid( array $round, int $player_id ): int {
-	$data = $round[ $player_id ] ?? null;
-	if ( ! $data || ! isset( $data['bid'] ) ) {
-		return 0;
+if ( ! function_exists( __NAMESPACE__ . '\\get_effective_bid' ) ) {
+	/**
+	 * Get effective bid for a player (including werewolf adjustment).
+	 *
+	 * @param array $round     Round data.
+	 * @param int   $player_id Player ID.
+	 * @return int Effective bid.
+	 */
+	function get_effective_bid( array $round, int $player_id ): int {
+		$data = $round[ $player_id ] ?? null;
+		if ( ! $data || ! isset( $data['bid'] ) ) {
+			return 0;
+		}
+		$base_bid = (int) $data['bid'];
+		$meta     = $round['_meta'] ?? null;
+		if ( $meta && isset( $meta['werewolfPlayerId'] ) && (int) $meta['werewolfPlayerId'] === $player_id ) {
+			return $base_bid + (int) ( $meta['werewolfAdjustment'] ?? 0 );
+		}
+		return $base_bid;
 	}
-	$base_bid = (int) $data['bid'];
-	$meta     = $round['_meta'] ?? null;
-	if ( $meta && isset( $meta['werewolfPlayerId'] ) && (int) $meta['werewolfPlayerId'] === $player_id ) {
-		return $base_bid + (int) ( $meta['werewolfAdjustment'] ?? 0 );
-	}
-	return $base_bid;
 }
 
 // Calculate running totals and final scores.
