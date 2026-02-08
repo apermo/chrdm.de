@@ -1,0 +1,27 @@
+/**
+ * Wizard Score Card - Editor styles
+ */
+
+.wp-block-apermo-score-cards-wizard {
+	.asc-wizard {
+		border: 1px solid #ddd;
+
+		&__pending {
+			.components-notice {
+				margin: 0 0 16px;
+			}
+		}
+	}
+
+	.asc-wizard-display {
+		&__edit-hint {
+			margin: 16px 0 0;
+			padding: 12px;
+			background: #f0f0f0;
+			border-radius: 4px;
+			text-align: center;
+			color: #666;
+			font-size: 0.9em;
+		}
+	}
+}

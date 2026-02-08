@@ -6,6 +6,7 @@
 
 import DartsScoreForm from './darts/DartsScoreForm';
 import PoolGameForm from './pool/PoolGameForm';
+import WizardRoundForm from './wizard/WizardRoundForm';
 import PlayerSelector from './components/PlayerSelector';
 
 /**
@@ -14,6 +15,7 @@ import PlayerSelector from './components/PlayerSelector';
 function init() {
 	initDartsBlocks();
 	initPoolBlocks();
+	initWizardBlocks();
 }
 
 /**
@@ -525,6 +527,200 @@ function calculatePoolPositions( players, games ) {
 	} );
 
 	return positions;
+}
+
+/**
+ * Initialize Wizard blocks.
+ */
+function initWizardBlocks() {
+	const wizardBlocks = document.querySelectorAll( '.asc-wizard[data-can-manage="true"]' );
+	wizardBlocks.forEach( ( block ) => {
+		const formContainer = block.querySelector( '.asc-wizard-form-container' );
+		const addRoundBtn = block.querySelector( '.asc-wizard__add-round-btn' );
+		const editRoundBtns = block.querySelectorAll( '.asc-wizard__edit-round-btn' );
+		const completeBtn = block.querySelector( '.asc-wizard__complete-btn' );
+		const editPlayersBtn = block.querySelector( '.asc-wizard__edit-players-btn' );
+		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+
+		const players = JSON.parse( block.dataset.players || '[]' );
+		const gameData = block.dataset.game ? JSON.parse( block.dataset.game ) : null;
+		const rounds = gameData?.rounds || [];
+		const totalRounds = parseInt( block.dataset.totalRounds, 10 ) || 15;
+
+		// Add round button - show form for new round
+		if ( addRoundBtn && formContainer ) {
+			addRoundBtn.addEventListener( 'click', () => {
+				addRoundBtn.hidden = true;
+				formContainer.hidden = false;
+				new WizardRoundForm( formContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					players,
+					rounds,
+					totalRounds,
+					editRoundIndex: null,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						formContainer.hidden = true;
+						formContainer.innerHTML = '';
+						addRoundBtn.hidden = false;
+					},
+				} );
+			} );
+		}
+
+		// Edit round buttons
+		editRoundBtns.forEach( ( btn ) => {
+			btn.addEventListener( 'click', () => {
+				const roundIndex = parseInt( btn.dataset.round, 10 );
+				if ( addRoundBtn ) {
+					addRoundBtn.hidden = true;
+				}
+				formContainer.hidden = false;
+				new WizardRoundForm( formContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					players,
+					rounds,
+					totalRounds,
+					editRoundIndex: roundIndex,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						formContainer.hidden = true;
+						formContainer.innerHTML = '';
+						if ( addRoundBtn ) {
+							addRoundBtn.hidden = false;
+						}
+					},
+				} );
+			} );
+		} );
+
+		// Complete game button
+		if ( completeBtn ) {
+			completeBtn.addEventListener( 'click', () => {
+				completeWizardGame( block.dataset.postId, block.dataset.blockId, players, rounds, completeBtn );
+			} );
+		}
+
+		// No existing game - show form immediately
+		if ( formContainer && ! formContainer.hidden && ! gameData ) {
+			new WizardRoundForm( formContainer, {
+				postId: block.dataset.postId,
+				blockId: block.dataset.blockId,
+				players,
+				rounds: [],
+				totalRounds,
+				editRoundIndex: null,
+				onSave: () => window.location.reload(),
+			} );
+		}
+
+		// Handle edit players button
+		if ( editPlayersBtn && playerSelectorContainer ) {
+			editPlayersBtn.addEventListener( 'click', () => {
+				editPlayersBtn.hidden = true;
+				playerSelectorContainer.hidden = false;
+
+				const playerIds = JSON.parse( block.dataset.playerIds || '[]' );
+				new PlayerSelector( playerSelectorContainer, {
+					postId: block.dataset.postId,
+					blockId: block.dataset.blockId,
+					selectedPlayerIds: playerIds,
+					minPlayers: 3,
+					maxPlayers: 6,
+					onSave: () => window.location.reload(),
+					onCancel: () => {
+						editPlayersBtn.hidden = false;
+					},
+				} );
+			} );
+		}
+	} );
+}
+
+/**
+ * Complete a Wizard game.
+ */
+async function completeWizardGame( postId, blockId, players, rounds, button ) {
+	const config = window.apermoScoreCards || {};
+	const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
+	const nonce = config.restNonce;
+
+	const originalText = button.textContent;
+	button.disabled = true;
+	button.textContent = window.wp?.i18n?.__( 'Completing...', 'apermo-score-cards' ) || 'Completing...';
+
+	// Calculate final scores
+	const finalScores = {};
+	const positions = {};
+
+	players.forEach( ( player ) => {
+		let total = 0;
+		rounds.forEach( ( round ) => {
+			const data = round[ player.id ];
+			if ( data && typeof data.bid === 'number' && typeof data.won === 'number' ) {
+				if ( data.bid === data.won ) {
+					total += 20 + data.won * 10;
+				} else {
+					total -= 10 * Math.abs( data.bid - data.won );
+				}
+			}
+		} );
+		finalScores[ player.id ] = total;
+	} );
+
+	// Sort and calculate positions
+	const sorted = Object.entries( finalScores ).sort( ( a, b ) => b[ 1 ] - a[ 1 ] );
+	let currentPos = 1;
+	let prevScore = null;
+
+	sorted.forEach( ( [ playerId, score ], index ) => {
+		if ( score !== prevScore ) {
+			currentPos = index + 1;
+			prevScore = score;
+		}
+		positions[ playerId ] = currentPos;
+	} );
+
+	// Find winner(s)
+	const winnerIds = sorted.filter( ( [ _, score ] ) => score === sorted[ 0 ][ 1 ] ).map( ( [ id ] ) => parseInt( id, 10 ) );
+
+	const playerIds = players.map( ( p ) => p.id );
+
+	try {
+		const response = await fetch(
+			`${ restUrl }/posts/${ postId }/games/${ blockId }`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce,
+				},
+				body: JSON.stringify( {
+					gameType: 'wizard',
+					playerIds,
+					rounds,
+					finalScores,
+					positions,
+					winnerIds,
+					status: 'completed',
+				} ),
+			}
+		);
+
+		if ( ! response.ok ) {
+			const error = await response.json().catch( () => ( {} ) );
+			throw new Error( error.message || 'Failed to complete game' );
+		}
+
+		window.location.reload();
+	} catch ( error ) {
+		console.error( 'Failed to complete wizard game:', error );
+		alert( error.message || 'Failed to complete game. Please try again.' );
+		button.disabled = false;
+		button.textContent = originalText;
+	}
 }
 
 /**

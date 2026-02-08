@@ -34,6 +34,7 @@ $blocks       = parse_blocks( $post_content );
 $game_block_types = array(
 	'apermo-score-cards/darts',
 	'apermo-score-cards/pool',
+	'apermo-score-cards/wizard',
 );
 
 // Collect all games from blocks, merging with meta data.

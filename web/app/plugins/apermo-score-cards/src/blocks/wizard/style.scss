@@ -1,0 +1,477 @@
+/**
+ * Wizard Score Card - Frontend styles
+ */
+
+.asc-wizard {
+	margin: 24px 0;
+	padding: 20px;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+	&__header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 20px;
+		padding-bottom: 16px;
+		border-bottom: 3px solid #8e44ad;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 1.5em;
+		font-weight: 700;
+		color: #333;
+	}
+
+	&__rounds {
+		padding: 4px 12px;
+		background: #f0f0f0;
+		border-radius: 4px;
+		font-size: 0.85em;
+		color: #666;
+	}
+
+	&__status {
+		padding: 4px 12px;
+		border-radius: 4px;
+		font-size: 0.85em;
+		font-weight: 500;
+
+		&--completed {
+			background: #d4edda;
+			color: #155724;
+		}
+	}
+
+	&__pending {
+		text-align: center;
+		padding: 20px;
+		color: #666;
+
+		p {
+			margin: 0 0 16px;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 20px;
+		padding-top: 16px;
+		border-top: 1px solid #eee;
+	}
+
+	&__add-round-btn,
+	&__edit-round-btn,
+	&__complete-btn,
+	&__edit-players-btn {
+		padding: 10px 20px;
+		border: none;
+		border-radius: 6px;
+		font-size: 0.95em;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	&__add-round-btn {
+		background: #8e44ad;
+		color: #fff;
+
+		&:hover {
+			background: #7d3c98;
+		}
+	}
+
+	&__edit-round-btn {
+		background: #3498db;
+		color: #fff;
+
+		&:hover {
+			background: #2980b9;
+		}
+	}
+
+	&__complete-btn {
+		background: #27ae60;
+		color: #fff;
+
+		&:hover {
+			background: #219a52;
+		}
+	}
+
+	&__edit-players-btn {
+		background: #f39c12;
+		color: #fff;
+
+		&:hover {
+			background: #e67e22;
+		}
+	}
+
+	&__player-actions {
+		margin-top: 16px;
+	}
+}
+
+.asc-wizard-display {
+	&__progress {
+		margin: 0 0 16px;
+		font-size: 0.9em;
+		color: #666;
+	}
+
+	&__table-wrapper {
+		overflow-x: auto;
+		margin: 0 -20px;
+		padding: 0 20px;
+	}
+
+	&__table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9em;
+
+		th,
+		td {
+			padding: 8px 10px;
+			text-align: center;
+			border: 1px solid #e0e0e0;
+		}
+
+		thead {
+			background: #2c3e50;
+			color: #fff;
+
+			th {
+				font-weight: 600;
+				border-color: #34495e;
+			}
+		}
+
+		tbody tr {
+			&:nth-child(even) {
+				background: #fafafa;
+			}
+
+			&:hover {
+				background: #f0f7ff;
+			}
+		}
+
+		&--full {
+			min-width: 600px;
+		}
+	}
+
+	&__subheader {
+		background: #34495e !important;
+
+		th {
+			font-size: 0.8em;
+			font-weight: 500;
+			padding: 4px 6px;
+		}
+	}
+
+	&__player-header {
+		min-width: 120px;
+	}
+
+	&__header-avatar {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		vertical-align: middle;
+		margin-right: 6px;
+	}
+
+	&__round-col {
+		width: 60px;
+	}
+
+	&__round-num {
+		font-weight: 600;
+		background: #f5f5f5;
+	}
+
+	&__bid-col,
+	&__won-col {
+		width: 40px;
+	}
+
+	&__score-col {
+		width: 50px;
+	}
+
+	&__bid {
+		color: #666;
+	}
+
+	&__won {
+		&--correct {
+			background: rgba(39, 174, 96, 0.15);
+			color: #27ae60;
+			font-weight: 600;
+		}
+	}
+
+	&__pts {
+		font-weight: 500;
+
+		&--negative {
+			color: #e74c3c;
+		}
+	}
+
+	&__total-row {
+		background: #2c3e50 !important;
+		color: #fff;
+
+		td {
+			border-color: #34495e;
+			font-size: 1.1em;
+		}
+	}
+
+	&__total-label {
+		text-align: left !important;
+		font-weight: 600;
+	}
+
+	&__total-score {
+		&--position-1 {
+			background: rgba(255, 215, 0, 0.3) !important;
+		}
+
+		&--position-2 {
+			background: rgba(192, 192, 192, 0.3) !important;
+		}
+
+		&--position-3 {
+			background: rgba(205, 127, 50, 0.2) !important;
+		}
+	}
+
+	&__medal {
+		margin-right: 6px;
+		font-size: 1.2em;
+	}
+
+	&__player {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		text-align: left;
+	}
+
+	&__avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__rank-col {
+		width: 50px;
+	}
+
+	&__row {
+		&--position-1 {
+			background: #fff9e6 !important;
+		}
+
+		&--position-2 {
+			background: #f5f5f5 !important;
+		}
+
+		&--position-3 {
+			background: #fdf5eb !important;
+		}
+	}
+}
+
+// Wizard round form
+.asc-wizard-form {
+	margin-top: 20px;
+	padding: 20px;
+	background: #f8f9fa;
+	border-radius: 8px;
+
+	&__title {
+		margin: 0 0 16px;
+		font-size: 1.1em;
+		font-weight: 600;
+	}
+
+	&__grid {
+		display: grid;
+		gap: 16px;
+	}
+
+	&__player-row {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 12px;
+		background: #fff;
+		border-radius: 6px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	}
+
+	&__player-info {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-width: 120px;
+	}
+
+	&__player-avatar {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__player-name {
+		font-weight: 500;
+	}
+
+	&__inputs {
+		display: flex;
+		gap: 12px;
+		flex: 1;
+	}
+
+	&__input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	&__label {
+		font-size: 0.8em;
+		color: #666;
+		text-transform: uppercase;
+	}
+
+	&__input {
+		width: 60px;
+		padding: 8px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 1em;
+		text-align: center;
+
+		&:focus {
+			outline: none;
+			border-color: #8e44ad;
+			box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
+		}
+	}
+
+	&__score-preview {
+		min-width: 60px;
+		padding: 8px;
+		text-align: center;
+		font-weight: 600;
+		font-size: 1.1em;
+
+		&--positive {
+			color: #27ae60;
+		}
+
+		&--negative {
+			color: #e74c3c;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		gap: 12px;
+		margin-top: 20px;
+		justify-content: center;
+	}
+
+	&__submit,
+	&__cancel {
+		padding: 12px 28px;
+		border: none;
+		border-radius: 6px;
+		font-size: 1em;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	&__submit {
+		background: #8e44ad;
+		color: #fff;
+
+		&:hover:not(:disabled) {
+			background: #7d3c98;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	&__cancel {
+		background: #ddd;
+		color: #333;
+
+		&:hover {
+			background: #ccc;
+		}
+	}
+
+	&__message {
+		margin-top: 12px;
+		padding: 10px 14px;
+		border-radius: 6px;
+		text-align: center;
+
+		&--error {
+			background: #f8d7da;
+			color: #721c24;
+		}
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.asc-wizard {
+		padding: 16px;
+	}
+
+	.asc-wizard-display {
+		&__table {
+			font-size: 0.8em;
+
+			th,
+			td {
+				padding: 6px 4px;
+			}
+		}
+
+		&__header-avatar {
+			display: none;
+		}
+	}
+
+	.asc-wizard-form {
+		&__player-row {
+			flex-wrap: wrap;
+		}
+
+		&__player-info {
+			width: 100%;
+			margin-bottom: 8px;
+		}
+	}
+}

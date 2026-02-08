@@ -1,0 +1,37 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "apermo-score-cards/wizard",
+	"version": "1.0.0",
+	"title": "Wizard Score Card",
+	"category": "widgets",
+	"icon": "superhero",
+	"description": "Score card for Wizard card game. Track bids, tricks, and calculate scores automatically.",
+	"textdomain": "apermo-score-cards",
+	"attributes": {
+		"blockId": {
+			"type": "string"
+		},
+		"playerIds": {
+			"type": "array",
+			"default": []
+		},
+		"customTitle": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [ "postId" ],
+	"providesContext": {
+		"apermo-score-cards/blockId": "blockId",
+		"apermo-score-cards/gameType": "wizard"
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./editor.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}
