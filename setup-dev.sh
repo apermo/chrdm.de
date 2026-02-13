@@ -31,7 +31,7 @@ fi
 
 if [ ! -L "$THEMES_DIR/sovereignty" ]; then
     echo "Creating symlink for sovereignty..."
-    ln -s "$REPOS_DIR/sovereignty" "$THEMES_DIR/sovereignty"
+    ln -s ../../../repos/sovereignty "$THEMES_DIR/sovereignty"
 fi
 
 # Add custom plugins here as needed:
@@ -41,7 +41,7 @@ fi
 # fi
 # if [ ! -L "$PLUGINS_DIR/my-plugin" ]; then
 #     rm -rf "$PLUGINS_DIR/my-plugin" 2>/dev/null || true
-#     ln -s "$REPOS_DIR/my-plugin" "$PLUGINS_DIR/my-plugin"
+#     ln -s ../../../repos/my-plugin "$PLUGINS_DIR/my-plugin"
 # fi
 
 echo ""
