@@ -2,90 +2,62 @@
  * Darts block frontend styles
  */
 
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
+
 .wp-block-apermo-score-cards-darts {
-	margin: 24px 0;
+	margin: $spacing-lg 0;
 }
 
 .asc-darts {
-	padding: 20px;
-	background: #fff;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	@include block-wrapper;
 
 	&__header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 20px;
-		padding-bottom: 16px;
-		border-bottom: 3px solid #e74c3c;
+		@include block-header($color-darts);
 	}
 
 	&__title {
-		margin: 0;
-		font-size: 1.5em;
-		font-weight: 700;
-		color: #333;
+		@include block-title;
 	}
 
 	&__status {
-		padding: 6px 16px;
-		border-radius: 20px;
-		font-size: 0.85em;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
+		@include status-badge;
 
 		&--completed {
-			background: #d4edda;
-			color: #155724;
+			background: $color-success-bg;
+			color: $color-success-text;
 		}
 
 		&--in-progress {
-			background: #fff3cd;
-			color: #856404;
+			background: $color-warning-bg;
+			color: $color-warning-text;
 		}
+	}
+
+	&__pending {
+		@include pending-state;
+	}
+
+	&__actions,
+	&__player-actions {
+		@include actions-container;
+	}
+
+	&__edit-btn,
+	&__duplicate-btn,
+	&__edit-players-btn {
+		@include btn-secondary($color-darts);
 	}
 }
 
 .asc-darts-display {
 	&__table {
-		width: 100%;
-		border-collapse: collapse;
+		@include table-base;
 		margin-bottom: 20px;
-		overflow: hidden;
-		border-radius: 8px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
 		th,
 		td {
-			padding: 12px 16px;
 			text-align: left;
-		}
-
-		thead {
-			background: #2c3e50;
-			color: #fff;
-
-			th {
-				font-weight: 600;
-				font-size: 0.9em;
-				text-transform: uppercase;
-				letter-spacing: 0.5px;
-			}
-		}
-
-		tbody tr {
-			border-bottom: 1px solid #eee;
-			transition: background 0.2s;
-
-			&:last-child {
-				border-bottom: none;
-			}
-
-			&:hover {
-				background: #f8f9fa;
-			}
 		}
 	}
 
@@ -96,141 +68,72 @@
 
 	&__row {
 		&--podium {
-			font-weight: 600;
+			font-weight: $font-weight-semibold;
 		}
 
 		&--position-1 {
-			background: #fff9e6 !important;
-
-			&:hover {
-				background: #fff3cc !important;
-			}
+			@include podium-row-1;
 		}
 
 		&--position-2 {
-			background: #f5f5f5 !important;
-
-			&:hover {
-				background: #ebebeb !important;
-			}
+			@include podium-row-2;
 		}
 
 		&--position-3 {
-			background: #fdf5eb !important;
-
-			&:hover {
-				background: #faebd7 !important;
-			}
+			@include podium-row-3;
 		}
 
 		&--finished {
 			.asc-darts-display__score {
-				font-weight: 700;
+				font-weight: $font-weight-bold;
 			}
 		}
 	}
 
 	&__rank {
 		text-align: center;
-		font-weight: 700;
-		font-size: 1.1em;
-		color: #666;
+		font-weight: $font-weight-bold;
+		font-size: $font-size-2xl;
+		color: $color-text-secondary;
 	}
 
 	&__medal {
-		display: inline-block;
+		@include medal;
 		font-size: 1.4em;
 	}
 
-	&__round-info {
-		margin: 16px 0 0;
-		padding: 12px 16px;
-		background: #f8f9fa;
-		border-radius: 8px;
-		text-align: center;
-		color: #666;
-		font-size: 0.95em;
-	}
-
-	&__edit-hint {
-		margin: 12px 0 0;
-		text-align: center;
-		color: #888;
-		font-size: 0.85em;
-		font-style: italic;
-	}
-}
-
-.asc-darts__actions,
-.asc-darts__player-actions {
-	display: flex;
-	justify-content: center;
-	gap: 12px;
-	margin-top: 20px;
-	flex-wrap: wrap;
-}
-
-.asc-darts__edit-btn,
-.asc-darts__duplicate-btn,
-.asc-darts__edit-players-btn {
-	padding: 10px 24px;
-	background: transparent;
-	color: #666;
-	border: 2px solid #ddd;
-	border-radius: 6px;
-	font-size: 0.95em;
-	cursor: pointer;
-	transition: all 0.2s;
-
-	&:hover:not(:disabled) {
-		background: #f8f9fa;
-		border-color: #e74c3c;
-		color: #e74c3c;
-	}
-
-	&:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
 	&__player {
-		display: flex;
-		align-items: center;
+		@include player-display;
 		gap: 12px;
 	}
 
 	&__avatar {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid #fff;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		@include avatar-styled($avatar-xl);
 	}
 
 	&__name {
-		font-weight: 600;
-		font-size: 1em;
+		@include player-name;
+		font-size: $font-size-xl;
 	}
 
 	&__draw-label {
-		margin-left: 8px;
-		padding: 2px 8px;
-		background: #e0e0e0;
-		border-radius: 4px;
-		font-size: 0.75em;
-		font-weight: 500;
-		color: #666;
+		margin-left: $spacing-sm;
+		padding: 2px $spacing-sm;
+		background: $color-border-dark;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-xs;
+		font-weight: $font-weight-medium;
+		color: $color-text-secondary;
 	}
 
 	&__score {
 		font-family: 'SF Mono', Monaco, 'Courier New', monospace;
 		font-size: 1.2em;
-		font-weight: 500;
+		font-weight: $font-weight-medium;
 
 		&--zero {
-			color: #27ae60;
-			font-weight: 700;
+			color: $color-btn-success;
+			font-weight: $font-weight-bold;
 
 			&::before {
 				content: '✓ ';
@@ -240,31 +143,39 @@
 	}
 
 	&__round {
-		color: #888;
-		font-size: 0.95em;
+		color: $color-text-light;
+		font-size: $font-size-lg;
 	}
 
-}
+	&__round-info {
+		margin: $spacing-md 0 0;
+		padding: 12px $spacing-md;
+		background: $color-bg-light;
+		border-radius: $border-radius-lg;
+		text-align: center;
+		color: $color-text-secondary;
+		font-size: $font-size-lg;
+	}
 
-// Pending state
-.asc-darts__pending {
-	text-align: center;
-
-	p {
-		margin-bottom: 16px;
-		color: #666;
+	&__edit-hint {
+		margin: 12px 0 0;
+		text-align: center;
+		color: $color-text-light;
+		font-size: $font-size-sm;
 		font-style: italic;
 	}
 }
 
 // Frontend score form
 .asc-darts-form {
+	@include form-container;
+
 	&__title {
-		margin: 0 0 16px;
+		margin: 0 0 $spacing-md;
 		padding-bottom: 12px;
-		border-bottom: 2px solid #e74c3c;
-		font-size: 1.1em;
-		color: #333;
+		border-bottom: 2px solid $color-darts;
+		font-size: $font-size-2xl;
+		color: $color-text-primary;
 	}
 
 	&__round-input {
@@ -272,12 +183,12 @@
 		align-items: center;
 		gap: 12px;
 		margin: 20px 0;
-		padding: 16px;
-		background: #f8f9fa;
-		border-radius: 8px;
+		padding: $spacing-md;
+		background: $color-bg-light;
+		border-radius: $border-radius-lg;
 
 		label {
-			font-weight: 600;
+			font-weight: $font-weight-semibold;
 			white-space: nowrap;
 		}
 
@@ -287,178 +198,101 @@
 	}
 
 	&__table {
-		width: 100%;
-		border-collapse: collapse;
+		@include table-base;
 		margin-bottom: 20px;
-		overflow: hidden;
-		border-radius: 8px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
 		th,
 		td {
-			padding: 12px 16px;
 			text-align: left;
-		}
-
-		thead {
-			background: #2c3e50;
-			color: #fff;
-
-			th {
-				font-weight: 600;
-				font-size: 0.9em;
-				text-transform: uppercase;
-				letter-spacing: 0.5px;
-			}
-		}
-
-		tbody tr {
-			border-bottom: 1px solid #eee;
-
-			&:last-child {
-				border-bottom: none;
-			}
 		}
 	}
 
 	&__player {
-		display: flex;
-		align-items: center;
+		@include player-display;
 		gap: 12px;
 	}
 
 	&__avatar {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid #fff;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		@include avatar-styled($avatar-xl);
 	}
 
 	&__input {
-		width: 100%;
-		max-width: 120px;
-		padding: 8px 12px;
-		border: 2px solid #ddd;
-		border-radius: 6px;
-		font-size: 1em;
-		transition: border-color 0.2s;
-
-		&:focus {
-			outline: none;
-			border-color: #e74c3c;
-		}
+		@include form-input($color-darts);
 
 		&.has-error {
-			border-color: #dc3545;
+			border-color: $color-error-text;
 		}
 	}
 
 	&__error {
 		display: block;
-		margin-top: 4px;
-		color: #dc3545;
+		margin-top: $spacing-xs;
+		color: $color-error-text;
 		font-size: 0.8em;
 	}
 
 	&__actions {
 		text-align: center;
-		margin-bottom: 16px;
+		margin-bottom: $spacing-md;
 	}
 
 	&__submit {
-		padding: 12px 32px;
-		background: #e74c3c;
-		color: #fff;
-		border: none;
-		border-radius: 8px;
-		font-size: 1.1em;
-		font-weight: 600;
-		cursor: pointer;
-		transition: background 0.2s, transform 0.1s;
-
-		&:hover:not(:disabled) {
-			background: #c0392b;
-		}
+		@include btn-primary($color-darts, $color-darts-dark);
+		padding: 12px $spacing-xl;
+		font-size: $font-size-2xl;
+		font-weight: $font-weight-semibold;
 
 		&:active:not(:disabled) {
 			transform: scale(0.98);
-		}
-
-		&:disabled {
-			opacity: 0.6;
-			cursor: not-allowed;
 		}
 	}
 
 	&__help {
 		text-align: center;
-		color: #666;
-		font-size: 0.9em;
+		color: $color-text-secondary;
+		font-size: $font-size-md;
 		margin: 0;
 	}
 
 	&__message {
-		margin-top: 16px;
-		padding: 12px 16px;
-		border-radius: 8px;
+		margin-top: $spacing-md;
+		padding: 12px $spacing-md;
+		border-radius: $border-radius-lg;
 		text-align: center;
 
 		&--error {
-			background: #f8d7da;
-			color: #721c24;
-			border: 1px solid #f5c6cb;
+			@include form-message-error;
 		}
 
 		&--success {
-			background: #d4edda;
-			color: #155724;
-			border: 1px solid #c3e6cb;
+			@include form-message-success;
 		}
 	}
 }
 
 // Responsive
-@media (max-width: 600px) {
+@include responsive-md {
 	.asc-darts {
-		padding: 16px;
+		@include block-wrapper-mobile;
 	}
 
 	.asc-darts-display {
 		&__table {
-			font-size: 0.9em;
-
-			th,
-			td {
-				padding: 10px 12px;
-			}
+			@include table-mobile;
 		}
 
 		&__avatar {
-			width: 32px;
-			height: 32px;
-		}
-
-		&__winner-banner {
-			font-size: 1.1em;
-			padding: 12px 16px;
+			@include avatar($avatar-md);
 		}
 	}
 
 	.asc-darts-form {
 		&__table {
-			font-size: 0.9em;
-
-			th,
-			td {
-				padding: 10px 12px;
-			}
+			@include table-mobile;
 		}
 
 		&__avatar {
-			width: 32px;
-			height: 32px;
+			@include avatar($avatar-md);
 		}
 
 		&__input {

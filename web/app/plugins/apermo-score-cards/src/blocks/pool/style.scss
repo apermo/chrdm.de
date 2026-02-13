@@ -2,147 +2,63 @@
  * Pool Billiard block frontend styles
  */
 
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
+
 .wp-block-apermo-score-cards-pool {
-	margin: 24px 0;
+	margin: $spacing-lg 0;
 }
 
 .asc-pool {
-	padding: 20px;
-	background: #fff;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	@include block-wrapper;
 
 	&__header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 20px;
-		padding-bottom: 16px;
-		border-bottom: 3px solid #2e7d32;
+		@include block-header($color-pool);
 	}
 
 	&__title {
-		margin: 0;
-		font-size: 1.5em;
-		font-weight: 700;
-		color: #333;
+		@include block-title;
 	}
 
 	&__status {
-		padding: 6px 16px;
-		border-radius: 20px;
-		font-size: 0.85em;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
+		@include status-badge;
 
 		&--completed {
-			background: #d4edda;
-			color: #155724;
+			background: $color-success-bg;
+			color: $color-success-text;
 		}
 
 		&--in-progress {
-			background: #fff3cd;
-			color: #856404;
+			background: $color-warning-bg;
+			color: $color-warning-text;
 		}
 	}
 
 	&__pending {
-		text-align: center;
-
-		p {
-			margin-bottom: 16px;
-			color: #666;
-			font-style: italic;
-		}
+		@include pending-state;
 	}
 
 	&__actions {
-		display: flex;
-		justify-content: center;
-		gap: 12px;
-		margin-top: 20px;
-		flex-wrap: wrap;
+		@include actions-container;
 	}
 
 	&__add-game-btn,
 	&__complete-btn,
 	&__continue-btn,
 	&__edit-players-btn {
-		padding: 10px 24px;
-		background: transparent;
-		color: #666;
-		border: 2px solid #ddd;
-		border-radius: 6px;
-		font-size: 0.95em;
-		cursor: pointer;
-		transition: all 0.2s;
-
-		&:hover:not(:disabled) {
-			background: #f8f9fa;
-			border-color: #2e7d32;
-			color: #2e7d32;
-		}
-
-		&:disabled {
-			opacity: 0.6;
-			cursor: not-allowed;
-		}
+		@include btn-secondary($color-pool);
 	}
 
 	&__add-game-btn {
-		background: #2e7d32;
-		color: #fff;
-		border-color: #2e7d32;
-
-		&:hover:not(:disabled) {
-			background: #1b5e20;
-			border-color: #1b5e20;
-			color: #fff;
-		}
+		@include btn-primary($color-pool, $color-pool-dark);
 	}
 }
 
 // Standings table
 .asc-pool-standings {
 	&__table {
-		width: 100%;
-		border-collapse: collapse;
+		@include table-base;
 		margin-bottom: 20px;
-		overflow: hidden;
-		border-radius: 8px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-		th,
-		td {
-			padding: 12px 16px;
-			text-align: center;
-		}
-
-		thead {
-			background: #2c3e50;
-			color: #fff;
-
-			th {
-				font-weight: 600;
-				font-size: 0.9em;
-				text-transform: uppercase;
-				letter-spacing: 0.5px;
-			}
-		}
-
-		tbody tr {
-			border-bottom: 1px solid #eee;
-			transition: background 0.2s;
-
-			&:last-child {
-				border-bottom: none;
-			}
-
-			&:hover {
-				background: #f8f9fa;
-			}
-		}
 	}
 
 	&__rank-col {
@@ -155,76 +71,56 @@
 
 	&__row {
 		&--position-1 {
-			background: #fff9e6 !important;
-
-			&:hover {
-				background: #fff3cc !important;
-			}
+			@include podium-row-1;
 		}
 
 		&--position-2 {
-			background: #f5f5f5 !important;
-
-			&:hover {
-				background: #ebebeb !important;
-			}
+			@include podium-row-2;
 		}
 
 		&--position-3 {
-			background: #fdf5eb !important;
-
-			&:hover {
-				background: #faebd7 !important;
-			}
+			@include podium-row-3;
 		}
 	}
 
 	&__rank {
-		font-weight: 700;
-		font-size: 1.1em;
+		font-weight: $font-weight-bold;
+		font-size: $font-size-2xl;
 	}
 
 	&__player {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		text-align: left;
+		@include player-display;
 	}
 
 	&__avatar {
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid #fff;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		@include avatar-styled($avatar-lg);
 	}
 }
 
 // Games list
 .asc-pool-games {
-	margin-top: 24px;
+	margin-top: $spacing-lg;
 
 	&__title {
 		margin: 0 0 12px;
-		font-size: 1.1em;
-		font-weight: 600;
-		color: #333;
+		font-size: $font-size-2xl;
+		font-weight: $font-weight-semibold;
+		color: $color-text-primary;
 	}
 
 	&__list {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: $spacing-sm;
 	}
 
 	&__item {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 12px 16px;
-		background: #f8f9fa;
-		border-radius: 8px;
+		padding: 12px $spacing-md;
+		background: $color-bg-light;
+		border-radius: $border-radius-lg;
 		transition: background 0.2s;
 
 		&:hover {
@@ -242,11 +138,11 @@
 	&__player {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: $spacing-sm;
 		min-width: 120px;
 
 		&--winner {
-			font-weight: 600;
+			font-weight: $font-weight-semibold;
 
 			.asc-pool-games__name::after {
 				content: " 🏆";
@@ -259,90 +155,81 @@
 	}
 
 	&__avatar {
-		width: 28px;
-		height: 28px;
-		border-radius: 50%;
-		object-fit: cover;
+		@include avatar(28px);
 	}
 
 	&__vs {
-		color: #999;
-		font-size: 0.85em;
-		font-weight: 500;
+		color: $color-text-muted;
+		font-size: $font-size-sm;
+		font-weight: $font-weight-medium;
 	}
 
 	&__details {
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		color: #666;
-		font-size: 0.85em;
+		gap: $spacing-sm;
+		color: $color-text-secondary;
+		font-size: $font-size-sm;
 	}
 
 	&__balls-left {
-		padding: 2px 8px;
+		padding: 2px $spacing-sm;
 		background: #e9ecef;
-		border-radius: 4px;
+		border-radius: $border-radius-sm;
 	}
 
 	&__foul {
-		padding: 2px 8px;
-		background: #f8d7da;
-		color: #721c24;
-		border-radius: 4px;
+		padding: 2px $spacing-sm;
+		background: $color-error-bg;
+		color: $color-error-text;
+		border-radius: $border-radius-sm;
 	}
 
 	&__actions {
 		display: flex;
-		gap: 8px;
+		gap: $spacing-sm;
 		margin-left: 12px;
 	}
 
 	&__edit-btn,
 	&__delete-btn {
-		padding: 4px 8px;
+		padding: $spacing-xs $spacing-sm;
 		background: transparent;
-		border: 1px solid #ddd;
-		border-radius: 4px;
+		border: 1px solid $color-border-medium;
+		border-radius: $border-radius-sm;
 		font-size: 0.8em;
 		cursor: pointer;
 		transition: all 0.2s;
 
 		&:hover {
-			background: #fff;
+			background: $color-bg-white;
 		}
 	}
 
 	&__delete-btn:hover {
-		border-color: #dc3545;
-		color: #dc3545;
+		border-color: $color-error-text;
+		color: $color-error-text;
 	}
 
 	&__edit-btn:hover {
-		border-color: #2e7d32;
-		color: #2e7d32;
+		border-color: $color-pool;
+		color: $color-pool;
 	}
 }
 
 // Add game form
 .asc-pool-form {
-	margin-top: 20px;
-	padding: 20px;
-	background: #f8f9fa;
-	border-radius: 8px;
+	@include form-container;
 
 	&__title {
-		margin: 0 0 16px;
-		font-size: 1.1em;
-		font-weight: 600;
-		color: #333;
+		@include form-title;
 	}
 
 	&__row {
 		display: flex;
 		align-items: center;
-		gap: 16px;
-		margin-bottom: 16px;
+		gap: $spacing-md;
+		margin-bottom: $spacing-md;
 		flex-wrap: wrap;
 	}
 
@@ -352,44 +239,44 @@
 
 		label {
 			display: block;
-			margin-bottom: 4px;
-			font-size: 0.85em;
-			font-weight: 500;
-			color: #666;
+			margin-bottom: $spacing-xs;
+			font-size: $font-size-sm;
+			font-weight: $font-weight-medium;
+			color: $color-text-secondary;
 		}
 
 		select {
 			width: 100%;
 			padding: 10px 12px;
-			border: 2px solid #ddd;
-			border-radius: 6px;
-			font-size: 1em;
-			background: #fff;
+			border: 2px solid $color-border-medium;
+			border-radius: $border-radius-md;
+			font-size: $font-size-xl;
+			background: $color-bg-white;
 			cursor: pointer;
 
 			&:focus {
 				outline: none;
-				border-color: #2e7d32;
+				border-color: $color-pool;
 			}
 		}
 	}
 
 	&__vs {
 		padding-top: 20px;
-		color: #999;
-		font-weight: 600;
+		color: $color-text-muted;
+		font-weight: $font-weight-semibold;
 	}
 
 	&__winner-select {
 		width: 100%;
-		margin-bottom: 16px;
+		margin-bottom: $spacing-md;
 
 		label {
 			display: block;
-			margin-bottom: 4px;
-			font-size: 0.85em;
-			font-weight: 500;
-			color: #666;
+			margin-bottom: $spacing-xs;
+			font-size: $font-size-sm;
+			font-weight: $font-weight-medium;
+			color: $color-text-secondary;
 		}
 	}
 
@@ -403,57 +290,55 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
-		padding: 12px 16px;
-		background: #fff;
-		border: 2px solid #ddd;
-		border-radius: 6px;
+		gap: $spacing-sm;
+		padding: 12px $spacing-md;
+		background: $color-bg-white;
+		border: 2px solid $color-border-medium;
+		border-radius: $border-radius-md;
 		cursor: pointer;
 		transition: all 0.2s;
 
 		&:hover {
-			border-color: #2e7d32;
+			border-color: $color-pool;
 		}
 
 		&.is-selected {
 			background: #e8f5e9;
-			border-color: #2e7d32;
-			font-weight: 600;
+			border-color: $color-pool;
+			font-weight: $font-weight-semibold;
 		}
 
 		img {
-			width: 24px;
-			height: 24px;
-			border-radius: 50%;
+			@include avatar($avatar-sm);
 		}
 	}
 
 	&__optional {
 		display: flex;
-		gap: 16px;
-		margin-bottom: 16px;
+		gap: $spacing-md;
+		margin-bottom: $spacing-md;
 		flex-wrap: wrap;
 	}
 
 	&__field {
 		label {
 			display: block;
-			margin-bottom: 4px;
-			font-size: 0.85em;
-			font-weight: 500;
-			color: #666;
+			margin-bottom: $spacing-xs;
+			font-size: $font-size-sm;
+			font-weight: $font-weight-medium;
+			color: $color-text-secondary;
 		}
 
 		input[type="number"] {
 			width: 80px;
 			padding: 10px 12px;
-			border: 2px solid #ddd;
-			border-radius: 6px;
-			font-size: 1em;
+			border: 2px solid $color-border-medium;
+			border-radius: $border-radius-md;
+			font-size: $font-size-xl;
 
 			&:focus {
 				outline: none;
-				border-color: #2e7d32;
+				border-color: $color-pool;
 			}
 		}
 	}
@@ -461,7 +346,7 @@
 	&__checkbox {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: $spacing-sm;
 		padding-top: 20px;
 
 		input {
@@ -471,7 +356,7 @@
 		}
 
 		label {
-			font-size: 0.95em;
+			font-size: $font-size-lg;
 			cursor: pointer;
 		}
 	}
@@ -482,79 +367,43 @@
 		justify-content: flex-end;
 	}
 
-	&__cancel-btn,
-	&__submit-btn {
-		padding: 10px 24px;
-		border-radius: 6px;
-		font-size: 0.95em;
-		cursor: pointer;
-		transition: all 0.2s;
-	}
-
 	&__cancel-btn {
-		background: transparent;
-		border: 2px solid #ddd;
-		color: #666;
-
-		&:hover {
-			background: #fff;
-			border-color: #999;
-		}
+		@include btn-secondary($color-pool);
 	}
 
 	&__submit-btn {
-		background: #2e7d32;
-		border: 2px solid #2e7d32;
-		color: #fff;
-
-		&:hover:not(:disabled) {
-			background: #1b5e20;
-			border-color: #1b5e20;
-		}
-
-		&:disabled {
-			opacity: 0.6;
-			cursor: not-allowed;
-		}
+		@include btn-primary($color-pool, $color-pool-dark);
 	}
 
 	&__message {
 		margin-top: 12px;
 		padding: 10px 14px;
-		border-radius: 6px;
+		border-radius: $border-radius-md;
 		text-align: center;
 
 		&--error {
-			background: #f8d7da;
-			color: #721c24;
+			@include form-message-error;
 		}
 
 		&--success {
-			background: #d4edda;
-			color: #155724;
+			@include form-message-success;
 		}
 	}
 }
 
 // Responsive
-@media (max-width: 600px) {
+@include responsive-md {
 	.asc-pool {
-		padding: 16px;
+		@include block-wrapper-mobile;
 	}
 
 	.asc-pool-standings {
 		&__table {
-			font-size: 0.85em;
-
-			th,
-			td {
-				padding: 8px 10px;
-			}
+			@include table-mobile;
 		}
 
 		&__avatar {
-			width: 28px;
-			height: 28px;
+			@include avatar(28px);
 		}
 	}
 
@@ -562,7 +411,7 @@
 		&__item {
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 8px;
+			gap: $spacing-sm;
 		}
 
 		&__actions {

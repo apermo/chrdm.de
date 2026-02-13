@@ -2,79 +2,47 @@
  * Evening Summary block frontend styles
  */
 
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
+
 .wp-block-apermo-score-cards-evening-summary {
-	margin: 24px 0;
+	margin: $spacing-lg 0;
 }
 
 .asc-evening-summary {
-	padding: 20px;
-	background: #fff;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	@include block-wrapper;
 
 	&__header {
 		margin-bottom: 20px;
-		padding-bottom: 16px;
-		border-bottom: 3px solid #9b59b6;
+		padding-bottom: $spacing-md;
+		border-bottom: 3px solid $color-evening-summary;
 	}
 
 	&__title {
-		margin: 0;
-		font-size: 1.5em;
-		font-weight: 700;
-		color: #333;
+		@include block-title;
 	}
 
 	&__notice {
-		margin: 0 0 16px;
-		padding: 12px 16px;
-		background: #f8f9fa;
-		border-radius: 8px;
+		margin: 0 0 $spacing-md;
+		padding: 12px $spacing-md;
+		background: $color-bg-light;
+		border-radius: $border-radius-lg;
 		text-align: center;
-		color: #666;
+		color: $color-text-secondary;
 		font-style: italic;
 	}
 
 	&__table-wrapper {
-		overflow-x: auto;
+		@include table-wrapper;
+		margin: 0;
+		padding: 0;
 	}
 
 	&__table {
-		width: 100%;
-		border-collapse: collapse;
-		overflow: hidden;
-		border-radius: 8px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		@include table-base;
 
-		th,
-		td {
-			padding: 12px 16px;
-			text-align: center;
-		}
-
-		thead {
-			background: #2c3e50;
-			color: #fff;
-
-			th {
-				font-weight: 600;
-				font-size: 0.85em;
-				text-transform: uppercase;
-				letter-spacing: 0.5px;
-			}
-		}
-
-		tbody tr {
-			border-bottom: 1px solid #eee;
-			transition: background 0.2s;
-
-			&:last-child {
-				border-bottom: none;
-			}
-
-			&:hover {
-				background: #f8f9fa;
-			}
+		thead th {
+			font-size: $font-size-sm;
 		}
 	}
 
@@ -109,33 +77,21 @@
 
 	&__row {
 		&--position-1 {
-			background: #fff9e6 !important;
-
-			&:hover {
-				background: #fff3cc !important;
-			}
+			@include podium-row-1;
 		}
 
 		&--position-2 {
-			background: #f5f5f5 !important;
-
-			&:hover {
-				background: #ebebeb !important;
-			}
+			@include podium-row-2;
 		}
 
 		&--position-3 {
-			background: #fdf5eb !important;
-
-			&:hover {
-				background: #faebd7 !important;
-			}
+			@include podium-row-3;
 		}
 	}
 
 	&__rank {
-		font-weight: 700;
-		font-size: 1.1em;
+		font-weight: $font-weight-bold;
+		font-size: $font-size-2xl;
 	}
 
 	&__medal {
@@ -143,40 +99,32 @@
 	}
 
 	&__player {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		text-align: left;
+		@include player-display;
 	}
 
 	&__avatar {
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid #fff;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		@include avatar-styled($avatar-lg);
 	}
 
 	&__name {
-		font-weight: 600;
+		@include player-name;
 	}
 
 	&__game-cell {
 		&--position-1 {
-			background: rgba(255, 215, 0, 0.2);
+			background: $color-gold-rgba-light;
 		}
 
 		&--position-2 {
-			background: rgba(192, 192, 192, 0.2);
+			background: $color-silver-rgba-light;
 		}
 
 		&--position-3 {
-			background: rgba(205, 127, 50, 0.15);
+			background: $color-bronze-rgba-light;
 		}
 
 		&--skipped {
-			color: #999;
+			color: $color-text-muted;
 		}
 	}
 
@@ -190,27 +138,21 @@
 
 	&__total {
 		background: rgba(0, 0, 0, 0.03);
-		font-size: 1.1em;
+		font-size: $font-size-2xl;
 	}
 }
 
 // Responsive
-@media (max-width: 600px) {
+@include responsive-md {
 	.asc-evening-summary {
-		padding: 16px;
+		@include block-wrapper-mobile;
 
 		&__table {
-			font-size: 0.85em;
-
-			th,
-			td {
-				padding: 8px 10px;
-			}
+			@include table-mobile;
 		}
 
 		&__avatar {
-			width: 28px;
-			height: 28px;
+			@include avatar(28px);
 		}
 
 		&__game-col {

@@ -2,52 +2,48 @@
  * Phase 10 Score Card - Frontend Styles
  */
 
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
+
 .asc-phase10 {
-	padding: 1rem;
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	@include block-wrapper;
+	padding: $font-size-xl; // 1rem
 
 	&__header {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
-		margin-bottom: 1rem;
+		gap: $font-size-xl;
+		margin-bottom: $font-size-xl;
 		flex-wrap: wrap;
 	}
 
 	&__title {
 		margin: 0;
-		font-size: 1.25rem;
+		font-size: $font-size-3xl;
 	}
 
 	&__status {
-		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
-		font-size: 0.75rem;
-		font-weight: 600;
+		padding: $spacing-xs $spacing-sm;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-xs;
+		font-weight: $font-weight-semibold;
 		text-transform: uppercase;
 
 		&--completed {
-			background: #d4edda;
-			color: #155724;
+			background: $color-success-bg;
+			color: $color-success-text;
 		}
 	}
 
 	&__pending {
-		text-align: center;
-		padding: 1rem;
-		color: #666;
-
-		p {
-			margin: 0 0 1rem;
-		}
+		@include pending-state;
+		padding: $font-size-xl;
 	}
 
 	&__actions {
 		display: flex;
-		gap: 0.5rem;
-		margin-top: 1rem;
+		gap: $spacing-sm;
+		margin-top: $font-size-xl;
 		flex-wrap: wrap;
 	}
 
@@ -55,90 +51,74 @@
 	&__edit-round-btn,
 	&__complete-btn,
 	&__edit-players-btn {
-		padding: 0.5rem 1rem;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: 0.875rem;
-		transition: background-color 0.2s;
+		@include btn-base;
+		padding: $spacing-sm $font-size-xl;
+		font-size: $font-size-base;
 	}
 
 	&__add-round-btn {
-		background: #007cba;
-		color: #fff;
+		background: $color-phase10;
+		color: $color-bg-white;
 
 		&:hover {
-			background: #005a87;
+			background: $color-phase10-dark;
 		}
 	}
 
-	&__edit-round-btn {
-		background: #f0f0f1;
-		color: #1e1e1e;
-
-		&:hover {
-			background: #dcdcde;
-		}
+	&__edit-round-btn,
+	&__edit-players-btn {
+		@include btn-ghost;
 	}
 
 	&__complete-btn {
-		background: #00a32a;
-		color: #fff;
+		background: $color-btn-success-wp;
+		color: $color-bg-white;
 
 		&:hover {
-			background: #008a20;
-		}
-	}
-
-	&__edit-players-btn {
-		background: #f0f0f1;
-		color: #1e1e1e;
-
-		&:hover {
-			background: #dcdcde;
+			background: $color-btn-success-wp-dark;
 		}
 	}
 
 	&__player-actions {
-		margin-top: 1rem;
+		margin-top: $font-size-xl;
 	}
 }
 
 // Display table
 .asc-phase10-display {
 	&__progress {
-		margin: 0 0 1rem;
-		font-weight: 600;
-		color: #666;
+		margin: 0 0 $font-size-xl;
+		font-weight: $font-weight-semibold;
+		color: $color-text-secondary;
 	}
 
 	&__table-wrapper {
 		overflow-x: auto;
-		margin: 0 -1rem;
-		padding: 0 1rem;
+		margin: 0 (-$font-size-xl);
+		padding: 0 $font-size-xl;
 	}
 
 	&__table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.875rem;
+		font-size: $font-size-base;
 		min-width: 300px;
 
 		th,
 		td {
-			padding: 0.5rem;
+			padding: $spacing-sm;
 			text-align: center;
-			border-bottom: 1px solid #e0e0e0;
+			border-bottom: 1px solid $color-table-border;
 		}
 
 		th {
-			background: #f8f9fa;
-			font-weight: 600;
+			background: $color-bg-light;
+			font-weight: $font-weight-semibold;
 			white-space: nowrap;
 		}
 
 		tbody tr:hover {
-			background: #f8f9fa;
+			background: $color-bg-light;
 		}
 	}
 
@@ -147,19 +127,18 @@
 	}
 
 	&__round-num {
-		font-weight: 600;
-		color: #666;
+		font-weight: $font-weight-semibold;
+		color: $color-text-secondary;
 	}
 
 	&__player-col {
 		vertical-align: bottom;
-		padding-bottom: 0.5rem !important;
+		padding-bottom: $spacing-sm !important;
 
-		// On small screens, rotate the header content
-		@media (max-width: 479px) {
+		@include responsive-sm {
 			height: 100px;
 			vertical-align: middle;
-			padding: 0.25rem !important;
+			padding: $spacing-xs !important;
 		}
 	}
 
@@ -167,14 +146,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.5rem;
+		gap: $spacing-sm;
 
-		// On small screens, rotate 90° counter-clockwise
-		@media (max-width: 479px) {
+		@include responsive-sm {
 			writing-mode: vertical-rl;
 			transform: rotate(180deg);
 			flex-direction: row-reverse;
-			gap: 0.25rem;
+			gap: $spacing-xs;
 			height: 100%;
 		}
 	}
@@ -185,55 +163,47 @@
 
 	&__header-avatar,
 	&__avatar {
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-		object-fit: cover;
-		flex-shrink: 0;
+		@include avatar($avatar-sm);
 
-		@media (max-width: 479px) {
+		@include responsive-sm {
 			width: 20px;
 			height: 20px;
 		}
 	}
 
 	&__player {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		@include player-display;
 	}
 
 	&__phase-row {
 		td {
-			background: #f8f9fa;
-			border-bottom: 2px solid #e0e0e0;
+			background: $color-bg-light;
+			border-bottom: 2px solid $color-table-border;
 		}
 	}
 
 	&__phase-label {
-		font-weight: 600;
-		color: #666;
+		font-weight: $font-weight-semibold;
+		color: $color-text-secondary;
 		text-align: left !important;
 	}
 
 	&__phase-cell {
-		padding: 0.5rem !important;
+		padding: $spacing-sm !important;
 	}
 
 	&__phase-grid {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.25rem;
+		gap: $spacing-xs;
 		justify-content: center;
 
-		// Wide layout: 2 rows × 5 columns.
-		@media (min-width: 480px) {
+		@media (min-width: $breakpoint-sm) {
 			max-width: 140px;
 			margin: 0 auto;
 		}
 
-		// Narrow layout: 5 rows × 2 columns.
-		@media (max-width: 479px) {
+		@include responsive-sm {
 			max-width: 60px;
 			margin: 0 auto;
 		}
@@ -243,27 +213,27 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 24px;
-		height: 24px;
-		font-size: 0.75rem;
-		font-weight: 500;
-		color: #666;
-		background: #fff;
-		border: 1px solid #ddd;
-		border-radius: 4px;
+		width: $avatar-sm;
+		height: $avatar-sm;
+		font-size: $font-size-xs;
+		font-weight: $font-weight-medium;
+		color: $color-text-secondary;
+		background: $color-bg-white;
+		border: 1px solid $color-border-medium;
+		border-radius: $border-radius-sm;
 
 		&--completed {
 			text-decoration: line-through;
-			color: #999;
+			color: $color-text-muted;
 			background: #e8e8e8;
-			border-color: #ccc;
+			border-color: $color-border-dark;
 		}
 
 		&--current {
-			color: #007cba;
+			color: $color-phase10;
 			background: #e6f4fa;
-			border-color: #007cba;
-			font-weight: 700;
+			border-color: $color-phase10;
+			font-weight: $font-weight-bold;
 			box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
 		}
 	}
@@ -273,25 +243,25 @@
 
 		&--zero {
 			.asc-phase10-display__points {
-				color: #00a32a;
-				font-weight: 600;
+				color: $color-btn-success-wp;
+				font-weight: $font-weight-semibold;
 			}
 		}
 
 		&--phase-completed {
-			background: #d4edda !important;
+			background: $color-success-bg !important;
 
 			.asc-phase10-display__points {
-				color: #155724;
-				font-weight: 600;
+				color: $color-success-text;
+				font-weight: $font-weight-semibold;
 			}
 		}
 	}
 
 	&__phase-completed-icon {
-		color: #00a32a;
+		color: $color-btn-success-wp;
 		font-weight: bold;
-		margin-right: 0.25rem;
+		margin-right: $spacing-xs;
 	}
 
 	&__points {
@@ -300,15 +270,15 @@
 
 	&__total {
 		display: block;
-		font-size: 0.75rem;
-		color: #999;
+		font-size: $font-size-xs;
+		color: $color-text-muted;
 	}
 
 	&__total-row {
 		td {
-			border-top: 2px solid #1e1e1e;
-			background: #f8f9fa;
-			font-weight: 600;
+			border-top: 2px solid $color-btn-secondary-text;
+			background: $color-bg-light;
+			font-weight: $font-weight-semibold;
 		}
 	}
 
@@ -318,7 +288,7 @@
 
 	&__total-score {
 		&--position-1 {
-			background: #fff3cd !important;
+			background: $color-warning-bg !important;
 		}
 
 		&--position-2 {
@@ -335,85 +305,76 @@
 			&::after {
 				content: "✓";
 				display: inline-block;
-				margin-left: 0.25rem;
-				color: #00a32a;
-				font-size: 0.75rem;
+				margin-left: $spacing-xs;
+				color: $color-btn-success-wp;
+				font-size: $font-size-xs;
 			}
 		}
 	}
 
 	&__medal {
-		margin-right: 0.25rem;
+		margin-right: $spacing-xs;
 	}
 }
 
 // Form styles
 .asc-phase10-form {
-	padding: 1rem;
-	background: #f8f9fa;
-	border-radius: 8px;
-	margin-top: 1rem;
+	@include form-container;
+	padding: $font-size-xl;
 
 	&__title {
-		margin: 0 0 1rem;
-		font-size: 1rem;
+		margin: 0 0 $font-size-xl;
+		font-size: $font-size-xl;
 	}
 
 	&__players {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
-		margin-bottom: 1rem;
+		margin-bottom: $font-size-xl;
 	}
 
 	&__player-row {
-		display: flex;
-		align-items: center;
+		@include form-player-row;
 		gap: 0.75rem;
-		flex-wrap: wrap;
 	}
 
 	&__player-info {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		@include player-display;
 		min-width: 120px;
 		flex: 1;
 	}
 
 	&__player-avatar {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		object-fit: cover;
+		@include avatar($avatar-md);
 	}
 
 	&__player-name {
-		font-weight: 500;
+		@include player-name;
 	}
 
 	&__player-phase {
-		font-size: 0.75rem;
-		color: #007cba;
+		font-size: $font-size-xs;
+		color: $color-phase10;
 		background: #e6f4fa;
-		padding: 0.125rem 0.5rem;
+		padding: 0.125rem $spacing-sm;
 		border-radius: 10px;
-		font-weight: 500;
+		font-weight: $font-weight-medium;
 	}
 
 	&__input-group {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: $spacing-sm;
 		flex-wrap: wrap;
 	}
 
 	&__phase-completed-label {
 		display: flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: $spacing-xs;
 		cursor: pointer;
-		font-size: 0.875rem;
+		font-size: $font-size-base;
 		white-space: nowrap;
 	}
 
@@ -424,46 +385,46 @@
 	}
 
 	&__phase-completed-text {
-		color: #666;
+		color: $color-text-secondary;
 	}
 
 	&__phase-completed-checkbox:checked + &__phase-completed-text {
-		color: #00a32a;
-		font-weight: 500;
+		color: $color-btn-success-wp;
+		font-weight: $font-weight-medium;
 	}
 
 	&__input {
 		width: 80px;
-		padding: 0.5rem;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		font-size: 1rem;
+		padding: $spacing-sm;
+		border: 1px solid $color-border-medium;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-xl;
 		text-align: center;
 
 		&:focus {
-			border-color: #007cba;
+			border-color: $color-phase10;
 			outline: none;
-			box-shadow: 0 0 0 1px #007cba;
+			box-shadow: 0 0 0 1px $color-phase10;
 		}
 
 		&:disabled {
-			background: #f0f0f1;
-			color: #999;
+			background: $color-bg-medium;
+			color: $color-text-muted;
 			cursor: not-allowed;
 		}
 	}
 
 	&__calc-btn {
-		padding: 0.5rem;
-		background: #f0f0f1;
-		border: 1px solid #ddd;
-		border-radius: 4px;
+		padding: $spacing-sm;
+		background: $color-bg-medium;
+		border: 1px solid $color-border-medium;
+		border-radius: $border-radius-sm;
 		cursor: pointer;
-		font-size: 1rem;
+		font-size: $font-size-xl;
 		line-height: 1;
 
 		&:hover:not(:disabled) {
-			background: #dcdcde;
+			background: $color-btn-secondary-hover;
 		}
 
 		&:disabled {
@@ -474,40 +435,32 @@
 
 	&__actions {
 		display: flex;
-		gap: 0.5rem;
-		margin-top: 1rem;
+		gap: $spacing-sm;
+		margin-top: $font-size-xl;
 	}
 
 	&__save-btn,
 	&__cancel-btn {
-		padding: 0.5rem 1rem;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: 0.875rem;
+		@include btn-base;
+		padding: $spacing-sm $font-size-xl;
+		font-size: $font-size-base;
 	}
 
 	&__save-btn {
-		background: #007cba;
-		color: #fff;
+		background: $color-phase10;
+		color: $color-bg-white;
 
 		&:hover {
-			background: #005a87;
+			background: $color-phase10-dark;
 		}
 
 		&:disabled {
-			background: #ccc;
-			cursor: not-allowed;
+			background: $color-border-dark;
 		}
 	}
 
 	&__cancel-btn {
-		background: #f0f0f1;
-		color: #1e1e1e;
-
-		&:hover {
-			background: #dcdcde;
-		}
+		@include btn-ghost;
 	}
 }
 
@@ -522,48 +475,48 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 100000;
-	padding: 1rem;
+	z-index: $z-index-modal;
+	padding: $font-size-xl;
 
 	&__modal {
-		background: #fff;
-		border-radius: 8px;
+		background: $color-bg-white;
+		border-radius: $border-radius-lg;
 		max-width: 400px;
 		width: 100%;
 		max-height: 90vh;
 		overflow-y: auto;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		box-shadow: $shadow-lg;
 	}
 
 	&__header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 1rem;
-		border-bottom: 1px solid #e0e0e0;
+		padding: $font-size-xl;
+		border-bottom: 1px solid $color-table-border;
 	}
 
 	&__title {
 		margin: 0;
-		font-size: 1rem;
+		font-size: $font-size-xl;
 	}
 
 	&__close {
 		background: none;
 		border: none;
-		font-size: 1.5rem;
+		font-size: $font-size-4xl;
 		cursor: pointer;
 		padding: 0;
 		line-height: 1;
-		color: #666;
+		color: $color-text-secondary;
 
 		&:hover {
-			color: #1e1e1e;
+			color: $color-btn-secondary-text;
 		}
 	}
 
 	&__body {
-		padding: 1rem;
+		padding: $font-size-xl;
 	}
 
 	&__card-types {
@@ -576,7 +529,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: $font-size-xl;
 	}
 
 	&__card-label {
@@ -585,25 +538,25 @@
 
 	&__card-name {
 		display: block;
-		font-weight: 500;
+		font-weight: $font-weight-medium;
 	}
 
 	&__card-points {
 		display: block;
-		font-size: 0.75rem;
-		color: #666;
+		font-size: $font-size-xs;
+		color: $color-text-secondary;
 	}
 
 	&__card-input {
 		width: 60px;
-		padding: 0.5rem;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		font-size: 1rem;
+		padding: $spacing-sm;
+		border: 1px solid $color-border-medium;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-xl;
 		text-align: center;
 
 		&:focus {
-			border-color: #007cba;
+			border-color: $color-phase10;
 			outline: none;
 		}
 	}
@@ -612,50 +565,43 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 1rem;
-		background: #f8f9fa;
-		border-radius: 4px;
-		margin-top: 1rem;
-		font-weight: 600;
+		padding: $font-size-xl;
+		background: $color-bg-light;
+		border-radius: $border-radius-sm;
+		margin-top: $font-size-xl;
+		font-weight: $font-weight-semibold;
 	}
 
 	&__total-value {
-		font-size: 1.25rem;
-		color: #007cba;
+		font-size: $font-size-3xl;
+		color: $color-phase10;
 	}
 
 	&__footer {
 		display: flex;
-		gap: 0.5rem;
-		padding: 1rem;
-		border-top: 1px solid #e0e0e0;
+		gap: $spacing-sm;
+		padding: $font-size-xl;
+		border-top: 1px solid $color-table-border;
 	}
 
 	&__apply-btn,
 	&__cancel-btn {
 		flex: 1;
-		padding: 0.75rem 1rem;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: 0.875rem;
+		@include btn-base;
+		padding: 0.75rem $font-size-xl;
+		font-size: $font-size-base;
 	}
 
 	&__apply-btn {
-		background: #007cba;
-		color: #fff;
+		background: $color-phase10;
+		color: $color-bg-white;
 
 		&:hover {
-			background: #005a87;
+			background: $color-phase10-dark;
 		}
 	}
 
 	&__cancel-btn {
-		background: #f0f0f1;
-		color: #1e1e1e;
-
-		&:hover {
-			background: #dcdcde;
-		}
+		@include btn-ghost;
 	}
 }

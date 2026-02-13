@@ -2,160 +2,122 @@
  * Wizard Score Card - Frontend styles
  */
 
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
+
 .asc-wizard {
-	margin: 24px 0;
-	padding: 20px;
-	background: #fff;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	@include block-wrapper;
 
 	&__header {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 12px;
-		margin-bottom: 20px;
-		padding-bottom: 16px;
-		border-bottom: 3px solid #8e44ad;
+		@include block-header($color-wizard);
 	}
 
 	&__title {
-		margin: 0;
-		font-size: 1.5em;
-		font-weight: 700;
-		color: #333;
+		@include block-title;
 	}
 
 	&__rounds {
-		padding: 4px 12px;
-		background: #f0f0f0;
-		border-radius: 4px;
-		font-size: 0.85em;
-		color: #666;
+		padding: $spacing-xs 12px;
+		background: $color-bg-medium;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-sm;
+		color: $color-text-secondary;
 	}
 
 	&__status {
-		padding: 4px 12px;
-		border-radius: 4px;
-		font-size: 0.85em;
-		font-weight: 500;
+		@include status-badge;
+		padding: $spacing-xs 12px;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-sm;
 
 		&--completed {
-			background: #d4edda;
-			color: #155724;
+			background: $color-success-bg;
+			color: $color-success-text;
 		}
 	}
 
 	&__pending {
-		text-align: center;
-		padding: 20px;
-		color: #666;
-
-		p {
-			margin: 0 0 16px;
-		}
+		@include pending-state;
 	}
 
 	&__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 12px;
-		margin-top: 20px;
-		padding-top: 16px;
-		border-top: 1px solid #eee;
+		@include actions-container;
+		border-top: 1px solid $color-border-light;
+		padding-top: $spacing-md;
 	}
 
 	&__add-round-btn,
 	&__edit-round-btn,
 	&__complete-btn,
 	&__edit-players-btn {
-		padding: 10px 20px;
-		border: none;
-		border-radius: 6px;
-		font-size: 0.95em;
-		cursor: pointer;
-		transition: all 0.2s;
+		@include btn-base;
 	}
 
 	&__add-round-btn {
-		background: #8e44ad;
-		color: #fff;
+		@include btn-primary($color-wizard, $color-wizard-dark);
 
-		&:hover {
-			background: #7d3c98;
+		&--continue {
+			background: $color-btn-warning !important;
+
+			&:hover {
+				background: $color-btn-warning-dark !important;
+			}
 		}
 	}
 
 	&__edit-round-btn {
-		background: #3498db;
-		color: #fff;
-
-		&:hover {
-			background: #2980b9;
-		}
+		@include btn-primary($color-btn-info, $color-btn-info-dark);
 	}
 
 	&__complete-btn {
-		background: #27ae60;
-		color: #fff;
-
-		&:hover {
-			background: #219a52;
-		}
+		@include btn-primary($color-btn-success, $color-btn-success-dark);
 	}
 
 	&__edit-players-btn {
-		background: #f39c12;
-		color: #fff;
-
-		&:hover {
-			background: #e67e22;
-		}
+		@include btn-primary($color-btn-warning, $color-btn-warning-dark);
 	}
 
 	&__player-actions {
-		margin-top: 16px;
+		margin-top: $spacing-md;
 	}
 }
 
 .asc-wizard-display {
 	&__progress {
-		margin: 0 0 16px;
-		font-size: 0.9em;
-		color: #666;
+		margin: 0 0 $spacing-md;
+		font-size: $font-size-md;
+		color: $color-text-secondary;
 	}
 
 	&__table-wrapper {
-		overflow-x: auto;
-		margin: 0 -20px;
-		padding: 0 20px;
+		@include table-wrapper;
 	}
 
 	&__table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 0.9em;
+		font-size: $font-size-md;
 
 		th,
 		td {
-			padding: 8px 10px;
+			padding: $spacing-sm 10px;
 			text-align: center;
-			border: 1px solid #e0e0e0;
+			border: 1px solid $color-table-border;
 		}
 
 		thead {
-			background: #2c3e50;
-			color: #fff;
+			background: $color-table-header-bg;
+			color: $color-bg-white;
 
 			th {
-				font-weight: 600;
-				border-color: #34495e;
+				font-weight: $font-weight-semibold;
+				border-color: $color-table-header-border;
 			}
 		}
 
 		tbody tr {
 			&:nth-child(even) {
-				background: #fafafa;
+				background: $color-table-row-alt;
 			}
 
 			&:hover {
@@ -169,12 +131,12 @@
 	}
 
 	&__subheader {
-		background: #34495e !important;
+		background: $color-table-header-border !important;
 
 		th {
 			font-size: 0.8em;
-			font-weight: 500;
-			padding: 4px 6px;
+			font-weight: $font-weight-medium;
+			padding: $spacing-xs 6px;
 		}
 	}
 
@@ -183,9 +145,7 @@
 	}
 
 	&__header-avatar {
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
+		@include avatar($avatar-sm);
 		vertical-align: middle;
 		margin-right: 6px;
 	}
@@ -195,8 +155,8 @@
 	}
 
 	&__round-num {
-		font-weight: 600;
-		background: #f5f5f5;
+		font-weight: $font-weight-semibold;
+		background: $color-silver-bg;
 	}
 
 	&__bid-col,
@@ -209,71 +169,65 @@
 	}
 
 	&__bid {
-		color: #666;
+		color: $color-text-secondary;
 	}
 
 	&__won {
 		&--correct {
 			background: rgba(39, 174, 96, 0.15);
-			color: #27ae60;
-			font-weight: 600;
+			color: $color-btn-success;
+			font-weight: $font-weight-semibold;
 		}
 	}
 
 	&__pts {
-		font-weight: 500;
+		font-weight: $font-weight-medium;
 
 		&--negative {
-			color: #e74c3c;
+			color: $color-darts;
 		}
 	}
 
 	&__total-row {
-		background: #2c3e50 !important;
-		color: #fff;
+		background: $color-table-header-bg !important;
+		color: $color-bg-white;
 
 		td {
-			border-color: #34495e;
-			font-size: 1.1em;
+			border-color: $color-table-header-border;
+			font-size: $font-size-2xl;
 		}
 	}
 
 	&__total-label {
 		text-align: left !important;
-		font-weight: 600;
+		font-weight: $font-weight-semibold;
 	}
 
 	&__total-score {
 		&--position-1 {
-			background: rgba(255, 215, 0, 0.3) !important;
+			@include podium-cell-1;
 		}
 
 		&--position-2 {
-			background: rgba(192, 192, 192, 0.3) !important;
+			@include podium-cell-2;
 		}
 
 		&--position-3 {
-			background: rgba(205, 127, 50, 0.2) !important;
+			@include podium-cell-3;
 		}
 	}
 
 	&__medal {
-		margin-right: 6px;
+		@include medal;
 		font-size: 1.2em;
 	}
 
 	&__player {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		text-align: left;
+		@include player-display;
 	}
 
 	&__avatar {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		object-fit: cover;
+		@include avatar($avatar-md);
 	}
 
 	&__rank-col {
@@ -282,108 +236,115 @@
 
 	&__row {
 		&--position-1 {
-			background: #fff9e6 !important;
+			@include podium-row-1;
 		}
 
 		&--position-2 {
-			background: #f5f5f5 !important;
+			@include podium-row-2;
 		}
 
 		&--position-3 {
-			background: #fdf5eb !important;
+			@include podium-row-3;
 		}
+
+		&--incomplete {
+			background: $color-gold-bg !important;
+			opacity: 0.9;
+
+			td {
+				border-color: #f0e6c8;
+			}
+		}
+	}
+
+	&__werewolf-indicator {
+		color: $color-wizard;
+		font-weight: $font-weight-semibold;
+		font-size: $font-size-xs;
+		margin-left: 1px;
+	}
+
+	&__in-progress {
+		margin-left: $spacing-xs;
+		font-size: 0.8em;
 	}
 }
 
 // Wizard round form
 .asc-wizard-form {
-	margin-top: 20px;
-	padding: 20px;
-	background: #f8f9fa;
-	border-radius: 8px;
+	@include form-container;
 
 	// Step indicator
 	&__step-indicator {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
+		gap: $spacing-sm;
 		margin-bottom: 20px;
-		padding-bottom: 16px;
-		border-bottom: 1px solid #e0e0e0;
+		padding-bottom: $spacing-md;
+		border-bottom: 1px solid $color-table-border;
 	}
 
 	&__step {
-		padding: 4px 12px;
-		font-size: 0.85em;
-		color: #999;
-		background: #f0f0f0;
-		border-radius: 4px;
+		padding: $spacing-xs 12px;
+		font-size: $font-size-sm;
+		color: $color-text-muted;
+		background: $color-bg-medium;
+		border-radius: $border-radius-sm;
 
 		&--active {
-			background: #8e44ad;
-			color: #fff;
-			font-weight: 600;
+			background: $color-wizard;
+			color: $color-bg-white;
+			font-weight: $font-weight-semibold;
 		}
 
 		&--done {
-			background: #27ae60;
-			color: #fff;
+			background: $color-btn-success;
+			color: $color-bg-white;
 		}
 	}
 
 	&__step-separator {
-		color: #ccc;
+		color: $color-border-dark;
 	}
 
 	&__title {
-		margin: 0 0 16px;
-		font-size: 1.1em;
-		font-weight: 600;
+		margin: 0 0 $spacing-md;
+		font-size: $font-size-2xl;
+		font-weight: $font-weight-semibold;
 	}
 
 	&__max-tricks {
-		font-weight: 400;
-		color: #666;
-		font-size: 0.85em;
+		font-weight: $font-weight-normal;
+		color: $color-text-secondary;
+		font-size: $font-size-sm;
 	}
 
 	&__grid {
 		display: grid;
-		gap: 16px;
+		gap: $spacing-md;
 	}
 
 	&__player-row {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-		padding: 12px;
-		background: #fff;
-		border-radius: 6px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		@include form-player-row;
 	}
 
 	&__player-info {
-		display: flex;
-		align-items: center;
-		gap: 10px;
+		@include player-display;
 		min-width: 120px;
 	}
 
 	&__player-avatar {
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		object-fit: cover;
+		@include avatar($avatar-lg);
 	}
 
 	&__player-name {
-		font-weight: 500;
+		@include player-name;
 	}
 
 	&__player-bid {
-		color: #666;
-		font-size: 0.9em;
+		color: $color-text-secondary;
+		font-size: $font-size-md;
 	}
 
 	&__inputs {
@@ -395,35 +356,35 @@
 	&__input-group {
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
+		gap: $spacing-xs;
 	}
 
 	&__label {
 		font-size: 0.8em;
-		color: #666;
+		color: $color-text-secondary;
 		text-transform: uppercase;
 	}
 
 	&__input {
 		width: 60px;
-		padding: 8px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		font-size: 1em;
+		padding: $spacing-sm;
+		border: 1px solid $color-border-medium;
+		border-radius: $border-radius-sm;
+		font-size: $font-size-xl;
 		text-align: center;
 
 		&:focus {
 			outline: none;
-			border-color: #8e44ad;
+			border-color: $color-wizard;
 			box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
 		}
 
 		&--invalid {
-			border-color: #e74c3c;
+			border-color: $color-darts;
 			background: rgba(231, 76, 60, 0.1);
 
 			&:focus {
-				border-color: #e74c3c;
+				border-color: $color-darts;
 				box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
 			}
 		}
@@ -431,32 +392,32 @@
 
 	// Bid display (for results step)
 	&__bid-display {
-		font-size: 1.1em;
-		font-weight: 500;
-		padding: 8px;
+		font-size: $font-size-2xl;
+		font-weight: $font-weight-medium;
+		padding: $spacing-sm;
 		min-width: 40px;
 		text-align: center;
 	}
 
 	&__werewolf-indicator {
-		color: #8e44ad;
-		font-weight: 600;
+		color: $color-wizard;
+		font-weight: $font-weight-semibold;
 		margin-left: 2px;
 	}
 
 	&__score-preview {
 		min-width: 60px;
-		padding: 8px;
+		padding: $spacing-sm;
 		text-align: center;
-		font-weight: 600;
-		font-size: 1.1em;
+		font-weight: $font-weight-semibold;
+		font-size: $font-size-2xl;
 
 		&--positive {
-			color: #27ae60;
+			color: $color-btn-success;
 		}
 
 		&--negative {
-			color: #e74c3c;
+			color: $color-darts;
 		}
 	}
 
@@ -466,27 +427,27 @@
 		align-items: center;
 		justify-content: center;
 		gap: 12px;
-		margin-top: 16px;
+		margin-top: $spacing-md;
 		padding: 12px;
-		border-radius: 6px;
-		font-weight: 500;
+		border-radius: $border-radius-md;
+		font-weight: $font-weight-medium;
 
 		&--balanced {
 			background: rgba(39, 174, 96, 0.15);
-			color: #27ae60;
+			color: $color-btn-success;
 		}
 
 		&--unbalanced {
 			background: rgba(231, 76, 60, 0.15);
-			color: #e74c3c;
+			color: $color-darts;
 		}
 	}
 
 	&__bid-difference {
-		padding: 2px 8px;
+		padding: 2px $spacing-sm;
 		background: rgba(0, 0, 0, 0.1);
-		border-radius: 4px;
-		font-weight: 600;
+		border-radius: $border-radius-sm;
+		font-weight: $font-weight-semibold;
 	}
 
 	// Results summary
@@ -494,26 +455,26 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 8px;
-		margin-top: 16px;
+		gap: $spacing-sm;
+		margin-top: $spacing-md;
 		padding: 12px;
-		border-radius: 6px;
-		font-weight: 500;
+		border-radius: $border-radius-md;
+		font-weight: $font-weight-medium;
 
 		&--valid {
 			background: rgba(39, 174, 96, 0.15);
-			color: #27ae60;
+			color: $color-btn-success;
 		}
 
 		&--invalid {
 			background: rgba(231, 76, 60, 0.15);
-			color: #e74c3c;
+			color: $color-darts;
 		}
 	}
 
 	&__results-error {
-		font-size: 0.85em;
-		font-weight: 400;
+		font-size: $font-size-sm;
+		font-weight: $font-weight-normal;
 	}
 
 	// Werewolf step
@@ -527,13 +488,13 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 12px;
-		background: #fff;
-		border-radius: 6px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		background: $color-bg-white;
+		border-radius: $border-radius-md;
+		box-shadow: $shadow-sm;
 
 		&--no-werewolf {
 			justify-content: center;
-			margin-top: 8px;
+			margin-top: $spacing-sm;
 			background: transparent;
 			box-shadow: none;
 		}
@@ -541,85 +502,85 @@
 
 	&__werewolf-buttons {
 		display: flex;
-		gap: 8px;
+		gap: $spacing-sm;
 	}
 
 	&__werewolf-btn {
 		width: 44px;
 		height: 44px;
-		border: 2px solid #ddd;
-		border-radius: 8px;
-		background: #fff;
-		font-size: 1em;
-		font-weight: 600;
+		border: 2px solid $color-border-medium;
+		border-radius: $border-radius-lg;
+		background: $color-bg-white;
+		font-size: $font-size-xl;
+		font-weight: $font-weight-semibold;
 		cursor: pointer;
 		transition: all 0.2s;
 
 		&:hover:not(:disabled) {
-			border-color: #8e44ad;
+			border-color: $color-wizard;
 		}
 
 		&:disabled {
 			opacity: 0.3;
 			cursor: not-allowed;
-			background: #f5f5f5;
+			background: $color-silver-bg;
 		}
 
 		&--selected {
-			background: #8e44ad;
-			border-color: #8e44ad;
-			color: #fff;
+			background: $color-wizard;
+			border-color: $color-wizard;
+			color: $color-bg-white;
 		}
 
 		&--minus {
-			color: #e74c3c;
+			color: $color-darts;
 
 			&.asc-wizard-form__werewolf-btn--selected {
-				background: #e74c3c;
-				border-color: #e74c3c;
-				color: #fff;
+				background: $color-darts;
+				border-color: $color-darts;
+				color: $color-bg-white;
 			}
 		}
 
 		&--plus {
-			color: #27ae60;
+			color: $color-btn-success;
 
 			&.asc-wizard-form__werewolf-btn--selected {
-				background: #27ae60;
-				border-color: #27ae60;
-				color: #fff;
+				background: $color-btn-success;
+				border-color: $color-btn-success;
+				color: $color-bg-white;
 			}
 		}
 	}
 
 	&__no-werewolf-btn {
 		width: 100%;
-		padding: 12px 24px;
-		border: 2px solid #ddd;
-		border-radius: 6px;
-		background: #fff;
-		font-size: 0.95em;
+		padding: 12px $spacing-lg;
+		border: 2px solid $color-border-medium;
+		border-radius: $border-radius-md;
+		background: $color-bg-white;
+		font-size: $font-size-lg;
 		cursor: pointer;
 		transition: all 0.2s;
 
 		&:hover {
-			border-color: #8e44ad;
+			border-color: $color-wizard;
 		}
 
 		&--selected {
-			background: #8e44ad;
-			border-color: #8e44ad;
-			color: #fff;
+			background: $color-wizard;
+			border-color: $color-wizard;
+			color: $color-bg-white;
 		}
 	}
 
 	// Bomb option
 	&__bomb-option {
-		margin-top: 16px;
+		margin-top: $spacing-md;
 		padding: 12px;
-		background: #fff;
-		border-radius: 6px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		background: $color-bg-white;
+		border-radius: $border-radius-md;
+		box-shadow: $shadow-sm;
 	}
 
 	&__bomb-label {
@@ -627,7 +588,7 @@
 		align-items: center;
 		gap: 10px;
 		cursor: pointer;
-		font-size: 0.95em;
+		font-size: $font-size-lg;
 	}
 
 	&__bomb-checkbox {
@@ -646,88 +607,35 @@
 	&__submit,
 	&__cancel,
 	&__back {
+		@include btn-base;
 		padding: 12px 28px;
-		border: none;
-		border-radius: 6px;
-		font-size: 1em;
-		cursor: pointer;
-		transition: all 0.2s;
 	}
 
 	&__submit {
-		background: #8e44ad;
-		color: #fff;
-
-		&:hover:not(:disabled) {
-			background: #7d3c98;
-		}
-
-		&:disabled {
-			opacity: 0.5;
-			cursor: not-allowed;
-		}
+		@include btn-primary($color-wizard, $color-wizard-dark);
 	}
 
 	&__cancel,
 	&__back {
-		background: #ddd;
-		color: #333;
-
-		&:hover {
-			background: #ccc;
-		}
+		@include btn-ghost;
 	}
 
 	&__message {
 		margin-top: 12px;
 		padding: 10px 14px;
-		border-radius: 6px;
+		border-radius: $border-radius-md;
 		text-align: center;
 
 		&--error {
-			background: #f8d7da;
-			color: #721c24;
+			@include form-message-error;
 		}
-	}
-}
-
-// Werewolf indicator and incomplete round in display table
-.asc-wizard-display {
-	&__werewolf-indicator {
-		color: #8e44ad;
-		font-weight: 600;
-		font-size: 0.75em;
-		margin-left: 1px;
-	}
-
-	&__row--incomplete {
-		background: #fff9e6 !important;
-		opacity: 0.9;
-
-		td {
-			border-color: #f0e6c8;
-		}
-	}
-
-	&__in-progress {
-		margin-left: 4px;
-		font-size: 0.8em;
-	}
-}
-
-// Continue round button variant
-.asc-wizard__add-round-btn--continue {
-	background: #f39c12 !important;
-
-	&:hover {
-		background: #e67e22 !important;
 	}
 }
 
 // Responsive
-@media (max-width: 768px) {
+@include responsive-lg {
 	.asc-wizard {
-		padding: 16px;
+		@include block-wrapper-mobile;
 	}
 
 	.asc-wizard-display {
@@ -736,7 +644,7 @@
 
 			th,
 			td {
-				padding: 6px 4px;
+				padding: 6px $spacing-xs;
 			}
 		}
 
@@ -748,12 +656,12 @@
 	.asc-wizard-form {
 		&__step-indicator {
 			flex-wrap: wrap;
-			gap: 4px;
+			gap: $spacing-xs;
 		}
 
 		&__step {
-			font-size: 0.75em;
-			padding: 3px 8px;
+			font-size: $font-size-xs;
+			padding: 3px $spacing-sm;
 		}
 
 		&__player-row,
@@ -763,7 +671,7 @@
 
 		&__player-info {
 			width: 100%;
-			margin-bottom: 8px;
+			margin-bottom: $spacing-sm;
 		}
 
 		&__werewolf-buttons {
