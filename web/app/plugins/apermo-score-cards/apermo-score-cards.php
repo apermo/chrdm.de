@@ -37,6 +37,14 @@ require_once ASC_PLUGIN_DIR . 'includes/class-rest-api.php';
 require_once ASC_PLUGIN_DIR . 'includes/class-block-bindings.php';
 require_once ASC_PLUGIN_DIR . 'includes/class-blocks.php';
 
+// Load rendering classes.
+require_once ASC_PLUGIN_DIR . 'includes/trait-base-render.php';
+require_once ASC_PLUGIN_DIR . 'includes/class-game-renderer.php';
+require_once ASC_PLUGIN_DIR . 'includes/class-darts-renderer.php';
+require_once ASC_PLUGIN_DIR . 'includes/class-wizard-renderer.php';
+require_once ASC_PLUGIN_DIR . 'includes/class-phase10-renderer.php';
+require_once ASC_PLUGIN_DIR . 'includes/class-pool-renderer.php';
+
 /**
  * Initialize the plugin.
  *
