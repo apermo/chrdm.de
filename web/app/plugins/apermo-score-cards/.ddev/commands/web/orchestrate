@@ -1,0 +1,175 @@
+#!/bin/bash
+
+## Description: Set up WordPress for plugin testing
+## Usage: orchestrate
+## Example: ddev orchestrate
+
+set -e
+
+echo "=== Setting up WordPress for apermo-score-cards testing ==="
+
+# Configuration
+WP_VERSION="${WP_VERSION:-latest}"
+WP_LOCALE="${WP_LOCALE:-en_US}"
+ADMIN_USER="${ADMIN_USER:-admin}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin}"
+ADMIN_EMAIL="${ADMIN_EMAIL:-admin@example.com}"
+SITE_TITLE="Score Cards Test Site"
+
+# Directory paths
+DOCROOT="/var/www/html/wordpress"
+PLUGIN_DIR="/var/www/html"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+log_step() {
+    echo -e "${GREEN}→${NC} $1"
+}
+
+log_warn() {
+    echo -e "${YELLOW}⚠${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}✗${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}✓${NC} $1"
+}
+
+# Step 1: Download WordPress if not present
+if [ ! -f "$DOCROOT/wp-load.php" ]; then
+    log_step "Downloading WordPress ${WP_VERSION}..."
+    mkdir -p "$DOCROOT"
+    wp core download --path="$DOCROOT" --version="$WP_VERSION" --locale="$WP_LOCALE" --skip-content
+    log_success "WordPress downloaded"
+else
+    log_warn "WordPress already exists, skipping download"
+fi
+
+# Step 2: Create wp-config.php if not present
+if [ ! -f "$DOCROOT/wp-config.php" ]; then
+    log_step "Creating wp-config.php..."
+    wp config create \
+        --path="$DOCROOT" \
+        --dbname=db \
+        --dbuser=db \
+        --dbpass=db \
+        --dbhost=db \
+        --extra-php <<'PHP'
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
+define( 'SCRIPT_DEBUG', true );
+define( 'WP_ENVIRONMENT_TYPE', 'development' );
+
+// Disable updates during testing
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
+define( 'WP_AUTO_UPDATE_CORE', false );
+PHP
+    log_success "wp-config.php created"
+else
+    log_warn "wp-config.php already exists, skipping"
+fi
+
+# Step 3: Install WordPress
+if ! wp core is-installed --path="$DOCROOT" 2>/dev/null; then
+    log_step "Installing WordPress..."
+    wp core install \
+        --path="$DOCROOT" \
+        --url="https://${DDEV_HOSTNAME}" \
+        --title="$SITE_TITLE" \
+        --admin_user="$ADMIN_USER" \
+        --admin_password="$ADMIN_PASSWORD" \
+        --admin_email="$ADMIN_EMAIL" \
+        --skip-email
+    log_success "WordPress installed"
+else
+    log_warn "WordPress already installed, skipping"
+fi
+
+# Step 4: Create plugin symlink
+PLUGIN_DEST="$DOCROOT/wp-content/plugins/apermo-score-cards"
+if [ ! -L "$PLUGIN_DEST" ]; then
+    log_step "Creating plugin symlink..."
+    ln -sf "$PLUGIN_DIR" "$PLUGIN_DEST"
+    log_success "Plugin symlinked"
+else
+    log_warn "Plugin symlink already exists"
+fi
+
+# Step 5: Activate plugin
+log_step "Activating apermo-score-cards plugin..."
+wp plugin activate apermo-score-cards --path="$DOCROOT" 2>/dev/null || true
+log_success "Plugin activated"
+
+# Step 6: Create test content
+log_step "Creating test content..."
+
+# Create a test page for score cards
+PAGE_EXISTS=$(wp post list --path="$DOCROOT" --post_type=page --name="score-cards-test" --format=count 2>/dev/null || echo "0")
+if [ "$PAGE_EXISTS" = "0" ]; then
+    wp post create \
+        --path="$DOCROOT" \
+        --post_type=page \
+        --post_title="Score Cards Test" \
+        --post_name="score-cards-test" \
+        --post_status=publish \
+        --post_content='<!-- wp:apermo-score-cards/wizard /-->'
+    log_success "Test page created"
+else
+    log_warn "Test page already exists"
+fi
+
+# Step 7: Create test users
+log_step "Creating test users..."
+for i in 1 2 3 4; do
+    USER_EXISTS=$(wp user get "player$i" --path="$DOCROOT" --field=ID 2>/dev/null || echo "")
+    if [ -z "$USER_EXISTS" ]; then
+        wp user create "player$i" "player$i@example.com" \
+            --path="$DOCROOT" \
+            --role=subscriber \
+            --display_name="Player $i" \
+            --user_pass="player$i"
+        log_success "Created user: player$i"
+    fi
+done
+
+# Step 8: Grant capabilities
+log_step "Setting up capabilities..."
+wp cap add editor manage_scorecards --path="$DOCROOT" 2>/dev/null || true
+wp cap add administrator manage_scorecards --path="$DOCROOT" 2>/dev/null || true
+log_success "Capabilities configured"
+
+# Step 9: Flush rewrite rules
+log_step "Flushing rewrite rules..."
+wp rewrite flush --path="$DOCROOT"
+log_success "Rewrite rules flushed"
+
+# Step 10: Build plugin assets
+log_step "Building plugin assets..."
+cd "$PLUGIN_DIR"
+if [ -f "package.json" ]; then
+    npm run build 2>/dev/null || log_warn "npm build skipped or failed"
+fi
+log_success "Assets built"
+
+echo ""
+echo "=== Setup Complete ==="
+echo ""
+echo "WordPress Admin:"
+echo "  URL:      https://${DDEV_HOSTNAME}/wp-admin/"
+echo "  Username: $ADMIN_USER"
+echo "  Password: $ADMIN_PASSWORD"
+echo ""
+echo "Test Page:"
+echo "  https://${DDEV_HOSTNAME}/score-cards-test/"
+echo ""
+echo "Test Users (password = username):"
+echo "  player1, player2, player3, player4"
+echo ""

@@ -1,0 +1,19 @@
+# DDEV generated files
+.ddev-docker-compose-base.yaml
+.ddev-docker-compose-full.yaml
+.global_commands
+.homeadditions
+.sshimageBuild
+.webimageBuild
+.webimageExtra
+docker-compose*.yaml
+db_snapshots/
+import-db/
+import.sql
+import.sql.gz
+*_value.yaml
+
+# Project-specific
+wordpress/
+.dbimageBuild
+mutagen/
