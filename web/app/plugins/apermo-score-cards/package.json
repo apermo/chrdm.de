@@ -8,11 +8,18 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
-		"lint:js": "wp-scripts lint-js",
-		"lint:css": "wp-scripts lint-style",
-		"format": "wp-scripts format"
+		"lint": "npm run lint:js && npm run lint:css",
+		"lint:js": "wp-scripts lint-js src/",
+		"lint:js:fix": "wp-scripts lint-js src/ --fix",
+		"lint:css": "wp-scripts lint-style 'src/**/*.scss'",
+		"lint:css:fix": "wp-scripts lint-style 'src/**/*.scss' --fix",
+		"format": "wp-scripts format",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:headed": "playwright test --headed"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.41.0",
 		"@wordpress/scripts": "^28.0.0"
 	},
 	"dependencies": {
