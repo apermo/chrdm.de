@@ -312,4 +312,17 @@ abstract class Game_Renderer {
 	protected function render_header_meta(): void {
 		// Default: nothing extra.
 	}
+
+	/**
+	 * Render the "New Game" button for completed games.
+	 *
+	 * @return void
+	 */
+	protected function render_new_game_button(): void {
+		?>
+		<button type="button" class="<?php echo esc_attr( $this->get_css_prefix() . '__new-game-btn' ); ?> asc-new-game-btn">
+			<?php esc_html_e( 'New Game', 'apermo-score-cards' ); ?>
+		</button>
+		<?php
+	}
 }

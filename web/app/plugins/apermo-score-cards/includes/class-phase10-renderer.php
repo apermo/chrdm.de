@@ -298,6 +298,11 @@ class Phase10_Renderer extends Game_Renderer {
 	 */
 	protected function render_actions(): void {
 		if ( 'completed' === $this->status ) {
+			?>
+			<div class="asc-phase10__actions">
+				<?php $this->render_new_game_button(); ?>
+			</div>
+			<?php
 			return;
 		}
 		?>

@@ -9,6 +9,7 @@ import PoolGameForm from './pool/PoolGameForm';
 import WizardRoundForm from './wizard/WizardRoundForm';
 import Phase10RoundForm from './phase10/Phase10RoundForm';
 import PlayerSelector from './components/PlayerSelector';
+import { resetGame } from './base/api';
 
 /**
  * Initialize all score card forms on the page.
@@ -18,6 +19,7 @@ function init() {
 	initPoolBlocks();
 	initWizardBlocks();
 	initPhase10Blocks();
+	initNewGameButtons();
 }
 
 /**
@@ -1099,6 +1101,69 @@ async function duplicateBlock( postId, blockId, button ) {
 	} catch ( error ) {
 		console.error( 'Failed to duplicate block:', error );
 		alert( error.message || 'Failed to add game. Please try again.' );
+		button.disabled = false;
+		button.textContent = originalText;
+	}
+}
+
+/**
+ * Initialize New Game buttons across all block types.
+ */
+function initNewGameButtons() {
+	document.querySelectorAll( '.asc-new-game-btn' ).forEach( ( btn ) => {
+		btn.addEventListener( 'click', () => {
+			handleNewGame( btn );
+		} );
+	} );
+}
+
+/**
+ * Handle New Game button click.
+ * Resets the game data and reloads the page.
+ *
+ * @param {HTMLElement} button The clicked button.
+ */
+async function handleNewGame( button ) {
+	const confirmMessage =
+		window.wp?.i18n?.__(
+			'Start a new game? Current results will be cleared.',
+			'apermo-score-cards'
+		) || 'Start a new game? Current results will be cleared.';
+
+	if ( ! confirm( confirmMessage ) ) {
+		return;
+	}
+
+	const block = button.closest(
+		'[data-post-id][data-block-id][data-player-ids]'
+	);
+	if ( ! block ) {
+		return;
+	}
+
+	const { postId, blockId, game } = block.dataset;
+	const playerIds = JSON.parse( block.dataset.playerIds || '[]' );
+	const gameData = game ? JSON.parse( game ) : {};
+	const gameType = gameData.gameType || '';
+
+	if ( ! gameType ) {
+		return;
+	}
+
+	const originalText = button.textContent;
+	button.disabled = true;
+	button.textContent =
+		window.wp?.i18n?.__( 'Resetting…', 'apermo-score-cards' ) ||
+		'Resetting...';
+
+	try {
+		await resetGame( postId, blockId, gameType, playerIds );
+		window.location.reload();
+	} catch ( error ) {
+		console.error( 'Failed to reset game:', error );
+		alert(
+			error.message || 'Failed to start new game. Please try again.'
+		);
 		button.disabled = false;
 		button.textContent = originalText;
 	}

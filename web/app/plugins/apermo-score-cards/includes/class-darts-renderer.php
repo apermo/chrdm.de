@@ -228,6 +228,7 @@ class Darts_Renderer extends Game_Renderer {
 			<button type="button" class="asc-darts__duplicate-btn">
 				<?php esc_html_e( 'Add Another Darts Game', 'apermo-score-cards' ); ?>
 			</button>
+			<?php $this->render_new_game_button(); ?>
 		</div>
 		<?php
 	}

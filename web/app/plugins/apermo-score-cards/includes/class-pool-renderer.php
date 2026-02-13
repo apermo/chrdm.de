@@ -381,6 +381,7 @@ class Pool_Renderer extends Game_Renderer {
 				<button type="button" class="asc-pool__continue-btn">
 					<?php esc_html_e( 'Continue', 'apermo-score-cards' ); ?>
 				</button>
+				<?php $this->render_new_game_button(); ?>
 			<?php endif; ?>
 		</div>
 		<div class="asc-pool-form-container" hidden></div>

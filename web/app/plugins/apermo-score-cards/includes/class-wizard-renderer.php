@@ -365,6 +365,11 @@ class Wizard_Renderer extends Game_Renderer {
 	 */
 	protected function render_actions(): void {
 		if ( 'completed' === $this->status ) {
+			?>
+			<div class="asc-wizard__actions">
+				<?php $this->render_new_game_button(); ?>
+			</div>
+			<?php
 			return;
 		}
 		?>
@@ -383,7 +388,7 @@ class Wizard_Renderer extends Game_Renderer {
 					<?php esc_html_e( 'Edit Last Round', 'apermo-score-cards' ); ?>
 				</button>
 			<?php endif; ?>
-			<?php if ( 'completed' !== $this->status && $this->completed_rounds >= $this->total_rounds ) : ?>
+			<?php if ( $this->completed_rounds >= $this->total_rounds ) : ?>
 				<button type="button" class="asc-wizard__complete-btn">
 					<?php esc_html_e( 'Complete Game', 'apermo-score-cards' ); ?>
 				</button>
