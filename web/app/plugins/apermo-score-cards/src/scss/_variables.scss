@@ -1,0 +1,157 @@
+/**
+ * Shared SCSS Variables for Score Card Blocks
+ *
+ * Design tokens used across all game blocks for consistent styling.
+ */
+
+// =============================================================================
+// Colors
+// =============================================================================
+
+// Status colors
+$color-success-bg: #d4edda;
+$color-success-text: #155724;
+$color-success-border: #c3e6cb;
+
+$color-warning-bg: #fff3cd;
+$color-warning-text: #856404;
+$color-warning-border: #ffeeba;
+
+$color-error-bg: #f8d7da;
+$color-error-text: #721c24;
+$color-error-border: #f5c6cb;
+
+// Podium / Position colors
+$color-gold-bg: #fff9e6;
+$color-gold-bg-hover: #fff3cc;
+$color-gold-rgba: rgba(255, 215, 0, 0.3);
+$color-gold-rgba-light: rgba(255, 215, 0, 0.2);
+
+$color-silver-bg: #f5f5f5;
+$color-silver-bg-hover: #ebebeb;
+$color-silver-rgba: rgba(192, 192, 192, 0.3);
+$color-silver-rgba-light: rgba(192, 192, 192, 0.2);
+
+$color-bronze-bg: #fdf5eb;
+$color-bronze-bg-hover: #faebd7;
+$color-bronze-rgba: rgba(205, 127, 50, 0.2);
+$color-bronze-rgba-light: rgba(205, 127, 50, 0.15);
+
+// Game accent colors
+$color-wizard: #8e44ad;
+$color-wizard-dark: #7d3c98;
+
+$color-phase10: #007cba;
+$color-phase10-dark: #005a87;
+
+$color-darts: #e74c3c;
+$color-darts-dark: #c0392b;
+
+$color-pool: #2e7d32;
+$color-pool-dark: #1b5e20;
+
+$color-evening-summary: #9b59b6;
+
+// Table colors
+$color-table-header-bg: #2c3e50;
+$color-table-header-border: #34495e;
+$color-table-row-alt: #fafafa;
+$color-table-row-hover: #f8f9fa;
+$color-table-border: #e0e0e0;
+
+// UI colors
+$color-text-primary: #333;
+$color-text-secondary: #666;
+$color-text-muted: #999;
+$color-text-light: #888;
+
+$color-border-light: #eee;
+$color-border-medium: #ddd;
+$color-border-dark: #ccc;
+
+$color-bg-white: #fff;
+$color-bg-light: #f8f9fa;
+$color-bg-medium: #f0f0f1;
+
+// Button colors
+$color-btn-secondary-bg: #f0f0f1;
+$color-btn-secondary-hover: #dcdcde;
+$color-btn-secondary-text: #1e1e1e;
+
+$color-btn-success: #27ae60;
+$color-btn-success-dark: #219a52;
+$color-btn-success-wp: #00a32a;
+$color-btn-success-wp-dark: #008a20;
+
+$color-btn-warning: #f39c12;
+$color-btn-warning-dark: #e67e22;
+
+$color-btn-info: #3498db;
+$color-btn-info-dark: #2980b9;
+
+// =============================================================================
+// Spacing Scale
+// =============================================================================
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// =============================================================================
+// Typography
+// =============================================================================
+
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.85rem;   // ~14px
+$font-size-base: 0.875rem; // 14px
+$font-size-md: 0.9rem;    // ~14.4px
+$font-size-lg: 0.95rem;   // ~15px
+$font-size-xl: 1rem;      // 16px
+$font-size-2xl: 1.1rem;   // ~18px
+$font-size-3xl: 1.25rem;  // 20px
+$font-size-4xl: 1.5rem;   // 24px
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// =============================================================================
+// Borders & Shadows
+// =============================================================================
+
+$border-radius-sm: 4px;
+$border-radius-md: 6px;
+$border-radius-lg: 8px;
+$border-radius-xl: 12px;
+$border-radius-round: 50%;
+$border-radius-pill: 20px;
+
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+// =============================================================================
+// Breakpoints
+// =============================================================================
+
+$breakpoint-sm: 480px;
+$breakpoint-md: 600px;
+$breakpoint-lg: 768px;
+
+// =============================================================================
+// Avatar Sizes
+// =============================================================================
+
+$avatar-sm: 24px;
+$avatar-md: 32px;
+$avatar-lg: 36px;
+$avatar-xl: 40px;
+
+// =============================================================================
+// Z-index Scale
+// =============================================================================
+
+$z-index-modal: 100000;

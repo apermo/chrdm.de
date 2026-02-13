@@ -1,0 +1,51 @@
+/**
+ * Form Component Styles
+ *
+ * Score entry form styling.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder selectors for form components
+%asc-form {
+	@include form-container;
+}
+
+%asc-form-title {
+	@include form-title;
+}
+
+%asc-form-player-row {
+	@include form-player-row;
+}
+
+%asc-form-player-info {
+	@include player-display;
+	min-width: 120px;
+}
+
+%asc-form-player-avatar {
+	@include avatar($avatar-lg);
+}
+
+%asc-form-player-name {
+	@include player-name;
+}
+
+// Form message placeholders
+%asc-form-message-error {
+	@include form-message-error;
+}
+
+%asc-form-message-success {
+	@include form-message-success;
+}
+
+// Form actions container
+%asc-form-actions {
+	display: flex;
+	gap: $spacing-sm + $spacing-xs; // 12px
+	margin-top: 20px;
+	justify-content: center;
+}

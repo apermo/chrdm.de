@@ -1,0 +1,39 @@
+/**
+ * Podium Component Styles
+ *
+ * Position-based styling for rankings (gold, silver, bronze).
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder selectors for podium rows
+%asc-row-position-1 {
+	@include podium-row-1;
+}
+
+%asc-row-position-2 {
+	@include podium-row-2;
+}
+
+%asc-row-position-3 {
+	@include podium-row-3;
+}
+
+// Placeholder selectors for podium cells (used in total scores)
+%asc-cell-position-1 {
+	@include podium-cell-1;
+}
+
+%asc-cell-position-2 {
+	@include podium-cell-2;
+}
+
+%asc-cell-position-3 {
+	@include podium-cell-3;
+}
+
+// Medal styling
+%asc-medal {
+	@include medal;
+}

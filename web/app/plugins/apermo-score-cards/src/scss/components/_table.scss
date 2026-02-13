@@ -1,0 +1,47 @@
+/**
+ * Table Component Styles
+ *
+ * Base table styling for score displays and standings.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder for base table
+%asc-table {
+	@include table-base;
+}
+
+// Placeholder for table wrapper
+%asc-table-wrapper {
+	@include table-wrapper;
+}
+
+// Common table cell styles
+%asc-rank-col {
+	@include rank-cell;
+}
+
+%asc-player-col {
+	text-align: left !important;
+	min-width: 120px;
+}
+
+// Common row classes
+.asc-table-row {
+	&--podium {
+		font-weight: $font-weight-semibold;
+	}
+
+	&--position-1 {
+		@include podium-row-1;
+	}
+
+	&--position-2 {
+		@include podium-row-2;
+	}
+
+	&--position-3 {
+		@include podium-row-3;
+	}
+}

@@ -1,0 +1,87 @@
+/**
+ * Actions Component Styles
+ *
+ * Action button styling for score card blocks.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder for actions container
+%asc-actions {
+	@include actions-container;
+}
+
+// Placeholder for primary buttons with different colors
+%asc-btn-base {
+	@include btn-base;
+}
+
+%asc-btn-primary-wizard {
+	@include btn-primary($color-wizard, $color-wizard-dark);
+}
+
+%asc-btn-primary-phase10 {
+	@include btn-primary($color-phase10, $color-phase10-dark);
+}
+
+%asc-btn-primary-darts {
+	@include btn-primary($color-darts, $color-darts-dark);
+}
+
+%asc-btn-primary-pool {
+	@include btn-primary($color-pool, $color-pool-dark);
+}
+
+%asc-btn-primary-success {
+	@include btn-primary($color-btn-success, $color-btn-success-dark);
+}
+
+%asc-btn-primary-warning {
+	@include btn-primary($color-btn-warning, $color-btn-warning-dark);
+}
+
+%asc-btn-primary-info {
+	@include btn-primary($color-btn-info, $color-btn-info-dark);
+}
+
+// Secondary/outline buttons
+%asc-btn-secondary {
+	@include btn-secondary;
+}
+
+%asc-btn-secondary-wizard {
+	@include btn-secondary($color-wizard);
+}
+
+%asc-btn-secondary-phase10 {
+	@include btn-secondary($color-phase10);
+}
+
+%asc-btn-secondary-darts {
+	@include btn-secondary($color-darts);
+}
+
+%asc-btn-secondary-pool {
+	@include btn-secondary($color-pool);
+}
+
+// Ghost button
+%asc-btn-ghost {
+	@include btn-ghost;
+}
+
+// Cancel/back button
+%asc-btn-cancel {
+	@include btn-ghost;
+}
+
+// Submit button with game color
+%asc-btn-submit {
+	@include btn-base;
+	font-weight: $font-weight-semibold;
+
+	&:active:not(:disabled) {
+		transform: scale(0.98);
+	}
+}

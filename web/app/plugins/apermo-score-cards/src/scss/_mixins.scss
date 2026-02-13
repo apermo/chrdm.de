@@ -1,0 +1,439 @@
+/**
+ * Shared SCSS Mixins for Score Card Blocks
+ *
+ * Reusable patterns used across all game blocks.
+ */
+
+@use 'variables' as *;
+
+// =============================================================================
+// Block Wrapper
+// =============================================================================
+
+/// Main block wrapper with consistent padding, shadow, and background
+/// @param {Color} $accent - The game's accent color for header border
+@mixin block-wrapper {
+	margin: $spacing-lg 0;
+	padding: 20px;
+	background: $color-bg-white;
+	border-radius: $border-radius-xl;
+	box-shadow: $shadow-md;
+}
+
+// =============================================================================
+// Block Header
+// =============================================================================
+
+/// Block header with title and status badge
+/// @param {Color} $accent - The game's accent color for bottom border
+@mixin block-header($accent) {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: $spacing-sm + $spacing-xs; // 12px
+	margin-bottom: 20px;
+	padding-bottom: $spacing-md;
+	border-bottom: 3px solid $accent;
+}
+
+/// Block title styling
+@mixin block-title {
+	margin: 0;
+	font-size: $font-size-4xl;
+	font-weight: $font-weight-bold;
+	color: $color-text-primary;
+}
+
+// =============================================================================
+// Status Badge
+// =============================================================================
+
+/// Status badge base styling
+@mixin status-badge {
+	padding: 6px $spacing-md;
+	border-radius: $border-radius-pill;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-semibold;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+/// Completed status badge
+@mixin status-badge-completed {
+	@include status-badge;
+	background: $color-success-bg;
+	color: $color-success-text;
+}
+
+/// In-progress status badge
+@mixin status-badge-in-progress {
+	@include status-badge;
+	background: $color-warning-bg;
+	color: $color-warning-text;
+}
+
+// =============================================================================
+// Avatar
+// =============================================================================
+
+/// Avatar image styling
+/// @param {Length} $size - Avatar size (use $avatar-* variables)
+@mixin avatar($size: $avatar-md) {
+	width: $size;
+	height: $size;
+	border-radius: $border-radius-round;
+	object-fit: cover;
+	flex-shrink: 0;
+}
+
+/// Avatar with border and shadow (for tables/forms)
+@mixin avatar-styled($size: $avatar-lg) {
+	@include avatar($size);
+	border: 2px solid $color-bg-white;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// =============================================================================
+// Player Display
+// =============================================================================
+
+/// Player display with avatar and name
+@mixin player-display {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm + 2px; // 10px
+	text-align: left;
+}
+
+/// Player name styling
+@mixin player-name {
+	font-weight: $font-weight-semibold;
+}
+
+// =============================================================================
+// Table Base
+// =============================================================================
+
+/// Base table styling
+@mixin table-base {
+	width: 100%;
+	border-collapse: collapse;
+	overflow: hidden;
+	border-radius: $border-radius-lg;
+	box-shadow: $shadow-sm;
+
+	th,
+	td {
+		padding: 12px $spacing-md;
+		text-align: center;
+	}
+
+	thead {
+		background: $color-table-header-bg;
+		color: $color-bg-white;
+
+		th {
+			font-weight: $font-weight-semibold;
+			font-size: $font-size-md;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+	}
+
+	tbody tr {
+		border-bottom: 1px solid $color-border-light;
+		transition: background 0.2s;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		&:hover {
+			background: $color-table-row-hover;
+		}
+	}
+}
+
+/// Table wrapper for horizontal scrolling
+@mixin table-wrapper {
+	overflow-x: auto;
+	margin: 0 -20px;
+	padding: 0 20px;
+}
+
+// =============================================================================
+// Podium Row Styles
+// =============================================================================
+
+/// Position 1 (gold) row styling
+@mixin podium-row-1 {
+	background: $color-gold-bg !important;
+
+	&:hover {
+		background: $color-gold-bg-hover !important;
+	}
+}
+
+/// Position 2 (silver) row styling
+@mixin podium-row-2 {
+	background: $color-silver-bg !important;
+
+	&:hover {
+		background: $color-silver-bg-hover !important;
+	}
+}
+
+/// Position 3 (bronze) row styling
+@mixin podium-row-3 {
+	background: $color-bronze-bg !important;
+
+	&:hover {
+		background: $color-bronze-bg-hover !important;
+	}
+}
+
+/// Apply podium styling based on position number
+/// Usage: @include podium-row(1);
+@mixin podium-row($position) {
+	@if $position == 1 {
+		@include podium-row-1;
+	} @else if $position == 2 {
+		@include podium-row-2;
+	} @else if $position == 3 {
+		@include podium-row-3;
+	}
+}
+
+/// Position-based cell highlight (for totals)
+@mixin podium-cell-1 {
+	background: $color-gold-rgba !important;
+}
+
+@mixin podium-cell-2 {
+	background: $color-silver-rgba !important;
+}
+
+@mixin podium-cell-3 {
+	background: $color-bronze-rgba !important;
+}
+
+// =============================================================================
+// Medal Display
+// =============================================================================
+
+/// Medal icon styling in tables
+@mixin medal {
+	display: inline-block;
+	margin-right: $spacing-xs + 2px; // 6px
+	font-size: 1.3em;
+}
+
+/// Rank cell styling
+@mixin rank-cell {
+	width: 50px;
+	text-align: center;
+	font-weight: $font-weight-bold;
+	font-size: $font-size-2xl;
+}
+
+// =============================================================================
+// Action Buttons
+// =============================================================================
+
+/// Actions container
+@mixin actions-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: $spacing-sm + $spacing-xs; // 12px
+	margin-top: 20px;
+}
+
+/// Base button styling
+@mixin btn-base {
+	padding: 10px $spacing-lg;
+	border: none;
+	border-radius: $border-radius-md;
+	font-size: $font-size-lg;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+}
+
+/// Primary action button (colored)
+/// @param {Color} $color - Button background color
+/// @param {Color} $hover - Button hover color
+@mixin btn-primary($color, $hover) {
+	@include btn-base;
+	background: $color;
+	color: $color-bg-white;
+
+	&:hover:not(:disabled) {
+		background: $hover;
+	}
+}
+
+/// Secondary/outline button
+/// @param {Color} $accent - Accent color for hover state
+@mixin btn-secondary($accent: $color-text-secondary) {
+	@include btn-base;
+	background: transparent;
+	color: $color-text-secondary;
+	border: 2px solid $color-border-medium;
+
+	&:hover:not(:disabled) {
+		background: $color-table-row-hover;
+		border-color: $accent;
+		color: $accent;
+	}
+}
+
+/// Ghost button (no border)
+@mixin btn-ghost {
+	@include btn-base;
+	background: $color-btn-secondary-bg;
+	color: $color-btn-secondary-text;
+	border: none;
+
+	&:hover:not(:disabled) {
+		background: $color-btn-secondary-hover;
+	}
+}
+
+// =============================================================================
+// Form Styles
+// =============================================================================
+
+/// Form container
+@mixin form-container {
+	margin-top: 20px;
+	padding: 20px;
+	background: $color-bg-light;
+	border-radius: $border-radius-lg;
+}
+
+/// Form title
+@mixin form-title {
+	margin: 0 0 $spacing-md;
+	font-size: $font-size-2xl;
+	font-weight: $font-weight-semibold;
+	color: $color-text-primary;
+}
+
+/// Form input field
+/// @param {Color} $focus-color - Focus border color
+@mixin form-input($focus-color) {
+	width: 100%;
+	max-width: 120px;
+	padding: $spacing-sm 12px;
+	border: 2px solid $color-border-medium;
+	border-radius: $border-radius-md;
+	font-size: $font-size-xl;
+	transition: border-color 0.2s;
+
+	&:focus {
+		outline: none;
+		border-color: $focus-color;
+		box-shadow: 0 0 0 1px $focus-color;
+	}
+
+	&:disabled {
+		background: $color-bg-medium;
+		color: $color-text-muted;
+		cursor: not-allowed;
+	}
+}
+
+/// Form row with player info and inputs
+@mixin form-player-row {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+	padding: 12px;
+	background: $color-bg-white;
+	border-radius: $border-radius-md;
+	box-shadow: $shadow-sm;
+}
+
+/// Form message (error/success)
+@mixin form-message {
+	margin-top: $spacing-sm + $spacing-xs; // 12px
+	padding: 10px 14px;
+	border-radius: $border-radius-md;
+	text-align: center;
+}
+
+@mixin form-message-error {
+	@include form-message;
+	background: $color-error-bg;
+	color: $color-error-text;
+	border: 1px solid $color-error-border;
+}
+
+@mixin form-message-success {
+	@include form-message;
+	background: $color-success-bg;
+	color: $color-success-text;
+	border: 1px solid $color-success-border;
+}
+
+// =============================================================================
+// Pending State
+// =============================================================================
+
+/// Pending state container
+@mixin pending-state {
+	text-align: center;
+	padding: 20px;
+	color: $color-text-secondary;
+
+	p {
+		margin: 0 0 $spacing-md;
+		font-style: italic;
+	}
+}
+
+// =============================================================================
+// Responsive Mixins
+// =============================================================================
+
+/// Apply styles for small screens
+@mixin responsive-sm {
+	@media (max-width: $breakpoint-sm) {
+		@content;
+	}
+}
+
+/// Apply styles for medium screens and below
+@mixin responsive-md {
+	@media (max-width: $breakpoint-md) {
+		@content;
+	}
+}
+
+/// Apply styles for large screens and below
+@mixin responsive-lg {
+	@media (max-width: $breakpoint-lg) {
+		@content;
+	}
+}
+
+/// Compact block wrapper for mobile
+@mixin block-wrapper-mobile {
+	padding: $spacing-md;
+}
+
+/// Compact table for mobile
+@mixin table-mobile {
+	font-size: $font-size-sm;
+
+	th,
+	td {
+		padding: $spacing-sm 10px;
+	}
+}

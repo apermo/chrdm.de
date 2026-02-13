@@ -1,0 +1,32 @@
+/**
+ * Avatar Component Styles
+ *
+ * Player avatar styling for tables and forms.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder selectors for avatar styles
+%asc-avatar-sm {
+	@include avatar($avatar-sm);
+}
+
+%asc-avatar-md {
+	@include avatar($avatar-md);
+}
+
+%asc-avatar-lg {
+	@include avatar-styled($avatar-lg);
+}
+
+%asc-avatar-xl {
+	@include avatar-styled($avatar-xl);
+}
+
+// Header avatar (in table headers)
+%asc-header-avatar {
+	@include avatar($avatar-sm);
+	vertical-align: middle;
+	margin-right: $spacing-xs + 2px; // 6px
+}

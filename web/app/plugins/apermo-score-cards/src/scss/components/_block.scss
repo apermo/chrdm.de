@@ -1,0 +1,26 @@
+/**
+ * Block Component Styles
+ *
+ * Base wrapper styles for all score card blocks.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder selector that game blocks can extend
+%asc-block {
+	@include block-wrapper;
+}
+
+// Generic block class (for shared use)
+.asc-block {
+	@extend %asc-block;
+
+	&__pending {
+		@include pending-state;
+	}
+
+	&__player-actions {
+		margin-top: $spacing-md;
+	}
+}

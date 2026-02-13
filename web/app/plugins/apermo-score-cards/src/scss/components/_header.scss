@@ -1,0 +1,28 @@
+/**
+ * Header Component Styles
+ *
+ * Block header with title and status badge.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Placeholder for title styling
+%asc-title {
+	@include block-title;
+}
+
+// Placeholder for status badge
+%asc-status {
+	@include status-badge;
+
+	&--completed {
+		background: $color-success-bg;
+		color: $color-success-text;
+	}
+
+	&--in-progress {
+		background: $color-warning-bg;
+		color: $color-warning-text;
+	}
+}
