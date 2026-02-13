@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+vendor/
 
 # Build output
 build/
@@ -14,3 +15,12 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Testing
+tmp/
+.phpunit.cache/
+playwright-report/
+test-results/
+
+# Coverage
+coverage/
