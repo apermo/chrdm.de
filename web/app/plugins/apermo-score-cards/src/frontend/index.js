@@ -24,13 +24,21 @@ function init() {
  * Initialize Darts blocks.
  */
 function initDartsBlocks() {
-	const dartsBlocks = document.querySelectorAll( '.asc-darts[data-can-manage="true"]' );
+	const dartsBlocks = document.querySelectorAll(
+		'.asc-darts[data-can-manage="true"]'
+	);
 	dartsBlocks.forEach( ( block ) => {
-		const formContainer = block.querySelector( '.asc-darts-form-container' );
+		const formContainer = block.querySelector(
+			'.asc-darts-form-container'
+		);
 		const editBtn = block.querySelector( '.asc-darts__edit-btn' );
 		const duplicateBtn = block.querySelector( '.asc-darts__duplicate-btn' );
-		const editPlayersBtn = block.querySelector( '.asc-darts__edit-players-btn' );
-		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+		const editPlayersBtn = block.querySelector(
+			'.asc-darts__edit-players-btn'
+		);
+		const playerSelectorContainer = block.querySelector(
+			'.asc-player-selector-container'
+		);
 
 		if ( formContainer && ! formContainer.hidden ) {
 			// Form is visible (no existing game) - initialize immediately
@@ -50,7 +58,11 @@ function initDartsBlocks() {
 		// Handle duplicate button
 		if ( duplicateBtn ) {
 			duplicateBtn.addEventListener( 'click', () => {
-				duplicateBlock( block.dataset.postId, block.dataset.blockId, duplicateBtn );
+				duplicateBlock(
+					block.dataset.postId,
+					block.dataset.blockId,
+					duplicateBtn
+				);
 			} );
 		}
 
@@ -78,22 +90,32 @@ function initDartsBlocks() {
  * Initialize Pool blocks.
  */
 function initPoolBlocks() {
-	const poolBlocks = document.querySelectorAll( '.asc-pool[data-can-manage="true"]' );
+	const poolBlocks = document.querySelectorAll(
+		'.asc-pool[data-can-manage="true"]'
+	);
 	poolBlocks.forEach( ( block ) => {
 		const formContainer = block.querySelector( '.asc-pool-form-container' );
 		const addGameBtn = block.querySelector( '.asc-pool__add-game-btn' );
-		const editPlayersBtn = block.querySelector( '.asc-pool__edit-players-btn' );
+		const editPlayersBtn = block.querySelector(
+			'.asc-pool__edit-players-btn'
+		);
 		const completeBtn = block.querySelector( '.asc-pool__complete-btn' );
 		const continueBtn = block.querySelector( '.asc-pool__continue-btn' );
-		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+		const playerSelectorContainer = block.querySelector(
+			'.asc-player-selector-container'
+		);
 
 		const players = JSON.parse( block.dataset.players || '[]' );
-		const gameData = block.dataset.game ? JSON.parse( block.dataset.game ) : null;
+		const gameData = block.dataset.game
+			? JSON.parse( block.dataset.game )
+			: null;
 		const games = gameData?.games || [];
 
 		// Get locked player IDs from container data attribute
 		const lockedPlayerIds = playerSelectorContainer
-			? JSON.parse( playerSelectorContainer.dataset.lockedPlayerIds || '[]' )
+			? JSON.parse(
+					playerSelectorContainer.dataset.lockedPlayerIds || '[]'
+			  )
 			: [];
 
 		// Add game button
@@ -149,10 +171,23 @@ function initPoolBlocks() {
 
 			if ( deleteBtn ) {
 				deleteBtn.addEventListener( 'click', () => {
-					if ( ! confirm( window.wp?.i18n?.__( 'Delete this game?', 'apermo-score-cards' ) || 'Delete this game?' ) ) {
+					if (
+						! confirm(
+							window.wp?.i18n?.__(
+								'Delete this game?',
+								'apermo-score-cards'
+							) || 'Delete this game?'
+						)
+					) {
 						return;
 					}
-					deletePoolGame( block.dataset.postId, block.dataset.blockId, players, games, gameIndex );
+					deletePoolGame(
+						block.dataset.postId,
+						block.dataset.blockId,
+						players,
+						games,
+						gameIndex
+					);
 				} );
 			}
 		} );
@@ -182,14 +217,26 @@ function initPoolBlocks() {
 		// Handle complete/finish button
 		if ( completeBtn ) {
 			completeBtn.addEventListener( 'click', () => {
-				completePoolSession( block.dataset.postId, block.dataset.blockId, players, games, completeBtn );
+				completePoolSession(
+					block.dataset.postId,
+					block.dataset.blockId,
+					players,
+					games,
+					completeBtn
+				);
 			} );
 		}
 
 		// Handle continue button
 		if ( continueBtn ) {
 			continueBtn.addEventListener( 'click', () => {
-				continuePoolSession( block.dataset.postId, block.dataset.blockId, players, games, continueBtn );
+				continuePoolSession(
+					block.dataset.postId,
+					block.dataset.blockId,
+					players,
+					games,
+					continueBtn
+				);
 			} );
 		}
 	} );
@@ -197,6 +244,11 @@ function initPoolBlocks() {
 
 /**
  * Delete a pool game.
+ * @param postId
+ * @param blockId
+ * @param players
+ * @param games
+ * @param gameIndex
  */
 async function deletePoolGame( postId, blockId, players, games, gameIndex ) {
 	const config = window.apermoScoreCards || {};
@@ -246,6 +298,11 @@ async function deletePoolGame( postId, blockId, players, games, gameIndex ) {
  * Complete/finish a pool session.
  * Removes players without games and marks as completed.
  * Stores final scores so future formula changes don't affect past games.
+ * @param postId
+ * @param blockId
+ * @param players
+ * @param games
+ * @param button
  */
 async function completePoolSession( postId, blockId, players, games, button ) {
 	const config = window.apermoScoreCards || {};
@@ -254,7 +311,9 @@ async function completePoolSession( postId, blockId, players, games, button ) {
 
 	const originalText = button.textContent;
 	button.disabled = true;
-	button.textContent = window.wp?.i18n?.__( 'Finishing...', 'apermo-score-cards' ) || 'Finishing...';
+	button.textContent =
+		window.wp?.i18n?.__( 'Finishing…', 'apermo-score-cards' ) ||
+		'Finishing...';
 
 	// Find players who participated in at least one game
 	const playersWithGames = new Set();
@@ -264,11 +323,16 @@ async function completePoolSession( postId, blockId, players, games, button ) {
 	} );
 
 	// Filter to only players with games
-	const activePlayers = players.filter( ( p ) => playersWithGames.has( p.id ) );
+	const activePlayers = players.filter( ( p ) =>
+		playersWithGames.has( p.id )
+	);
 	const activePlayerIds = activePlayers.map( ( p ) => p.id );
 
 	// Calculate positions and final scores with filtered players
-	const { positions, finalScores } = calculatePoolFinalResults( activePlayers, games );
+	const { positions, finalScores } = calculatePoolFinalResults(
+		activePlayers,
+		games
+	);
 
 	try {
 		// First update block attributes to remove players without games
@@ -318,7 +382,9 @@ async function completePoolSession( postId, blockId, players, games, button ) {
 		window.location.reload();
 	} catch ( error ) {
 		console.error( 'Failed to complete pool session:', error );
-		alert( error.message || 'Failed to complete session. Please try again.' );
+		alert(
+			error.message || 'Failed to complete session. Please try again.'
+		);
 		button.disabled = false;
 		button.textContent = originalText;
 	}
@@ -327,6 +393,11 @@ async function completePoolSession( postId, blockId, players, games, button ) {
 /**
  * Continue a completed pool session.
  * Sets status back to in_progress.
+ * @param postId
+ * @param blockId
+ * @param players
+ * @param games
+ * @param button
  */
 async function continuePoolSession( postId, blockId, players, games, button ) {
 	const config = window.apermoScoreCards || {};
@@ -335,7 +406,9 @@ async function continuePoolSession( postId, blockId, players, games, button ) {
 
 	const originalText = button.textContent;
 	button.disabled = true;
-	button.textContent = window.wp?.i18n?.__( 'Continuing...', 'apermo-score-cards' ) || 'Continuing...';
+	button.textContent =
+		window.wp?.i18n?.__( 'Continuing…', 'apermo-score-cards' ) ||
+		'Continuing...';
 
 	const playerIds = players.map( ( p ) => p.id );
 	const positions = calculatePoolPositions( players, games );
@@ -367,7 +440,9 @@ async function continuePoolSession( postId, blockId, players, games, button ) {
 		window.location.reload();
 	} catch ( error ) {
 		console.error( 'Failed to continue pool session:', error );
-		alert( error.message || 'Failed to continue session. Please try again.' );
+		alert(
+			error.message || 'Failed to continue session. Please try again.'
+		);
 		button.disabled = false;
 		button.textContent = originalText;
 	}
@@ -396,7 +471,10 @@ function calculatePoolFinalResults( players, games ) {
 			stats[ winnerId ].wins++;
 			stats[ winnerId ].points += 3;
 			if ( ! stats[ winnerId ].headToHead[ loserId ] ) {
-				stats[ winnerId ].headToHead[ loserId ] = { wins: 0, losses: 0 };
+				stats[ winnerId ].headToHead[ loserId ] = {
+					wins: 0,
+					losses: 0,
+				};
 			}
 			stats[ winnerId ].headToHead[ loserId ].wins++;
 		}
@@ -405,7 +483,10 @@ function calculatePoolFinalResults( players, games ) {
 			stats[ loserId ].losses++;
 			stats[ loserId ].points += 1;
 			if ( ! stats[ loserId ].headToHead[ winnerId ] ) {
-				stats[ loserId ].headToHead[ winnerId ] = { wins: 0, losses: 0 };
+				stats[ loserId ].headToHead[ winnerId ] = {
+					wins: 0,
+					losses: 0,
+				};
 			}
 			stats[ loserId ].headToHead[ winnerId ].losses++;
 		}
@@ -457,6 +538,8 @@ function calculatePoolFinalResults( players, games ) {
 /**
  * Calculate pool positions for evening summary.
  * Scoring: 1 point per game + 2 bonus for winning (win = 3pts, loss = 1pt).
+ * @param players
+ * @param games
  */
 function calculatePoolPositions( players, games ) {
 	const stats = {};
@@ -472,7 +555,10 @@ function calculatePoolPositions( players, games ) {
 			stats[ winnerId ].wins++;
 			stats[ winnerId ].points += 3; // 1 point for playing + 2 for winning = 3.
 			if ( ! stats[ winnerId ].headToHead[ loserId ] ) {
-				stats[ winnerId ].headToHead[ loserId ] = { wins: 0, losses: 0 };
+				stats[ winnerId ].headToHead[ loserId ] = {
+					wins: 0,
+					losses: 0,
+				};
 			}
 			stats[ winnerId ].headToHead[ loserId ].wins++;
 		}
@@ -481,7 +567,10 @@ function calculatePoolPositions( players, games ) {
 			stats[ loserId ].losses++;
 			stats[ loserId ].points += 1; // 1 point for playing.
 			if ( ! stats[ loserId ].headToHead[ winnerId ] ) {
-				stats[ loserId ].headToHead[ winnerId ] = { wins: 0, losses: 0 };
+				stats[ loserId ].headToHead[ winnerId ] = {
+					wins: 0,
+					losses: 0,
+				};
 			}
 			stats[ loserId ].headToHead[ winnerId ].losses++;
 		}
@@ -535,17 +624,29 @@ function calculatePoolPositions( players, games ) {
  * Initialize Wizard blocks.
  */
 function initWizardBlocks() {
-	const wizardBlocks = document.querySelectorAll( '.asc-wizard[data-can-manage="true"]' );
+	const wizardBlocks = document.querySelectorAll(
+		'.asc-wizard[data-can-manage="true"]'
+	);
 	wizardBlocks.forEach( ( block ) => {
-		const formContainer = block.querySelector( '.asc-wizard-form-container' );
+		const formContainer = block.querySelector(
+			'.asc-wizard-form-container'
+		);
 		const addRoundBtn = block.querySelector( '.asc-wizard__add-round-btn' );
-		const editRoundBtns = block.querySelectorAll( '.asc-wizard__edit-round-btn' );
+		const editRoundBtns = block.querySelectorAll(
+			'.asc-wizard__edit-round-btn'
+		);
 		const completeBtn = block.querySelector( '.asc-wizard__complete-btn' );
-		const editPlayersBtn = block.querySelector( '.asc-wizard__edit-players-btn' );
-		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+		const editPlayersBtn = block.querySelector(
+			'.asc-wizard__edit-players-btn'
+		);
+		const playerSelectorContainer = block.querySelector(
+			'.asc-player-selector-container'
+		);
 
 		const players = JSON.parse( block.dataset.players || '[]' );
-		const gameData = block.dataset.game ? JSON.parse( block.dataset.game ) : null;
+		const gameData = block.dataset.game
+			? JSON.parse( block.dataset.game )
+			: null;
 		const rounds = gameData?.rounds || [];
 		const totalRounds = parseInt( block.dataset.totalRounds, 10 ) || 15;
 
@@ -601,7 +702,13 @@ function initWizardBlocks() {
 		// Complete game button
 		if ( completeBtn ) {
 			completeBtn.addEventListener( 'click', () => {
-				completeWizardGame( block.dataset.postId, block.dataset.blockId, players, rounds, completeBtn );
+				completeWizardGame(
+					block.dataset.postId,
+					block.dataset.blockId,
+					players,
+					rounds,
+					completeBtn
+				);
 			} );
 		}
 
@@ -643,6 +750,11 @@ function initWizardBlocks() {
 
 /**
  * Complete a Wizard game.
+ * @param postId
+ * @param blockId
+ * @param players
+ * @param rounds
+ * @param button
  */
 async function completeWizardGame( postId, blockId, players, rounds, button ) {
 	const config = window.apermoScoreCards || {};
@@ -651,7 +763,9 @@ async function completeWizardGame( postId, blockId, players, rounds, button ) {
 
 	const originalText = button.textContent;
 	button.disabled = true;
-	button.textContent = window.wp?.i18n?.__( 'Completing...', 'apermo-score-cards' ) || 'Completing...';
+	button.textContent =
+		window.wp?.i18n?.__( 'Completing…', 'apermo-score-cards' ) ||
+		'Completing...';
 
 	// Calculate final scores
 	const finalScores = {};
@@ -661,7 +775,11 @@ async function completeWizardGame( postId, blockId, players, rounds, button ) {
 		let total = 0;
 		rounds.forEach( ( round ) => {
 			const data = round[ player.id ];
-			if ( data && typeof data.bid === 'number' && typeof data.won === 'number' ) {
+			if (
+				data &&
+				typeof data.bid === 'number' &&
+				typeof data.won === 'number'
+			) {
 				if ( data.bid === data.won ) {
 					total += 20 + data.won * 10;
 				} else {
@@ -673,7 +791,9 @@ async function completeWizardGame( postId, blockId, players, rounds, button ) {
 	} );
 
 	// Sort and calculate positions
-	const sorted = Object.entries( finalScores ).sort( ( a, b ) => b[ 1 ] - a[ 1 ] );
+	const sorted = Object.entries( finalScores ).sort(
+		( a, b ) => b[ 1 ] - a[ 1 ]
+	);
 	let currentPos = 1;
 	let prevScore = null;
 
@@ -686,7 +806,9 @@ async function completeWizardGame( postId, blockId, players, rounds, button ) {
 	} );
 
 	// Find winner(s)
-	const winnerIds = sorted.filter( ( [ _, score ] ) => score === sorted[ 0 ][ 1 ] ).map( ( [ id ] ) => parseInt( id, 10 ) );
+	const winnerIds = sorted
+		.filter( ( [ _, score ] ) => score === sorted[ 0 ][ 1 ] )
+		.map( ( [ id ] ) => parseInt( id, 10 ) );
 
 	const playerIds = players.map( ( p ) => p.id );
 
@@ -729,17 +851,31 @@ async function completeWizardGame( postId, blockId, players, rounds, button ) {
  * Initialize Phase 10 blocks.
  */
 function initPhase10Blocks() {
-	const phase10Blocks = document.querySelectorAll( '.asc-phase10[data-can-manage="true"]' );
+	const phase10Blocks = document.querySelectorAll(
+		'.asc-phase10[data-can-manage="true"]'
+	);
 	phase10Blocks.forEach( ( block ) => {
-		const formContainer = block.querySelector( '.asc-phase10-form-container' );
-		const addRoundBtn = block.querySelector( '.asc-phase10__add-round-btn' );
-		const editRoundBtns = block.querySelectorAll( '.asc-phase10__edit-round-btn' );
+		const formContainer = block.querySelector(
+			'.asc-phase10-form-container'
+		);
+		const addRoundBtn = block.querySelector(
+			'.asc-phase10__add-round-btn'
+		);
+		const editRoundBtns = block.querySelectorAll(
+			'.asc-phase10__edit-round-btn'
+		);
 		const completeBtn = block.querySelector( '.asc-phase10__complete-btn' );
-		const editPlayersBtn = block.querySelector( '.asc-phase10__edit-players-btn' );
-		const playerSelectorContainer = block.querySelector( '.asc-player-selector-container' );
+		const editPlayersBtn = block.querySelector(
+			'.asc-phase10__edit-players-btn'
+		);
+		const playerSelectorContainer = block.querySelector(
+			'.asc-player-selector-container'
+		);
 
 		const players = JSON.parse( block.dataset.players || '[]' );
-		const gameData = block.dataset.game ? JSON.parse( block.dataset.game ) : null;
+		const gameData = block.dataset.game
+			? JSON.parse( block.dataset.game )
+			: null;
 		const rounds = gameData?.rounds || [];
 
 		// Add round button - show form for new round
@@ -792,7 +928,13 @@ function initPhase10Blocks() {
 		// Complete game button
 		if ( completeBtn ) {
 			completeBtn.addEventListener( 'click', () => {
-				completePhase10Game( block.dataset.postId, block.dataset.blockId, players, rounds, completeBtn );
+				completePhase10Game(
+					block.dataset.postId,
+					block.dataset.blockId,
+					players,
+					rounds,
+					completeBtn
+				);
 			} );
 		}
 
@@ -833,6 +975,11 @@ function initPhase10Blocks() {
 
 /**
  * Complete a Phase 10 game.
+ * @param postId
+ * @param blockId
+ * @param players
+ * @param rounds
+ * @param button
  */
 async function completePhase10Game( postId, blockId, players, rounds, button ) {
 	const config = window.apermoScoreCards || {};
@@ -841,7 +988,9 @@ async function completePhase10Game( postId, blockId, players, rounds, button ) {
 
 	const originalText = button.textContent;
 	button.disabled = true;
-	button.textContent = window.wp?.i18n?.__( 'Completing...', 'apermo-score-cards' ) || 'Completing...';
+	button.textContent =
+		window.wp?.i18n?.__( 'Completing…', 'apermo-score-cards' ) ||
+		'Completing...';
 
 	// Calculate final scores (sum of all round points - lowest wins)
 	const finalScores = {};
@@ -856,7 +1005,9 @@ async function completePhase10Game( postId, blockId, players, rounds, button ) {
 	} );
 
 	// Sort by score ascending (lowest wins) and calculate positions
-	const sorted = Object.entries( finalScores ).sort( ( a, b ) => a[ 1 ] - b[ 1 ] );
+	const sorted = Object.entries( finalScores ).sort(
+		( a, b ) => a[ 1 ] - b[ 1 ]
+	);
 	let currentPos = 1;
 	let prevScore = null;
 
@@ -869,7 +1020,9 @@ async function completePhase10Game( postId, blockId, players, rounds, button ) {
 	} );
 
 	// Find winner(s) - lowest score
-	const winnerIds = sorted.filter( ( [ _, score ] ) => score === sorted[ 0 ][ 1 ] ).map( ( [ id ] ) => parseInt( id, 10 ) );
+	const winnerIds = sorted
+		.filter( ( [ _, score ] ) => score === sorted[ 0 ][ 1 ] )
+		.map( ( [ id ] ) => parseInt( id, 10 ) );
 
 	const playerIds = players.map( ( p ) => p.id );
 
@@ -910,6 +1063,9 @@ async function completePhase10Game( postId, blockId, players, rounds, button ) {
 
 /**
  * Duplicate a block via REST API.
+ * @param postId
+ * @param blockId
+ * @param button
  */
 async function duplicateBlock( postId, blockId, button ) {
 	const config = window.apermoScoreCards || {};
@@ -918,7 +1074,8 @@ async function duplicateBlock( postId, blockId, button ) {
 
 	const originalText = button.textContent;
 	button.disabled = true;
-	button.textContent = window.wp?.i18n?.__( 'Adding...', 'apermo-score-cards' ) || 'Adding...';
+	button.textContent =
+		window.wp?.i18n?.__( 'Adding…', 'apermo-score-cards' ) || 'Adding...';
 
 	try {
 		const response = await fetch(

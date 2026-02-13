@@ -55,7 +55,7 @@ export default class PlayerSelector {
 			this.container.innerHTML = `
 				<div class="asc-player-selector asc-player-selector--loading">
 					<span class="asc-player-selector__spinner"></span>
-					<span>${ __( 'Loading players...', 'apermo-score-cards' ) }</span>
+					<span>${ __( 'Loading players…', 'apermo-score-cards' ) }</span>
 				</div>
 			`;
 			return;
@@ -79,23 +79,39 @@ export default class PlayerSelector {
 		this.container.innerHTML = `
 			<div class="asc-player-selector">
 				<div class="asc-player-selector__header">
-					<span class="asc-player-selector__title">${ __( 'Players', 'apermo-score-cards' ) }</span>
+					<span class="asc-player-selector__title">${ __(
+						'Players',
+						'apermo-score-cards'
+					) }</span>
 					<span class="asc-player-selector__count">
 						${ selectedCount } / ${ this.minPlayers }-${ this.maxPlayers }
 					</span>
 				</div>
-				${ hasLockedPlayers ? `
+				${
+					hasLockedPlayers
+						? `
 					<p class="asc-player-selector__locked-hint">
 						${ __( 'Players with games cannot be removed.', 'apermo-score-cards' ) }
 					</p>
-				` : '' }
+				`
+						: ''
+				}
 				<div class="asc-player-selector__list">
-					${ this.players.map( ( player ) => {
-						const isSelected = this.selectedPlayerIds.includes( player.id );
-						const isLocked = this.lockedPlayerIds.includes( player.id );
-						const isDisabled = ( ! isSelected && ! canSelectMore ) || ( isSelected && isLocked );
-						return `
-							<label class="asc-player-selector__item ${ isSelected ? 'is-selected' : '' } ${ isDisabled ? 'is-disabled' : '' } ${ isLocked ? 'is-locked' : '' }">
+					${ this.players
+						.map( ( player ) => {
+							const isSelected = this.selectedPlayerIds.includes(
+								player.id
+							);
+							const isLocked = this.lockedPlayerIds.includes(
+								player.id
+							);
+							const isDisabled =
+								( ! isSelected && ! canSelectMore ) ||
+								( isSelected && isLocked );
+							return `
+							<label class="asc-player-selector__item ${ isSelected ? 'is-selected' : '' } ${
+								isDisabled ? 'is-disabled' : ''
+							} ${ isLocked ? 'is-locked' : '' }">
 								<input
 									type="checkbox"
 									value="${ player.id }"
@@ -104,27 +120,43 @@ export default class PlayerSelector {
 									class="asc-player-selector__checkbox"
 								/>
 								<span class="asc-player-selector__player">
-									${ player.avatarUrl ? `<img src="${ player.avatarUrl }" alt="" class="asc-player-selector__avatar" />` : '' }
-									<span class="asc-player-selector__name">${ this.escapeHtml( player.name ) }</span>
+									${
+										player.avatarUrl
+											? `<img src="${ player.avatarUrl }" alt="" class="asc-player-selector__avatar" />`
+											: ''
+									}
+									<span class="asc-player-selector__name">${ this.escapeHtml(
+										player.name
+									) }</span>
 									${ isLocked ? `<span class="asc-player-selector__lock">🔒</span>` : '' }
 								</span>
 							</label>
 						`;
-					} ).join( '' ) }
+						} )
+						.join( '' ) }
 				</div>
 				<div class="asc-player-selector__actions">
-					<button type="button" class="asc-player-selector__save" ${ ! canSave ? 'disabled' : '' }>
+					<button type="button" class="asc-player-selector__save" ${
+						! canSave ? 'disabled' : ''
+					}>
 						${ __( 'Save Players', 'apermo-score-cards' ) }
 					</button>
 					<button type="button" class="asc-player-selector__cancel">
 						${ __( 'Cancel', 'apermo-score-cards' ) }
 					</button>
 				</div>
-				${ ! canSave ? `
+				${
+					! canSave
+						? `
 					<p class="asc-player-selector__hint">
-						${ __( 'Select at least', 'apermo-score-cards' ) } ${ this.minPlayers } ${ __( 'players', 'apermo-score-cards' ) }
+						${ __( 'Select at least', 'apermo-score-cards' ) } ${ this.minPlayers } ${ __(
+							'players',
+							'apermo-score-cards'
+						) }
 					</p>
-				` : '' }
+				`
+						: ''
+				}
 				<div class="asc-player-selector__message" hidden></div>
 			</div>
 		`;
@@ -139,9 +171,15 @@ export default class PlayerSelector {
 	}
 
 	bindEvents() {
-		const checkboxes = this.container.querySelectorAll( '.asc-player-selector__checkbox' );
-		const saveBtn = this.container.querySelector( '.asc-player-selector__save' );
-		const cancelBtn = this.container.querySelector( '.asc-player-selector__cancel' );
+		const checkboxes = this.container.querySelectorAll(
+			'.asc-player-selector__checkbox'
+		);
+		const saveBtn = this.container.querySelector(
+			'.asc-player-selector__save'
+		);
+		const cancelBtn = this.container.querySelector(
+			'.asc-player-selector__cancel'
+		);
 
 		checkboxes.forEach( ( checkbox ) => {
 			checkbox.addEventListener( 'change', ( e ) => {
@@ -151,7 +189,9 @@ export default class PlayerSelector {
 						this.selectedPlayerIds.push( playerId );
 					}
 				} else {
-					this.selectedPlayerIds = this.selectedPlayerIds.filter( ( id ) => id !== playerId );
+					this.selectedPlayerIds = this.selectedPlayerIds.filter(
+						( id ) => id !== playerId
+					);
 				}
 				this.render();
 			} );
@@ -177,11 +217,17 @@ export default class PlayerSelector {
 		const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
 		const nonce = config.restNonce;
 
-		const saveBtn = this.container.querySelector( '.asc-player-selector__save' );
-		const messageEl = this.container.querySelector( '.asc-player-selector__message' );
+		const saveBtn = this.container.querySelector(
+			'.asc-player-selector__save'
+		);
+		const messageEl = this.container.querySelector(
+			'.asc-player-selector__message'
+		);
 
 		saveBtn.disabled = true;
-		saveBtn.textContent = window.wp?.i18n?.__( 'Saving...', 'apermo-score-cards' ) || 'Saving...';
+		saveBtn.textContent =
+			window.wp?.i18n?.__( 'Saving…', 'apermo-score-cards' ) ||
+			'Saving...';
 
 		try {
 			const response = await fetch(
@@ -192,7 +238,9 @@ export default class PlayerSelector {
 						'Content-Type': 'application/json',
 						'X-WP-Nonce': nonce,
 					},
-					body: JSON.stringify( { playerIds: this.selectedPlayerIds } ),
+					body: JSON.stringify( {
+						playerIds: this.selectedPlayerIds,
+					} ),
 				}
 			);
 
@@ -204,12 +252,16 @@ export default class PlayerSelector {
 			this.onSave( this.selectedPlayerIds );
 		} catch ( error ) {
 			console.error( 'Failed to save players:', error );
-			messageEl.textContent = error.message || 'Failed to save. Please try again.';
-			messageEl.className = 'asc-player-selector__message asc-player-selector__message--error';
+			messageEl.textContent =
+				error.message || 'Failed to save. Please try again.';
+			messageEl.className =
+				'asc-player-selector__message asc-player-selector__message--error';
 			messageEl.hidden = false;
 
 			saveBtn.disabled = false;
-			saveBtn.textContent = window.wp?.i18n?.__( 'Save Players', 'apermo-score-cards' ) || 'Save Players';
+			saveBtn.textContent =
+				window.wp?.i18n?.__( 'Save Players', 'apermo-score-cards' ) ||
+				'Save Players';
 		}
 	}
 }

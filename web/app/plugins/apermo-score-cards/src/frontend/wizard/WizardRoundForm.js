@@ -13,6 +13,8 @@
  * - Reloading the page doesn't lose entered data
  */
 
+import { __, escapeHtml as escapeHtmlUtil, getApiConfig } from '../base';
+
 const STEPS = {
 	BID: 1,
 	WEREWOLF: 2,
@@ -44,15 +46,23 @@ export default class WizardRoundForm {
 		// Determine if we're editing an existing round or adding a new one
 		// Also check for incomplete rounds (bids entered but no results)
 		const isEditing = this.editRoundIndex !== null;
-		let existingRound = isEditing ? this.rounds[ this.editRoundIndex ] : null;
+		let existingRound = isEditing
+			? this.rounds[ this.editRoundIndex ]
+			: null;
 
 		// Check if there's an incomplete round (last round has no 'won' values)
 		if ( ! isEditing && this.rounds.length > 0 ) {
 			const lastRound = this.rounds[ this.rounds.length - 1 ];
 			const isIncomplete = this.players.some( ( player ) => {
 				const data = lastRound[ player.id ];
-				return data && data.bid !== undefined && data.bid !== '' &&
-					( data.won === undefined || data.won === '' || data.won === null );
+				return (
+					data &&
+					data.bid !== undefined &&
+					data.bid !== '' &&
+					( data.won === undefined ||
+						data.won === '' ||
+						data.won === null )
+				);
 			} );
 
 			if ( isIncomplete ) {
@@ -282,9 +292,7 @@ export default class WizardRoundForm {
 	 * @return {Promise<boolean>} True on success.
 	 */
 	async saveRoundData() {
-		const config = window.apermoScoreCards || {};
-		const restUrl = config.restUrl || '/wp-json/apermo-score-cards/v1';
-		const nonce = config.restNonce;
+		const { restUrl, restNonce: nonce } = getApiConfig();
 
 		const roundData = this.buildRoundData();
 		const roundIndex = this.getRoundIndex();
@@ -349,7 +357,6 @@ export default class WizardRoundForm {
 	}
 
 	renderBidStep() {
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
 		const isEditing = this.editRoundIndex !== null;
 		const roundNumber = this.getRoundNumber();
 		const maxTricks = roundNumber;
@@ -360,38 +367,45 @@ export default class WizardRoundForm {
 		this.container.innerHTML = `
 			<div class="asc-wizard-form">
 				<div class="asc-wizard-form__step-indicator">
-					<span class="asc-wizard-form__step asc-wizard-form__step--active">${ __( 'Bids', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step asc-wizard-form__step--active">${ __(
+						'Bids'
+					) }</span>
 					<span class="asc-wizard-form__step-separator">→</span>
-					<span class="asc-wizard-form__step">${ __( 'Werewolf', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step">${ __( 'Werewolf' ) }</span>
 					<span class="asc-wizard-form__step-separator">→</span>
-					<span class="asc-wizard-form__step">${ __( 'Results', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step">${ __( 'Results' ) }</span>
 				</div>
 
 				<h4 class="asc-wizard-form__title">
-					${ isEditing
-						? `${ __( 'Edit Round', 'apermo-score-cards' ) } ${ roundNumber }`
-						: `${ __( 'Round', 'apermo-score-cards' ) } ${ roundNumber }`
+					${
+						isEditing
+							? `${ __( 'Edit Round' ) } ${ roundNumber }`
+							: `${ __( 'Round' ) } ${ roundNumber }`
 					}
 					<span class="asc-wizard-form__max-tricks">
-						(${ __( 'max', 'apermo-score-cards' ) } ${ maxTricks } ${ __( 'tricks', 'apermo-score-cards' ) })
+						(${ __( 'max' ) } ${ maxTricks } ${ __( 'tricks' ) })
 					</span>
 				</h4>
 
 				<div class="asc-wizard-form__grid">
-					${ this.players.map( ( player ) => {
-						const bid = this.roundData[ player.id ].bid;
-						return `
+					${ this.players
+						.map( ( player ) => {
+							const bid = this.roundData[ player.id ].bid;
+							return `
 							<div class="asc-wizard-form__player-row" data-player-id="${ player.id }">
 								<div class="asc-wizard-form__player-info">
-									${ player.avatarUrl
-										? `<img src="${ player.avatarUrl }" alt="" class="asc-wizard-form__player-avatar" />`
-										: ''
+									${
+										player.avatarUrl
+											? `<img src="${ player.avatarUrl }" alt="" class="asc-wizard-form__player-avatar" />`
+											: ''
 									}
-									<span class="asc-wizard-form__player-name">${ this.escapeHtml( player.name ) }</span>
+									<span class="asc-wizard-form__player-name">${ this.escapeHtml(
+										player.name
+									) }</span>
 								</div>
 								<div class="asc-wizard-form__inputs">
 									<div class="asc-wizard-form__input-group">
-										<label class="asc-wizard-form__label">${ __( 'Bid', 'apermo-score-cards' ) }</label>
+										<label class="asc-wizard-form__label">${ __( 'Bid' ) }</label>
 										<input
 											type="number"
 											class="asc-wizard-form__input asc-wizard-form__input--bid"
@@ -405,26 +419,35 @@ export default class WizardRoundForm {
 								</div>
 							</div>
 						`;
-					} ).join( '' ) }
+						} )
+						.join( '' ) }
 				</div>
 
-				<div class="asc-wizard-form__bid-summary asc-wizard-form__bid-summary--${ isBalanced ? 'balanced' : 'unbalanced' }">
+				<div class="asc-wizard-form__bid-summary asc-wizard-form__bid-summary--${
+					isBalanced ? 'balanced' : 'unbalanced'
+				}">
 					<span class="asc-wizard-form__bid-total">
-						${ __( 'Total', 'apermo-score-cards' ) }: ${ bidSum } / ${ roundNumber } ${ __( 'tricks', 'apermo-score-cards' ) }
+						${ __( 'Total' ) }: ${ bidSum } / ${ roundNumber } ${ __( 'tricks' ) }
 					</span>
-					${ ! isBalanced ? `
+					${
+						! isBalanced
+							? `
 						<span class="asc-wizard-form__bid-difference">
 							${ difference > 0 ? '+' : '' }${ difference }
 						</span>
-					` : '' }
+					`
+							: ''
+					}
 				</div>
 
 				<div class="asc-wizard-form__actions">
-					<button type="button" class="asc-wizard-form__submit" ${ ! this.allBidsEntered() ? 'disabled' : '' }>
-						${ __( 'Store Bids', 'apermo-score-cards' ) }
+					<button type="button" class="asc-wizard-form__submit" ${
+						! this.allBidsEntered() ? 'disabled' : ''
+					}>
+						${ __( 'Store Bids' ) }
 					</button>
 					<button type="button" class="asc-wizard-form__cancel">
-						${ __( 'Cancel', 'apermo-score-cards' ) }
+						${ __( 'Cancel' ) }
 					</button>
 				</div>
 				<div class="asc-wizard-form__message" hidden></div>
@@ -438,55 +461,63 @@ export default class WizardRoundForm {
 		const maxTricks = this.getRoundNumber();
 
 		// Bid inputs
-		this.container.querySelectorAll( '.asc-wizard-form__input--bid' ).forEach( ( input ) => {
-			input.addEventListener( 'input', ( e ) => {
-				const playerId = parseInt( e.target.dataset.playerId, 10 );
-				let value = e.target.value;
+		this.container
+			.querySelectorAll( '.asc-wizard-form__input--bid' )
+			.forEach( ( input ) => {
+				input.addEventListener( 'input', ( e ) => {
+					const playerId = parseInt( e.target.dataset.playerId, 10 );
+					let value = e.target.value;
 
-				if ( value !== '' ) {
-					let numValue = parseInt( value, 10 );
-					// Clamp value to valid range.
-					if ( ! isNaN( numValue ) ) {
-						if ( numValue < 0 ) {
-							numValue = 0;
-							e.target.value = '0';
-						} else if ( numValue > maxTricks ) {
-							numValue = maxTricks;
-							e.target.value = String( maxTricks );
+					if ( value !== '' ) {
+						let numValue = parseInt( value, 10 );
+						// Clamp value to valid range.
+						if ( ! isNaN( numValue ) ) {
+							if ( numValue < 0 ) {
+								numValue = 0;
+								e.target.value = '0';
+							} else if ( numValue > maxTricks ) {
+								numValue = maxTricks;
+								e.target.value = String( maxTricks );
+							}
+							value = numValue;
 						}
-						value = numValue;
 					}
-				}
 
-				this.roundData[ playerId ].bid = value === '' ? '' : parseInt( value, 10 );
-				this.updateInputValidation( e.target, this.isValidBid( this.roundData[ playerId ].bid ) );
-				this.updateBidSummary();
-				this.updateSubmitButton();
-			} );
-
-			// Also validate on blur to catch edge cases.
-			input.addEventListener( 'blur', ( e ) => {
-				const playerId = parseInt( e.target.dataset.playerId, 10 );
-				const bid = this.roundData[ playerId ].bid;
-				if ( bid !== '' && ! this.isValidBid( bid ) ) {
-					// Clamp to valid range on blur.
-					const numBid = parseInt( bid, 10 );
-					if ( numBid < 0 ) {
-						this.roundData[ playerId ].bid = 0;
-						e.target.value = '0';
-					} else if ( numBid > maxTricks ) {
-						this.roundData[ playerId ].bid = maxTricks;
-						e.target.value = String( maxTricks );
-					}
-					this.updateInputValidation( e.target, true );
+					this.roundData[ playerId ].bid =
+						value === '' ? '' : parseInt( value, 10 );
+					this.updateInputValidation(
+						e.target,
+						this.isValidBid( this.roundData[ playerId ].bid )
+					);
 					this.updateBidSummary();
 					this.updateSubmitButton();
-				}
+				} );
+
+				// Also validate on blur to catch edge cases.
+				input.addEventListener( 'blur', ( e ) => {
+					const playerId = parseInt( e.target.dataset.playerId, 10 );
+					const bid = this.roundData[ playerId ].bid;
+					if ( bid !== '' && ! this.isValidBid( bid ) ) {
+						// Clamp to valid range on blur.
+						const numBid = parseInt( bid, 10 );
+						if ( numBid < 0 ) {
+							this.roundData[ playerId ].bid = 0;
+							e.target.value = '0';
+						} else if ( numBid > maxTricks ) {
+							this.roundData[ playerId ].bid = maxTricks;
+							e.target.value = String( maxTricks );
+						}
+						this.updateInputValidation( e.target, true );
+						this.updateBidSummary();
+						this.updateSubmitButton();
+					}
+				} );
 			} );
-		} );
 
 		// Submit (Store Bids) - saves to DB
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
 		if ( submitBtn ) {
 			submitBtn.addEventListener( 'click', () => this.storeBids() );
 		}
@@ -517,12 +548,15 @@ export default class WizardRoundForm {
 		this.isSubmitting = true;
 		this.updateSubmitButton();
 
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
-		const messageEl = this.container.querySelector( '.asc-wizard-form__message' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
+		const messageEl = this.container.querySelector(
+			'.asc-wizard-form__message'
+		);
 		const originalText = submitBtn.textContent;
 
-		submitBtn.textContent = __( 'Saving...', 'apermo-score-cards' );
+		submitBtn.textContent = __( 'Saving…' );
 
 		// Update step before saving
 		this.meta.step = 'werewolf';
@@ -536,8 +570,10 @@ export default class WizardRoundForm {
 			this.render();
 		} catch ( error ) {
 			console.error( 'Failed to save bids:', error );
-			messageEl.textContent = error.message || __( 'Failed to save. Please try again.', 'apermo-score-cards' );
-			messageEl.className = 'asc-wizard-form__message asc-wizard-form__message--error';
+			messageEl.textContent =
+				error.message || __( 'Failed to save. Please try again.' );
+			messageEl.className =
+				'asc-wizard-form__message asc-wizard-form__message--error';
 			messageEl.hidden = false;
 
 			// Revert step on error
@@ -549,77 +585,107 @@ export default class WizardRoundForm {
 	}
 
 	updateBidSummary() {
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
 		const roundNumber = this.getRoundNumber();
 		const bidSum = this.getBidSum();
 		const difference = bidSum - roundNumber;
 		const isBalanced = difference === 0;
 
-		const summary = this.container.querySelector( '.asc-wizard-form__bid-summary' );
+		const summary = this.container.querySelector(
+			'.asc-wizard-form__bid-summary'
+		);
 		if ( summary ) {
-			summary.className = `asc-wizard-form__bid-summary asc-wizard-form__bid-summary--${ isBalanced ? 'balanced' : 'unbalanced' }`;
+			summary.className = `asc-wizard-form__bid-summary asc-wizard-form__bid-summary--${
+				isBalanced ? 'balanced' : 'unbalanced'
+			}`;
 			summary.innerHTML = `
 				<span class="asc-wizard-form__bid-total">
-					${ __( 'Total', 'apermo-score-cards' ) }: ${ bidSum } / ${ roundNumber } ${ __( 'tricks', 'apermo-score-cards' ) }
+					${ __( 'Total' ) }: ${ bidSum } / ${ roundNumber } ${ __( 'tricks' ) }
 				</span>
-				${ ! isBalanced ? `
+				${
+					! isBalanced
+						? `
 					<span class="asc-wizard-form__bid-difference">
 						${ difference > 0 ? '+' : '' }${ difference }
 					</span>
-				` : '' }
+				`
+						: ''
+				}
 			`;
 		}
 	}
 
 	renderWerewolfStep() {
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
 		const roundNumber = this.getRoundNumber();
 
 		this.container.innerHTML = `
 			<div class="asc-wizard-form">
 				<div class="asc-wizard-form__step-indicator">
-					<span class="asc-wizard-form__step asc-wizard-form__step--done">${ __( 'Bids', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step asc-wizard-form__step--done">${ __(
+						'Bids'
+					) }</span>
 					<span class="asc-wizard-form__step-separator">→</span>
-					<span class="asc-wizard-form__step asc-wizard-form__step--active">${ __( 'Werewolf', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step asc-wizard-form__step--active">${ __(
+						'Werewolf'
+					) }</span>
 					<span class="asc-wizard-form__step-separator">→</span>
-					<span class="asc-wizard-form__step">${ __( 'Results', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step">${ __( 'Results' ) }</span>
 				</div>
 
 				<h4 class="asc-wizard-form__title">
-					${ __( 'Round', 'apermo-score-cards' ) } ${ roundNumber } - ${ __( 'Werewolf Adjustment', 'apermo-score-cards' ) }
+					${ __( 'Round' ) } ${ roundNumber } - ${ __( 'Werewolf Adjustment' ) }
 				</h4>
 
 				<div class="asc-wizard-form__werewolf-grid">
-					${ this.players.map( ( player ) => {
-						const bid = parseInt( this.roundData[ player.id ].bid, 10 );
-						const isSelected = this.meta.werewolfPlayerId === player.id;
-						const selectedMinus = isSelected && this.meta.werewolfAdjustment === -1;
-						const selectedPlus = isSelected && this.meta.werewolfAdjustment === 1;
-						// Disable -1 if bid is already 0, disable +1 if bid is already max.
-						const canMinus = bid > 0;
-						const canPlus = bid < roundNumber;
+					${ this.players
+						.map( ( player ) => {
+							const bid = parseInt(
+								this.roundData[ player.id ].bid,
+								10
+							);
+							const isSelected =
+								this.meta.werewolfPlayerId === player.id;
+							const selectedMinus =
+								isSelected &&
+								this.meta.werewolfAdjustment === -1;
+							const selectedPlus =
+								isSelected &&
+								this.meta.werewolfAdjustment === 1;
+							// Disable -1 if bid is already 0, disable +1 if bid is already max.
+							const canMinus = bid > 0;
+							const canPlus = bid < roundNumber;
 
-						return `
+							return `
 							<div class="asc-wizard-form__werewolf-row" data-player-id="${ player.id }">
 								<div class="asc-wizard-form__player-info">
-									${ player.avatarUrl
-										? `<img src="${ player.avatarUrl }" alt="" class="asc-wizard-form__player-avatar" />`
-										: ''
+									${
+										player.avatarUrl
+											? `<img src="${ player.avatarUrl }" alt="" class="asc-wizard-form__player-avatar" />`
+											: ''
 									}
-									<span class="asc-wizard-form__player-name">${ this.escapeHtml( player.name ) }</span>
+									<span class="asc-wizard-form__player-name">${ this.escapeHtml(
+										player.name
+									) }</span>
 									<span class="asc-wizard-form__player-bid">(${ bid })</span>
 								</div>
 								<div class="asc-wizard-form__werewolf-buttons">
 									<button
 										type="button"
-										class="asc-wizard-form__werewolf-btn asc-wizard-form__werewolf-btn--minus ${ selectedMinus ? 'asc-wizard-form__werewolf-btn--selected' : '' }"
+										class="asc-wizard-form__werewolf-btn asc-wizard-form__werewolf-btn--minus ${
+											selectedMinus
+												? 'asc-wizard-form__werewolf-btn--selected'
+												: ''
+										}"
 										data-player-id="${ player.id }"
 										data-adjustment="-1"
 										${ ! canMinus ? 'disabled' : '' }
 									>-1</button>
 									<button
 										type="button"
-										class="asc-wizard-form__werewolf-btn asc-wizard-form__werewolf-btn--plus ${ selectedPlus ? 'asc-wizard-form__werewolf-btn--selected' : '' }"
+										class="asc-wizard-form__werewolf-btn asc-wizard-form__werewolf-btn--plus ${
+											selectedPlus
+												? 'asc-wizard-form__werewolf-btn--selected'
+												: ''
+										}"
 										data-player-id="${ player.id }"
 										data-adjustment="1"
 										${ ! canPlus ? 'disabled' : '' }
@@ -627,24 +693,29 @@ export default class WizardRoundForm {
 								</div>
 							</div>
 						`;
-					} ).join( '' ) }
+						} )
+						.join( '' ) }
 
 					<div class="asc-wizard-form__werewolf-row asc-wizard-form__werewolf-row--no-werewolf">
 						<button
 							type="button"
-							class="asc-wizard-form__no-werewolf-btn ${ this.meta.werewolfPlayerId === null ? 'asc-wizard-form__no-werewolf-btn--selected' : '' }"
+							class="asc-wizard-form__no-werewolf-btn ${
+								this.meta.werewolfPlayerId === null
+									? 'asc-wizard-form__no-werewolf-btn--selected'
+									: ''
+							}"
 						>
-							${ __( 'No Werewolf this round', 'apermo-score-cards' ) }
+							${ __( 'No Werewolf this round' ) }
 						</button>
 					</div>
 				</div>
 
 				<div class="asc-wizard-form__actions">
 					<button type="button" class="asc-wizard-form__submit">
-						${ __( 'Continue', 'apermo-score-cards' ) }
+						${ __( 'Continue' ) }
 					</button>
 					<button type="button" class="asc-wizard-form__back">
-						${ __( 'Back', 'apermo-score-cards' ) }
+						${ __( 'Back' ) }
 					</button>
 				</div>
 				<div class="asc-wizard-form__message" hidden></div>
@@ -656,26 +727,36 @@ export default class WizardRoundForm {
 
 	bindWerewolfStepEvents() {
 		// Werewolf adjustment buttons
-		this.container.querySelectorAll( '.asc-wizard-form__werewolf-btn' ).forEach( ( btn ) => {
-			btn.addEventListener( 'click', ( e ) => {
-				const playerId = parseInt( e.target.dataset.playerId, 10 );
-				const adjustment = parseInt( e.target.dataset.adjustment, 10 );
+		this.container
+			.querySelectorAll( '.asc-wizard-form__werewolf-btn' )
+			.forEach( ( btn ) => {
+				btn.addEventListener( 'click', ( e ) => {
+					const playerId = parseInt( e.target.dataset.playerId, 10 );
+					const adjustment = parseInt(
+						e.target.dataset.adjustment,
+						10
+					);
 
-				// Toggle: if same button clicked again, deselect
-				if ( this.meta.werewolfPlayerId === playerId && this.meta.werewolfAdjustment === adjustment ) {
-					this.meta.werewolfPlayerId = null;
-					this.meta.werewolfAdjustment = 0;
-				} else {
-					this.meta.werewolfPlayerId = playerId;
-					this.meta.werewolfAdjustment = adjustment;
-				}
+					// Toggle: if same button clicked again, deselect
+					if (
+						this.meta.werewolfPlayerId === playerId &&
+						this.meta.werewolfAdjustment === adjustment
+					) {
+						this.meta.werewolfPlayerId = null;
+						this.meta.werewolfAdjustment = 0;
+					} else {
+						this.meta.werewolfPlayerId = playerId;
+						this.meta.werewolfAdjustment = adjustment;
+					}
 
-				this.updateWerewolfSelection();
+					this.updateWerewolfSelection();
+				} );
 			} );
-		} );
 
 		// No Werewolf button
-		const noWerewolfBtn = this.container.querySelector( '.asc-wizard-form__no-werewolf-btn' );
+		const noWerewolfBtn = this.container.querySelector(
+			'.asc-wizard-form__no-werewolf-btn'
+		);
 		if ( noWerewolfBtn ) {
 			noWerewolfBtn.addEventListener( 'click', () => {
 				this.meta.werewolfPlayerId = null;
@@ -685,13 +766,17 @@ export default class WizardRoundForm {
 		}
 
 		// Continue button - saves to DB
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
 		if ( submitBtn ) {
 			submitBtn.addEventListener( 'click', () => this.storeWerewolf() );
 		}
 
 		// Back button
-		const backBtn = this.container.querySelector( '.asc-wizard-form__back' );
+		const backBtn = this.container.querySelector(
+			'.asc-wizard-form__back'
+		);
 		if ( backBtn ) {
 			backBtn.addEventListener( 'click', () => {
 				this.currentStep = STEPS.BID;
@@ -707,12 +792,15 @@ export default class WizardRoundForm {
 
 		this.isSubmitting = true;
 
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
-		const messageEl = this.container.querySelector( '.asc-wizard-form__message' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
+		const messageEl = this.container.querySelector(
+			'.asc-wizard-form__message'
+		);
 		const originalText = submitBtn.textContent;
 
-		submitBtn.textContent = __( 'Saving...', 'apermo-score-cards' );
+		submitBtn.textContent = __( 'Saving…' );
 		submitBtn.disabled = true;
 
 		// Update step before saving
@@ -727,8 +815,10 @@ export default class WizardRoundForm {
 			this.render();
 		} catch ( error ) {
 			console.error( 'Failed to save werewolf adjustment:', error );
-			messageEl.textContent = error.message || __( 'Failed to save. Please try again.', 'apermo-score-cards' );
-			messageEl.className = 'asc-wizard-form__message asc-wizard-form__message--error';
+			messageEl.textContent =
+				error.message || __( 'Failed to save. Please try again.' );
+			messageEl.className =
+				'asc-wizard-form__message asc-wizard-form__message--error';
 			messageEl.hidden = false;
 
 			// Revert step on error
@@ -741,29 +831,40 @@ export default class WizardRoundForm {
 
 	updateWerewolfSelection() {
 		// Clear all selections
-		this.container.querySelectorAll( '.asc-wizard-form__werewolf-btn' ).forEach( ( btn ) => {
-			btn.classList.remove( 'asc-wizard-form__werewolf-btn--selected' );
-		} );
+		this.container
+			.querySelectorAll( '.asc-wizard-form__werewolf-btn' )
+			.forEach( ( btn ) => {
+				btn.classList.remove(
+					'asc-wizard-form__werewolf-btn--selected'
+				);
+			} );
 
-		const noWerewolfBtn = this.container.querySelector( '.asc-wizard-form__no-werewolf-btn' );
+		const noWerewolfBtn = this.container.querySelector(
+			'.asc-wizard-form__no-werewolf-btn'
+		);
 
 		if ( this.meta.werewolfPlayerId !== null ) {
 			// Select the appropriate button
 			const selector = `.asc-wizard-form__werewolf-btn[data-player-id="${ this.meta.werewolfPlayerId }"][data-adjustment="${ this.meta.werewolfAdjustment }"]`;
 			const selectedBtn = this.container.querySelector( selector );
 			if ( selectedBtn ) {
-				selectedBtn.classList.add( 'asc-wizard-form__werewolf-btn--selected' );
+				selectedBtn.classList.add(
+					'asc-wizard-form__werewolf-btn--selected'
+				);
 			}
 			if ( noWerewolfBtn ) {
-				noWerewolfBtn.classList.remove( 'asc-wizard-form__no-werewolf-btn--selected' );
+				noWerewolfBtn.classList.remove(
+					'asc-wizard-form__no-werewolf-btn--selected'
+				);
 			}
 		} else if ( noWerewolfBtn ) {
-			noWerewolfBtn.classList.add( 'asc-wizard-form__no-werewolf-btn--selected' );
+			noWerewolfBtn.classList.add(
+				'asc-wizard-form__no-werewolf-btn--selected'
+			);
 		}
 	}
 
 	renderResultsStep() {
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
 		const isEditing = this.editRoundIndex !== null;
 		const roundNumber = this.getRoundNumber();
 		const maxTricks = roundNumber;
@@ -774,44 +875,75 @@ export default class WizardRoundForm {
 		this.container.innerHTML = `
 			<div class="asc-wizard-form">
 				<div class="asc-wizard-form__step-indicator">
-					<span class="asc-wizard-form__step asc-wizard-form__step--done">${ __( 'Bids', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step asc-wizard-form__step--done">${ __(
+						'Bids'
+					) }</span>
 					<span class="asc-wizard-form__step-separator">→</span>
-					<span class="asc-wizard-form__step asc-wizard-form__step--done">${ __( 'Werewolf', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step asc-wizard-form__step--done">${ __(
+						'Werewolf'
+					) }</span>
 					<span class="asc-wizard-form__step-separator">→</span>
-					<span class="asc-wizard-form__step asc-wizard-form__step--active">${ __( 'Results', 'apermo-score-cards' ) }</span>
+					<span class="asc-wizard-form__step asc-wizard-form__step--active">${ __(
+						'Results'
+					) }</span>
 				</div>
 
 				<h4 class="asc-wizard-form__title">
-					${ __( 'Round', 'apermo-score-cards' ) } ${ roundNumber } - ${ __( 'Enter Results', 'apermo-score-cards' ) }
+					${ __( 'Round' ) } ${ roundNumber } - ${ __( 'Enter Results' ) }
 				</h4>
 
 				<div class="asc-wizard-form__grid">
-					${ this.players.map( ( player ) => {
-						const bid = this.roundData[ player.id ].bid;
-						const won = this.roundData[ player.id ].won;
-						const effectiveBid = this.getEffectiveBid( player.id );
-						const hasWerewolf = this.meta.werewolfPlayerId === player.id;
-						const hasValues = bid !== '' && won !== '';
-						const score = hasValues ? this.calculateScore( effectiveBid, parseInt( won, 10 ) ) : null;
+					${ this.players
+						.map( ( player ) => {
+							const bid = this.roundData[ player.id ].bid;
+							const won = this.roundData[ player.id ].won;
+							const effectiveBid = this.getEffectiveBid(
+								player.id
+							);
+							const hasWerewolf =
+								this.meta.werewolfPlayerId === player.id;
+							const hasValues = bid !== '' && won !== '';
+							const score = hasValues
+								? this.calculateScore(
+										effectiveBid,
+										parseInt( won, 10 )
+								  )
+								: null;
 
-						return `
+							return `
 							<div class="asc-wizard-form__player-row" data-player-id="${ player.id }">
 								<div class="asc-wizard-form__player-info">
-									${ player.avatarUrl
-										? `<img src="${ player.avatarUrl }" alt="" class="asc-wizard-form__player-avatar" />`
-										: ''
+									${
+										player.avatarUrl
+											? `<img src="${ player.avatarUrl }" alt="" class="asc-wizard-form__player-avatar" />`
+											: ''
 									}
-									<span class="asc-wizard-form__player-name">${ this.escapeHtml( player.name ) }</span>
+									<span class="asc-wizard-form__player-name">${ this.escapeHtml(
+										player.name
+									) }</span>
 								</div>
 								<div class="asc-wizard-form__inputs">
 									<div class="asc-wizard-form__input-group">
-										<label class="asc-wizard-form__label">${ __( 'Bid', 'apermo-score-cards' ) }</label>
+										<label class="asc-wizard-form__label">${ __( 'Bid' ) }</label>
 										<span class="asc-wizard-form__bid-display">
-											${ bid }${ hasWerewolf ? `<sup class="asc-wizard-form__werewolf-indicator">${ this.meta.werewolfAdjustment > 0 ? '+' : '' }${ this.meta.werewolfAdjustment }</sup>` : '' }
+											${ bid }${
+												hasWerewolf
+													? `<sup class="asc-wizard-form__werewolf-indicator">${
+															this.meta
+																.werewolfAdjustment >
+															0
+																? '+'
+																: ''
+													  }${
+															this.meta
+																.werewolfAdjustment
+													  }</sup>`
+													: ''
+											}
 										</span>
 									</div>
 									<div class="asc-wizard-form__input-group">
-										<label class="asc-wizard-form__label">${ __( 'Won', 'apermo-score-cards' ) }</label>
+										<label class="asc-wizard-form__label">${ __( 'Won' ) }</label>
 										<input
 											type="number"
 											class="asc-wizard-form__input asc-wizard-form__input--won"
@@ -823,12 +955,21 @@ export default class WizardRoundForm {
 										/>
 									</div>
 								</div>
-								<div class="asc-wizard-form__score-preview ${ score !== null && score >= 0 ? 'asc-wizard-form__score-preview--positive' : '' } ${ score !== null && score < 0 ? 'asc-wizard-form__score-preview--negative' : '' }">
+								<div class="asc-wizard-form__score-preview ${
+									score !== null && score >= 0
+										? 'asc-wizard-form__score-preview--positive'
+										: ''
+								} ${
+									score !== null && score < 0
+										? 'asc-wizard-form__score-preview--negative'
+										: ''
+								}">
 									${ score !== null ? ( score >= 0 ? '+' : '' ) + score : '-' }
 								</div>
 							</div>
 						`;
-					} ).join( '' ) }
+						} )
+						.join( '' ) }
 				</div>
 
 				<div class="asc-wizard-form__bomb-option">
@@ -838,31 +979,40 @@ export default class WizardRoundForm {
 							class="asc-wizard-form__bomb-checkbox"
 							${ this.meta.bomb ? 'checked' : '' }
 						/>
-						${ __( 'Bomb played (one trick voided)', 'apermo-score-cards' ) }
+						${ __( 'Bomb played (one trick voided)' ) }
 					</label>
 				</div>
 
-				<div class="asc-wizard-form__results-summary asc-wizard-form__results-summary--${ isValid ? 'valid' : 'invalid' }">
+				<div class="asc-wizard-form__results-summary asc-wizard-form__results-summary--${
+					isValid ? 'valid' : 'invalid'
+				}">
 					<span class="asc-wizard-form__results-total">
-						${ __( 'Total', 'apermo-score-cards' ) }: ${ wonSum } / ${ expectedTricks } ${ __( 'tricks', 'apermo-score-cards' ) }
+						${ __( 'Total' ) }: ${ wonSum } / ${ expectedTricks } ${ __( 'tricks' ) }
 						${ isValid ? '✓' : '' }
 					</span>
-					${ ! isValid && this.allResultsEntered() ? `
+					${
+						! isValid && this.allResultsEntered()
+							? `
 						<span class="asc-wizard-form__results-error">
-							${ __( 'Total tricks must equal', 'apermo-score-cards' ) } ${ expectedTricks }
+							${ __( 'Total tricks must equal' ) } ${ expectedTricks }
 						</span>
-					` : '' }
+					`
+							: ''
+					}
 				</div>
 
 				<div class="asc-wizard-form__actions">
-					<button type="button" class="asc-wizard-form__submit" ${ ! this.isResultsValid() ? 'disabled' : '' }>
-						${ isEditing && this.allResultsEntered()
-							? __( 'Update Round', 'apermo-score-cards' )
-							: __( 'Save Round', 'apermo-score-cards' )
+					<button type="button" class="asc-wizard-form__submit" ${
+						! this.isResultsValid() ? 'disabled' : ''
+					}>
+						${
+							isEditing && this.allResultsEntered()
+								? __( 'Update Round' )
+								: __( 'Save Round' )
 						}
 					</button>
 					<button type="button" class="asc-wizard-form__back">
-						${ __( 'Back', 'apermo-score-cards' ) }
+						${ __( 'Back' ) }
 					</button>
 				</div>
 				<div class="asc-wizard-form__message" hidden></div>
@@ -876,57 +1026,65 @@ export default class WizardRoundForm {
 		const maxTricks = this.getRoundNumber();
 
 		// Won inputs
-		this.container.querySelectorAll( '.asc-wizard-form__input--won' ).forEach( ( input ) => {
-			input.addEventListener( 'input', ( e ) => {
-				const playerId = parseInt( e.target.dataset.playerId, 10 );
-				let value = e.target.value;
+		this.container
+			.querySelectorAll( '.asc-wizard-form__input--won' )
+			.forEach( ( input ) => {
+				input.addEventListener( 'input', ( e ) => {
+					const playerId = parseInt( e.target.dataset.playerId, 10 );
+					let value = e.target.value;
 
-				if ( value !== '' ) {
-					let numValue = parseInt( value, 10 );
-					// Clamp value to valid range.
-					if ( ! isNaN( numValue ) ) {
-						if ( numValue < 0 ) {
-							numValue = 0;
-							e.target.value = '0';
-						} else if ( numValue > maxTricks ) {
-							numValue = maxTricks;
-							e.target.value = String( maxTricks );
+					if ( value !== '' ) {
+						let numValue = parseInt( value, 10 );
+						// Clamp value to valid range.
+						if ( ! isNaN( numValue ) ) {
+							if ( numValue < 0 ) {
+								numValue = 0;
+								e.target.value = '0';
+							} else if ( numValue > maxTricks ) {
+								numValue = maxTricks;
+								e.target.value = String( maxTricks );
+							}
+							value = numValue;
 						}
-						value = numValue;
 					}
-				}
 
-				this.roundData[ playerId ].won = value === '' ? '' : parseInt( value, 10 );
-				this.updateInputValidation( e.target, this.isValidWon( this.roundData[ playerId ].won ) );
-				this.updateScorePreview( playerId );
-				this.updateResultsSummary();
-				this.updateSubmitButton();
-			} );
-
-			// Also validate on blur to catch edge cases.
-			input.addEventListener( 'blur', ( e ) => {
-				const playerId = parseInt( e.target.dataset.playerId, 10 );
-				const won = this.roundData[ playerId ].won;
-				if ( won !== '' && ! this.isValidWon( won ) ) {
-					// Clamp to valid range on blur.
-					const numWon = parseInt( won, 10 );
-					if ( numWon < 0 ) {
-						this.roundData[ playerId ].won = 0;
-						e.target.value = '0';
-					} else if ( numWon > maxTricks ) {
-						this.roundData[ playerId ].won = maxTricks;
-						e.target.value = String( maxTricks );
-					}
-					this.updateInputValidation( e.target, true );
+					this.roundData[ playerId ].won =
+						value === '' ? '' : parseInt( value, 10 );
+					this.updateInputValidation(
+						e.target,
+						this.isValidWon( this.roundData[ playerId ].won )
+					);
 					this.updateScorePreview( playerId );
 					this.updateResultsSummary();
 					this.updateSubmitButton();
-				}
+				} );
+
+				// Also validate on blur to catch edge cases.
+				input.addEventListener( 'blur', ( e ) => {
+					const playerId = parseInt( e.target.dataset.playerId, 10 );
+					const won = this.roundData[ playerId ].won;
+					if ( won !== '' && ! this.isValidWon( won ) ) {
+						// Clamp to valid range on blur.
+						const numWon = parseInt( won, 10 );
+						if ( numWon < 0 ) {
+							this.roundData[ playerId ].won = 0;
+							e.target.value = '0';
+						} else if ( numWon > maxTricks ) {
+							this.roundData[ playerId ].won = maxTricks;
+							e.target.value = String( maxTricks );
+						}
+						this.updateInputValidation( e.target, true );
+						this.updateScorePreview( playerId );
+						this.updateResultsSummary();
+						this.updateSubmitButton();
+					}
+				} );
 			} );
-		} );
 
 		// Bomb checkbox
-		const bombCheckbox = this.container.querySelector( '.asc-wizard-form__bomb-checkbox' );
+		const bombCheckbox = this.container.querySelector(
+			'.asc-wizard-form__bomb-checkbox'
+		);
 		if ( bombCheckbox ) {
 			bombCheckbox.addEventListener( 'change', ( e ) => {
 				this.meta.bomb = e.target.checked;
@@ -936,13 +1094,17 @@ export default class WizardRoundForm {
 		}
 
 		// Submit - saves to DB and calls onSave
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
 		if ( submitBtn ) {
 			submitBtn.addEventListener( 'click', () => this.submit() );
 		}
 
 		// Back button
-		const backBtn = this.container.querySelector( '.asc-wizard-form__back' );
+		const backBtn = this.container.querySelector(
+			'.asc-wizard-form__back'
+		);
 		if ( backBtn ) {
 			backBtn.addEventListener( 'click', () => {
 				this.currentStep = STEPS.WEREWOLF;
@@ -952,36 +1114,43 @@ export default class WizardRoundForm {
 	}
 
 	updateResultsSummary() {
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
 		const wonSum = this.getWonSum();
 		const expectedTricks = this.getExpectedTricks();
 		const isValid = wonSum === expectedTricks;
 
-		const summary = this.container.querySelector( '.asc-wizard-form__results-summary' );
+		const summary = this.container.querySelector(
+			'.asc-wizard-form__results-summary'
+		);
 		if ( summary ) {
-			summary.className = `asc-wizard-form__results-summary asc-wizard-form__results-summary--${ isValid ? 'valid' : 'invalid' }`;
+			summary.className = `asc-wizard-form__results-summary asc-wizard-form__results-summary--${
+				isValid ? 'valid' : 'invalid'
+			}`;
 			summary.innerHTML = `
 				<span class="asc-wizard-form__results-total">
-					${ __( 'Total', 'apermo-score-cards' ) }: ${ wonSum } / ${ expectedTricks } ${ __( 'tricks', 'apermo-score-cards' ) }
+					${ __( 'Total' ) }: ${ wonSum } / ${ expectedTricks } ${ __( 'tricks' ) }
 					${ isValid ? '✓' : '' }
 				</span>
-				${ ! isValid && this.allResultsEntered() ? `
+				${
+					! isValid && this.allResultsEntered()
+						? `
 					<span class="asc-wizard-form__results-error">
-						${ __( 'Total tricks must equal', 'apermo-score-cards' ) } ${ expectedTricks }
+						${ __( 'Total tricks must equal' ) } ${ expectedTricks }
 					</span>
-				` : '' }
+				`
+						: ''
+				}
 			`;
 		}
 	}
 
 	escapeHtml( text ) {
-		const div = document.createElement( 'div' );
-		div.textContent = text;
-		return div.innerHTML;
+		return escapeHtmlUtil( text );
 	}
 
 	bindCancelButton() {
-		const cancelBtn = this.container.querySelector( '.asc-wizard-form__cancel' );
+		const cancelBtn = this.container.querySelector(
+			'.asc-wizard-form__cancel'
+		);
 		if ( cancelBtn ) {
 			cancelBtn.addEventListener( 'click', () => {
 				if ( this.onCancel ) {
@@ -995,7 +1164,9 @@ export default class WizardRoundForm {
 	}
 
 	updateScorePreview( playerId ) {
-		const row = this.container.querySelector( `[data-player-id="${ playerId }"].asc-wizard-form__player-row` );
+		const row = this.container.querySelector(
+			`[data-player-id="${ playerId }"].asc-wizard-form__player-row`
+		);
 		if ( ! row ) {
 			return;
 		}
@@ -1014,11 +1185,17 @@ export default class WizardRoundForm {
 		const score = this.calculateScore( effectiveBid, parseInt( won, 10 ) );
 		preview.textContent = ( score >= 0 ? '+' : '' ) + score;
 		preview.className = 'asc-wizard-form__score-preview';
-		preview.classList.add( score >= 0 ? 'asc-wizard-form__score-preview--positive' : 'asc-wizard-form__score-preview--negative' );
+		preview.classList.add(
+			score >= 0
+				? 'asc-wizard-form__score-preview--positive'
+				: 'asc-wizard-form__score-preview--negative'
+		);
 	}
 
 	updateSubmitButton() {
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
 		if ( ! submitBtn ) {
 			return;
 		}
@@ -1038,20 +1215,25 @@ export default class WizardRoundForm {
 		this.isSubmitting = true;
 		this.updateSubmitButton();
 
-		const { __ } = window.wp?.i18n || { __: ( s ) => s };
-		const submitBtn = this.container.querySelector( '.asc-wizard-form__submit' );
-		const messageEl = this.container.querySelector( '.asc-wizard-form__message' );
+		const submitBtn = this.container.querySelector(
+			'.asc-wizard-form__submit'
+		);
+		const messageEl = this.container.querySelector(
+			'.asc-wizard-form__message'
+		);
 		const originalText = submitBtn.textContent;
 
-		submitBtn.textContent = __( 'Saving...', 'apermo-score-cards' );
+		submitBtn.textContent = __( 'Saving…' );
 
 		try {
 			await this.saveRoundData();
 			this.onSave();
 		} catch ( error ) {
 			console.error( 'Failed to save round:', error );
-			messageEl.textContent = error.message || __( 'Failed to save. Please try again.', 'apermo-score-cards' );
-			messageEl.className = 'asc-wizard-form__message asc-wizard-form__message--error';
+			messageEl.textContent =
+				error.message || __( 'Failed to save. Please try again.' );
+			messageEl.className =
+				'asc-wizard-form__message asc-wizard-form__message--error';
 			messageEl.hidden = false;
 
 			this.isSubmitting = false;
