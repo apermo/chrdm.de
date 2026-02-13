@@ -22,7 +22,8 @@ export default function DartsScoreDisplay( {
 		return posA - posB;
 	} );
 
-	const actualWinnerIds = winnerIds.length > 0 ? winnerIds : determineWinners( scores || {} );
+	const actualWinnerIds =
+		winnerIds.length > 0 ? winnerIds : determineWinners( scores || {} );
 	const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
 	return (
@@ -45,17 +46,26 @@ export default function DartsScoreDisplay( {
 						const rowClasses = [ 'asc-darts-display__row' ];
 						if ( position <= 3 ) {
 							rowClasses.push( 'asc-darts-display__row--podium' );
-							rowClasses.push( `asc-darts-display__row--position-${ position }` );
+							rowClasses.push(
+								`asc-darts-display__row--position-${ position }`
+							);
 						}
 						if ( isFinished ) {
-							rowClasses.push( 'asc-darts-display__row--finished' );
+							rowClasses.push(
+								'asc-darts-display__row--finished'
+							);
 						}
 
 						return (
-							<tr key={ player.id } className={ rowClasses.join( ' ' ) }>
+							<tr
+								key={ player.id }
+								className={ rowClasses.join( ' ' ) }
+							>
 								<td className="asc-darts-display__rank">
 									{ medal ? (
-										<span className="asc-darts-display__medal">{ medal }</span>
+										<span className="asc-darts-display__medal">
+											{ medal }
+										</span>
 									) : (
 										position
 									) }
@@ -74,7 +84,9 @@ export default function DartsScoreDisplay( {
 								</td>
 								<td
 									className={ `asc-darts-display__score ${
-										isFinished ? 'asc-darts-display__score--zero' : ''
+										isFinished
+											? 'asc-darts-display__score--zero'
+											: ''
 									}` }
 								>
 									{ playerScore?.finalScore ?? '-' }
@@ -97,9 +109,14 @@ export default function DartsScoreDisplay( {
 
 			<p className="asc-darts-display__edit-hint">
 				{ canEdit
-					? __( 'Edit results on the frontend.', 'apermo-score-cards' )
-					: __( 'Results can no longer be edited.', 'apermo-score-cards' )
-				}
+					? __(
+							'Edit results on the frontend.',
+							'apermo-score-cards'
+					  )
+					: __(
+							'Results can no longer be edited.',
+							'apermo-score-cards'
+					  ) }
 			</p>
 		</div>
 	);

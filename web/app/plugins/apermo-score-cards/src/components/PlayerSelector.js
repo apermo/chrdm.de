@@ -5,11 +5,7 @@
  */
 
 import { useSelect } from '@wordpress/data';
-import {
-	CheckboxControl,
-	Spinner,
-	SearchControl,
-} from '@wordpress/components';
+import { CheckboxControl, Spinner, SearchControl } from '@wordpress/components';
 import { useState, useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { STORE_NAME } from '../stores';
@@ -49,7 +45,9 @@ export default function PlayerSelector( {
 			}
 			newSelection = [ ...selectedPlayerIds, playerId ];
 		} else {
-			newSelection = selectedPlayerIds.filter( ( id ) => id !== playerId );
+			newSelection = selectedPlayerIds.filter(
+				( id ) => id !== playerId
+			);
 		}
 
 		onChange( newSelection );
@@ -86,7 +84,10 @@ export default function PlayerSelector( {
 				<span className="asc-player-selector__count">
 					{ sprintf(
 						/* translators: 1: selected count, 2: min players, 3: max players */
-						__( '%1$d selected (min: %2$d, max: %3$d)', 'apermo-score-cards' ),
+						__(
+							'%1$d selected (min: %2$d, max: %3$d)',
+							'apermo-score-cards'
+						),
 						selectionCount,
 						minPlayers,
 						maxPlayers
@@ -98,7 +99,10 @@ export default function PlayerSelector( {
 				<SearchControl
 					value={ searchTerm }
 					onChange={ setSearchTerm }
-					placeholder={ __( 'Search players…', 'apermo-score-cards' ) }
+					placeholder={ __(
+						'Search players…',
+						'apermo-score-cards'
+					) }
 				/>
 			) }
 
@@ -144,7 +148,10 @@ export default function PlayerSelector( {
 				<p className="asc-player-selector__warning">
 					{ sprintf(
 						/* translators: %d: minimum number of players required */
-						__( 'Please select at least %d players.', 'apermo-score-cards' ),
+						__(
+							'Please select at least %d players.',
+							'apermo-score-cards'
+						),
 						minPlayers
 					) }
 				</p>

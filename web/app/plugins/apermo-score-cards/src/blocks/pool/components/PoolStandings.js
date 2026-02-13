@@ -35,7 +35,10 @@ export function calculateStandings( games, players ) {
 			stats[ winnerId ].wins++;
 			stats[ winnerId ].points += 3; // 1 point for playing + 2 for winning = 3.
 			if ( ! stats[ winnerId ].headToHead[ loserId ] ) {
-				stats[ winnerId ].headToHead[ loserId ] = { wins: 0, losses: 0 };
+				stats[ winnerId ].headToHead[ loserId ] = {
+					wins: 0,
+					losses: 0,
+				};
 			}
 			stats[ winnerId ].headToHead[ loserId ].wins++;
 		}
@@ -44,7 +47,10 @@ export function calculateStandings( games, players ) {
 			stats[ loserId ].losses++;
 			stats[ loserId ].points += 1; // 1 point for playing.
 			if ( ! stats[ loserId ].headToHead[ winnerId ] ) {
-				stats[ loserId ].headToHead[ winnerId ] = { wins: 0, losses: 0 };
+				stats[ loserId ].headToHead[ winnerId ] = {
+					wins: 0,
+					losses: 0,
+				};
 			}
 			stats[ loserId ].headToHead[ winnerId ].losses++;
 		}
@@ -136,12 +142,16 @@ export default function PoolStandings( { games, players } ) {
 								) }
 								<span>{ standing.player.name }</span>
 							</td>
-							<td><strong>{ standing.points }</strong></td>
+							<td>
+								<strong>{ standing.points }</strong>
+							</td>
 							<td>{ standing.wins }</td>
 							<td>{ standing.losses }</td>
 							<td>
 								{ standing.gamesPlayed > 0
-									? `${ Math.round( standing.winPct * 100 ) }%`
+									? `${ Math.round(
+											standing.winPct * 100
+									  ) }%`
 									: '-' }
 							</td>
 						</tr>

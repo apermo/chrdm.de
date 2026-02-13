@@ -35,7 +35,10 @@ export default function ScoreTable( {
 							{ __( 'Round', 'apermo-score-cards' ) }
 						</th>
 						{ players.map( ( player ) => (
-							<th key={ player.id } className="asc-score-table__player-header">
+							<th
+								key={ player.id }
+								className="asc-score-table__player-header"
+							>
 								<span className="asc-score-table__player">
 									{ player.avatarUrl && (
 										<img
@@ -54,7 +57,10 @@ export default function ScoreTable( {
 				</thead>
 				<tbody>
 					{ rounds.map( ( round, roundIndex ) => (
-						<tr key={ roundIndex } className="asc-score-table__round-row">
+						<tr
+							key={ roundIndex }
+							className="asc-score-table__round-row"
+						>
 							<td className="asc-score-table__round-number">
 								{ roundIndex + 1 }
 							</td>
@@ -64,7 +70,11 @@ export default function ScoreTable( {
 									className="asc-score-table__cell"
 								>
 									{ renderRoundCell
-										? renderRoundCell( round, player.id, roundIndex )
+										? renderRoundCell(
+												round,
+												player.id,
+												roundIndex
+										  )
 										: round[ player.id ] ?? '-' }
 								</td>
 							) ) }
@@ -81,7 +91,9 @@ export default function ScoreTable( {
 								? calculateTotal( rounds, player.id )
 								: rounds.reduce(
 										( sum, round ) =>
-											sum + ( Number( round[ player.id ] ) || 0 ),
+											sum +
+											( Number( round[ player.id ] ) ||
+												0 ),
 										0
 								  );
 

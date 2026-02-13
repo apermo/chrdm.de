@@ -61,13 +61,20 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<PanelBody title={ __( 'Game Settings', 'apermo-score-cards' ) }>
+				<PanelBody
+					title={ __( 'Game Settings', 'apermo-score-cards' ) }
+				>
 					<TextControl
 						label={ __( 'Custom Title', 'apermo-score-cards' ) }
 						value={ customTitle }
-						onChange={ ( value ) => setAttributes( { customTitle: value } ) }
+						onChange={ ( value ) =>
+							setAttributes( { customTitle: value } )
+						}
 						placeholder={ __( 'Phase 10', 'apermo-score-cards' ) }
-						help={ __( 'Leave empty to use default title.', 'apermo-score-cards' ) }
+						help={ __(
+							'Leave empty to use default title.',
+							'apermo-score-cards'
+						) }
 					/>
 				</PanelBody>
 
@@ -86,7 +93,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					/>
 					{ hasGame && (
 						<p className="components-base-control__help">
-							{ __( 'Cannot change players after game started.', 'apermo-score-cards' ) }
+							{ __(
+								'Cannot change players after game started.',
+								'apermo-score-cards'
+							) }
 						</p>
 					) }
 				</PanelBody>
@@ -110,12 +120,18 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				>
 					{ playerIds.length > 0 && playerIds.length < 2 && (
 						<Notice status="warning" isDismissible={ false }>
-							{ __( 'Phase 10 requires at least 2 players.', 'apermo-score-cards' ) }
+							{ __(
+								'Phase 10 requires at least 2 players.',
+								'apermo-score-cards'
+							) }
 						</Notice>
 					) }
 					{ playerIds.length > 6 && (
 						<Notice status="warning" isDismissible={ false }>
-							{ __( 'Phase 10 supports maximum 6 players.', 'apermo-score-cards' ) }
+							{ __(
+								'Phase 10 supports maximum 6 players.',
+								'apermo-score-cards'
+							) }
 						</Notice>
 					) }
 				</Placeholder>
@@ -123,7 +139,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				<div className="asc-phase10">
 					<div className="asc-phase10__header">
 						<h3 className="asc-phase10__title">
-							{ customTitle || __( 'Phase 10', 'apermo-score-cards' ) }
+							{ customTitle ||
+								__( 'Phase 10', 'apermo-score-cards' ) }
 						</h3>
 						{ game?.status === 'completed' && (
 							<span className="asc-phase10__status asc-phase10__status--completed">
@@ -135,7 +152,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					{ game ? (
 						<div className="asc-phase10-display">
 							<p className="asc-phase10-display__info">
-								{ __( 'Game in progress. View scores on the frontend.', 'apermo-score-cards' ) }
+								{ __(
+									'Game in progress. View scores on the frontend.',
+									'apermo-score-cards'
+								) }
 							</p>
 						</div>
 					) : (
@@ -150,7 +170,12 @@ export default function Edit( { attributes, setAttributes, context } ) {
 								<thead>
 									<tr>
 										<th>#</th>
-										<th>{ __( 'Player', 'apermo-score-cards' ) }</th>
+										<th>
+											{ __(
+												'Player',
+												'apermo-score-cards'
+											) }
+										</th>
 									</tr>
 								</thead>
 								<tbody>

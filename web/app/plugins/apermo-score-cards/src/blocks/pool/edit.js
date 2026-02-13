@@ -63,13 +63,23 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<PanelBody title={ __( 'Game Settings', 'apermo-score-cards' ) }>
+				<PanelBody
+					title={ __( 'Game Settings', 'apermo-score-cards' ) }
+				>
 					<TextControl
 						label={ __( 'Custom Title', 'apermo-score-cards' ) }
 						value={ customTitle }
-						onChange={ ( value ) => setAttributes( { customTitle: value } ) }
-						placeholder={ __( 'Pool Billiard', 'apermo-score-cards' ) }
-						help={ __( 'Leave empty to use auto-generated title.', 'apermo-score-cards' ) }
+						onChange={ ( value ) =>
+							setAttributes( { customTitle: value } )
+						}
+						placeholder={ __(
+							'Pool Billiard',
+							'apermo-score-cards'
+						) }
+						help={ __(
+							'Leave empty to use auto-generated title.',
+							'apermo-score-cards'
+						) }
 					/>
 				</PanelBody>
 				<PanelBody
@@ -87,7 +97,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					/>
 					{ hasGames && (
 						<p className="components-base-control__help">
-							{ __( 'Cannot change players after games started.', 'apermo-score-cards' ) }
+							{ __(
+								'Cannot change players after games started.',
+								'apermo-score-cards'
+							) }
 						</p>
 					) }
 				</PanelBody>
@@ -113,7 +126,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				<div className="asc-pool">
 					<div className="asc-pool__header">
 						<h3 className="asc-pool__title">
-							{ customTitle || __( 'Pool Billiard', 'apermo-score-cards' ) }
+							{ customTitle ||
+								__( 'Pool Billiard', 'apermo-score-cards' ) }
 						</h3>
 						{ game?.status === 'completed' && (
 							<span className="asc-pool__status asc-pool__status--completed">
@@ -138,9 +152,18 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							<table className="asc-pool-standings__table">
 								<thead>
 									<tr>
-										<th>{ __( 'Player', 'apermo-score-cards' ) }</th>
-										<th>{ __( 'W', 'apermo-score-cards' ) }</th>
-										<th>{ __( 'L', 'apermo-score-cards' ) }</th>
+										<th>
+											{ __(
+												'Player',
+												'apermo-score-cards'
+											) }
+										</th>
+										<th>
+											{ __( 'W', 'apermo-score-cards' ) }
+										</th>
+										<th>
+											{ __( 'L', 'apermo-score-cards' ) }
+										</th>
 									</tr>
 								</thead>
 								<tbody>

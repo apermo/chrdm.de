@@ -32,7 +32,10 @@ export default function Edit( { attributes, setAttributes } ) {
 				) }
 			>
 				<p className="asc-evening-summary__editor-note">
-					{ __( 'The summary will appear on the frontend once games have been played.', 'apermo-score-cards' ) }
+					{ __(
+						'The summary will appear on the frontend once games have been played.',
+						'apermo-score-cards'
+					) }
 				</p>
 			</Placeholder>
 		</div>

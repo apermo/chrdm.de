@@ -73,25 +73,37 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<PanelBody title={ __( 'Game Settings', 'apermo-score-cards' ) }>
+				<PanelBody
+					title={ __( 'Game Settings', 'apermo-score-cards' ) }
+				>
 					<TextControl
 						label={ __( 'Custom Title', 'apermo-score-cards' ) }
 						value={ customTitle }
-						onChange={ ( value ) => setAttributes( { customTitle: value } ) }
+						onChange={ ( value ) =>
+							setAttributes( { customTitle: value } )
+						}
 						placeholder={ `Darts – ${ startingScore }` }
-						help={ __( 'Leave empty to use auto-generated title.', 'apermo-score-cards' ) }
+						help={ __(
+							'Leave empty to use auto-generated title.',
+							'apermo-score-cards'
+						) }
 					/>
 					<SelectControl
 						label={ __( 'Starting Score', 'apermo-score-cards' ) }
 						value={ startingScore }
 						options={ STARTING_SCORE_OPTIONS }
 						onChange={ ( value ) =>
-							setAttributes( { startingScore: parseInt( value, 10 ) } )
+							setAttributes( {
+								startingScore: parseInt( value, 10 ),
+							} )
 						}
 						disabled={ hasGame }
 						help={
 							hasGame
-								? __( 'Cannot change after game started.', 'apermo-score-cards' )
+								? __(
+										'Cannot change after game started.',
+										'apermo-score-cards'
+								  )
 								: ''
 						}
 					/>
@@ -112,7 +124,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					/>
 					{ hasGame && (
 						<p className="components-base-control__help">
-							{ __( 'Cannot change players after game started.', 'apermo-score-cards' ) }
+							{ __(
+								'Cannot change players after game started.',
+								'apermo-score-cards'
+							) }
 						</p>
 					) }
 				</PanelBody>
@@ -143,7 +158,11 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				<div className="asc-darts">
 					<div className="asc-darts__header">
 						<h3 className="asc-darts__title">
-							{ customTitle || `${ __( 'Darts', 'apermo-score-cards' ) } – ${ startingScore }` }
+							{ customTitle ||
+								`${ __(
+									'Darts',
+									'apermo-score-cards'
+								) } – ${ startingScore }` }
 						</h3>
 						{ game?.status === 'completed' && (
 							<span className="asc-darts__status asc-darts__status--completed">
@@ -170,7 +189,12 @@ export default function Edit( { attributes, setAttributes, context } ) {
 								<thead>
 									<tr>
 										<th>#</th>
-										<th>{ __( 'Player', 'apermo-score-cards' ) }</th>
+										<th>
+											{ __(
+												'Player',
+												'apermo-score-cards'
+											) }
+										</th>
 									</tr>
 								</thead>
 								<tbody>

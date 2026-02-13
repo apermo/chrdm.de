@@ -30,11 +30,17 @@ export function determineWinners( scores ) {
 
 	if ( finishedPlayers.length > 0 ) {
 		// Find the lowest round among finished players
-		const playersWithRounds = finishedPlayers.filter( ( p ) => p.finishedRound != null );
+		const playersWithRounds = finishedPlayers.filter(
+			( p ) => p.finishedRound != null
+		);
 
 		if ( playersWithRounds.length > 0 ) {
-			const lowestRound = Math.min( ...playersWithRounds.map( ( p ) => p.finishedRound ) );
-			const winners = playersWithRounds.filter( ( p ) => p.finishedRound === lowestRound );
+			const lowestRound = Math.min(
+				...playersWithRounds.map( ( p ) => p.finishedRound )
+			);
+			const winners = playersWithRounds.filter(
+				( p ) => p.finishedRound === lowestRound
+			);
 			return winners.map( ( p ) => p.id );
 		}
 
@@ -80,14 +86,20 @@ export function getPlayerRankings( scores ) {
 	// Sort by: finished first, then by round, then by remaining score
 	entries.sort( ( a, b ) => {
 		// Finished players come first
-		if ( a.finalScore === 0 && b.finalScore !== 0 ) return -1;
-		if ( b.finalScore === 0 && a.finalScore !== 0 ) return 1;
+		if ( a.finalScore === 0 && b.finalScore !== 0 ) {
+			return -1;
+		}
+		if ( b.finalScore === 0 && a.finalScore !== 0 ) {
+			return 1;
+		}
 
 		// Among finished, sort by round
 		if ( a.finalScore === 0 && b.finalScore === 0 ) {
 			const roundA = a.finishedRound ?? Infinity;
 			const roundB = b.finishedRound ?? Infinity;
-			if ( roundA !== roundB ) return roundA - roundB;
+			if ( roundA !== roundB ) {
+				return roundA - roundB;
+			}
 		}
 
 		// Sort by remaining score

@@ -77,17 +77,25 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<PanelBody title={ __( 'Game Settings', 'apermo-score-cards' ) }>
+				<PanelBody
+					title={ __( 'Game Settings', 'apermo-score-cards' ) }
+				>
 					<TextControl
 						label={ __( 'Custom Title', 'apermo-score-cards' ) }
 						value={ customTitle }
-						onChange={ ( value ) => setAttributes( { customTitle: value } ) }
+						onChange={ ( value ) =>
+							setAttributes( { customTitle: value } )
+						}
 						placeholder={ __( 'Wizard', 'apermo-score-cards' ) }
-						help={ __( 'Leave empty to use auto-generated title.', 'apermo-score-cards' ) }
+						help={ __(
+							'Leave empty to use auto-generated title.',
+							'apermo-score-cards'
+						) }
 					/>
 					{ hasPlayers && (
 						<p className="components-base-control__help">
-							{ __( 'Total rounds:', 'apermo-score-cards' ) } <strong>{ totalRounds }</strong>
+							{ __( 'Total rounds:', 'apermo-score-cards' ) }{ ' ' }
+							<strong>{ totalRounds }</strong>
 						</p>
 					) }
 				</PanelBody>
@@ -107,7 +115,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					/>
 					{ hasGame && (
 						<p className="components-base-control__help">
-							{ __( 'Cannot change players after game started.', 'apermo-score-cards' ) }
+							{ __(
+								'Cannot change players after game started.',
+								'apermo-score-cards'
+							) }
 						</p>
 					) }
 				</PanelBody>
@@ -131,12 +142,18 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				>
 					{ playerIds.length > 0 && playerIds.length < 3 && (
 						<Notice status="warning" isDismissible={ false }>
-							{ __( 'Wizard requires at least 3 players.', 'apermo-score-cards' ) }
+							{ __(
+								'Wizard requires at least 3 players.',
+								'apermo-score-cards'
+							) }
 						</Notice>
 					) }
 					{ playerIds.length > 6 && (
 						<Notice status="warning" isDismissible={ false }>
-							{ __( 'Wizard supports maximum 6 players.', 'apermo-score-cards' ) }
+							{ __(
+								'Wizard supports maximum 6 players.',
+								'apermo-score-cards'
+							) }
 						</Notice>
 					) }
 				</Placeholder>
@@ -144,10 +161,12 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				<div className="asc-wizard">
 					<div className="asc-wizard__header">
 						<h3 className="asc-wizard__title">
-							{ customTitle || __( 'Wizard', 'apermo-score-cards' ) }
+							{ customTitle ||
+								__( 'Wizard', 'apermo-score-cards' ) }
 						</h3>
 						<span className="asc-wizard__rounds">
-							{ totalRounds } { __( 'rounds', 'apermo-score-cards' ) }
+							{ totalRounds }{ ' ' }
+							{ __( 'rounds', 'apermo-score-cards' ) }
 						</span>
 						{ game?.status === 'completed' && (
 							<span className="asc-wizard__status asc-wizard__status--completed">
@@ -174,7 +193,12 @@ export default function Edit( { attributes, setAttributes, context } ) {
 								<thead>
 									<tr>
 										<th>#</th>
-										<th>{ __( 'Player', 'apermo-score-cards' ) }</th>
+										<th>
+											{ __(
+												'Player',
+												'apermo-score-cards'
+											) }
+										</th>
 									</tr>
 								</thead>
 								<tbody>

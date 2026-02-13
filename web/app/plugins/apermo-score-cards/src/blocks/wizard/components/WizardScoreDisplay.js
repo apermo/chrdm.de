@@ -31,7 +31,11 @@ function calculateRunningTotals( rounds, playerId ) {
 	let total = 0;
 	return rounds.map( ( round ) => {
 		const data = round[ playerId ];
-		if ( data && typeof data.bid === 'number' && typeof data.won === 'number' ) {
+		if (
+			data &&
+			typeof data.bid === 'number' &&
+			typeof data.won === 'number'
+		) {
 			total += calculateRoundScore( data.bid, data.won );
 		}
 		return total;
@@ -46,7 +50,8 @@ export default function WizardScoreDisplay( { game, players, totalRounds } ) {
 	const finalScores = {};
 	players.forEach( ( player ) => {
 		const totals = calculateRunningTotals( rounds, player.id );
-		finalScores[ player.id ] = totals.length > 0 ? totals[ totals.length - 1 ] : 0;
+		finalScores[ player.id ] =
+			totals.length > 0 ? totals[ totals.length - 1 ] : 0;
 	} );
 
 	// Sort players by score (descending)
@@ -59,7 +64,8 @@ export default function WizardScoreDisplay( { game, players, totalRounds } ) {
 	return (
 		<div className="asc-wizard-display">
 			<p className="asc-wizard-display__progress">
-				{ __( 'Round', 'apermo-score-cards' ) } { currentRound } / { totalRounds }
+				{ __( 'Round', 'apermo-score-cards' ) } { currentRound } /{ ' ' }
+				{ totalRounds }
 			</p>
 
 			<div className="asc-wizard-display__table-wrapper">
@@ -85,7 +91,9 @@ export default function WizardScoreDisplay( { game, players, totalRounds } ) {
 								<tr
 									key={ player.id }
 									className={ `asc-wizard-display__row ${
-										position <= 3 ? `asc-wizard-display__row--position-${ position }` : ''
+										position <= 3
+											? `asc-wizard-display__row--position-${ position }`
+											: ''
 									}` }
 								>
 									<td className="asc-wizard-display__rank">

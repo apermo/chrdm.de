@@ -174,12 +174,16 @@ const selectors = {
 	},
 
 	getPlayerById( state, playerId ) {
-		return state.players.find( ( player ) => player.id === playerId ) || null;
+		return (
+			state.players.find( ( player ) => player.id === playerId ) || null
+		);
 	},
 
 	getPlayersByIds( state, playerIds ) {
 		return playerIds
-			.map( ( id ) => state.players.find( ( player ) => player.id === id ) )
+			.map( ( id ) =>
+				state.players.find( ( player ) => player.id === id )
+			)
 			.filter( Boolean );
 	},
 
