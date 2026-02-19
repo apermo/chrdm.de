@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6b37ab0616be4af151ad35c6562f27e",
+    "content-hash": "1fc8ecace440ad4732b503acd60857cc",
     "packages": [
         {
             "name": "apermo/sovereignty",
@@ -1553,17 +1553,17 @@
     ],
     "packages-dev": [
         {
-            "name": "apermo/wp-coding-standards",
-            "version": "v1.0.0",
+            "name": "apermo/apermo-coding-standards",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/apermo/wp-coding-standards.git",
-                "reference": "398e6b248e847ebe2e49f47ebb62095b78299fce"
+                "url": "https://github.com/apermo/apermo-coding-standards.git",
+                "reference": "2dd0d9f406283ee10ddf2a44737ffe292d506288"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/wp-coding-standards/zipball/398e6b248e847ebe2e49f47ebb62095b78299fce",
-                "reference": "398e6b248e847ebe2e49f47ebb62095b78299fce",
+                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/2dd0d9f406283ee10ddf2a44737ffe292d506288",
+                "reference": "2dd0d9f406283ee10ddf2a44737ffe292d506288",
                 "shasum": ""
             },
             "require": {
@@ -1575,16 +1575,37 @@
                 "wp-coding-standards/wpcs": "^3.0",
                 "yoast/yoastcs": "^3.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^11.0"
+            },
             "type": "phpcodesniffer-standard",
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Christoph Daum",
+                    "homepage": "https://christoph-daum.de"
+                }
+            ],
             "description": "Shared PHPCS coding standards for WordPress projects by Apermo.",
+            "homepage": "https://github.com/apermo/apermo-coding-standards",
+            "keywords": [
+                "coding-standards",
+                "phpcs",
+                "static-analysis",
+                "wordpress"
+            ],
             "support": {
-                "source": "https://github.com/apermo/wp-coding-standards/tree/v1.0.0",
-                "issues": "https://github.com/apermo/wp-coding-standards/issues"
+                "issues": "https://github.com/apermo/apermo-coding-standards/issues",
+                "source": "https://github.com/apermo/apermo-coding-standards"
             },
-            "time": "2026-02-14T08:58:22+00:00"
+            "time": "2026-02-19T14:55:01+00:00"
         },
         {
             "name": "automattic/vipwpcs",
