@@ -33,7 +33,7 @@
     "wpackagist-plugin/dominant-color-images": "^1.2",
     "wpackagist-plugin/individual-multisite-author": "^1.4",
     "wpackagist-plugin/webp-uploads": "^2.6",
-    "wpackagist-plugin/multisite-language-switcher": "^2.10",
+    "lloc/multisite-language-switcher": "^2.10",
     "wpackagist-plugin/optimum-gravatar-cache": "^1.4",
     "wpackagist-plugin/performance-lab": "^4.0",
     "wpackagist-plugin/progress-planner": "^1.9",
