@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "429e334cdf69145e3a6271eb49888c76",
+    "content-hash": "905d998d0484eb02797490cf594e7d46",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1535,15 +1535,15 @@
         },
         {
             "name": "wpackagist-plugin/friends",
-            "version": "3.6.0",
+            "version": "4.1.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/friends/",
-                "reference": "tags/3.6.0"
+                "reference": "tags/4.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/friends.3.6.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/friends.4.1.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
