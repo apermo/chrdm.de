@@ -16,7 +16,6 @@
 /web/app/plugins/*
 !/web/app/plugins/.gitkeep
 # !/web/app/plugins/my-custom-plugin/
-!/web/app/plugins/apermo-score-cards/
 
 # mu-plugins - ignore all, whitelist custom
 /web/app/mu-plugins/*
