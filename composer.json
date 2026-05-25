@@ -18,7 +18,7 @@
     "roots/bedrock-disallow-indexing": "^2.0",
     "roots/wordpress": "^6.7",
     "roots/wp-config": "^1.0",
-    "apermo/sovereignty": "^1.0",
+    "apermo/sovereignty": "1.0.0",
     "wpackagist-plugin/activitypub": "^7.8",
     "wpackagist-plugin/antispam-bee": "^2.11",
     "wpackagist-plugin/basepress": "^2.17",
