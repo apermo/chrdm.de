@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "429e334cdf69145e3a6271eb49888c76",
+    "content-hash": "8e751f01b47238648bd1faa9e102913d",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1843,21 +1843,22 @@
     "packages-dev": [
         {
             "name": "apermo/apermo-coding-standards",
-            "version": "1.4.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-coding-standards.git",
-                "reference": "6c24dc9d51f3d800d741646147a44a79d87f5535"
+                "reference": "61f264eb411bb1a4ca581ca6c60740426596a85e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/6c24dc9d51f3d800d741646147a44a79d87f5535",
-                "reference": "6c24dc9d51f3d800d741646147a44a79d87f5535",
+                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/61f264eb411bb1a4ca581ca6c60740426596a85e",
+                "reference": "61f264eb411bb1a4ca581ca6c60740426596a85e",
                 "shasum": ""
             },
             "require": {
+                "automattic/vipwpcs": "^3.0",
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-                "php": ">=8.3",
+                "php": ">=7.4",
                 "phpcompatibility/phpcompatibility-wp": "^2.1",
                 "slevomat/coding-standard": "^8.0",
                 "squizlabs/php_codesniffer": "^3.10",
@@ -1865,12 +1866,28 @@
                 "yoast/yoastcs": "^3.0"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
                 "phpunit/phpunit": "^11.0"
             },
             "type": "phpcodesniffer-standard",
+            "autoload": {
+                "files": [
+                    "Apermo/polyfills.php"
+                ]
+            },
             "scripts": {
                 "test": [
                     "phpunit"
+                ],
+                "analyse": [
+                    "phpstan analyse"
+                ],
+                "post-install-cmd": [
+                    "git config core.hooksPath .githooks || true"
+                ],
+                "post-update-cmd": [
+                    "git config core.hooksPath .githooks || true"
                 ]
             },
             "license": [
@@ -1894,7 +1911,7 @@
                 "issues": "https://github.com/apermo/apermo-coding-standards/issues",
                 "source": "https://github.com/apermo/apermo-coding-standards"
             },
-            "time": "2026-02-20T07:45:04+00:00"
+            "time": "2026-05-02T12:32:03+00:00"
         },
         {
             "name": "automattic/vipwpcs",
