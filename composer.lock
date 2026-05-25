@@ -58,16 +58,16 @@
         },
         {
             "name": "apermo/apermo-stash",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-stash.git",
-                "reference": "98ed3e9e3a69166e8fefec70310d5020c166ab11"
+                "reference": "02a1e0d03ba5f9df8e981b31d715da11ceef0dc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-stash/zipball/98ed3e9e3a69166e8fefec70310d5020c166ab11",
-                "reference": "98ed3e9e3a69166e8fefec70310d5020c166ab11",
+                "url": "https://api.github.com/repos/apermo/apermo-stash/zipball/02a1e0d03ba5f9df8e981b31d715da11ceef0dc9",
+                "reference": "02a1e0d03ba5f9df8e981b31d715da11ceef0dc9",
                 "shasum": ""
             },
             "require": {
@@ -101,9 +101,9 @@
             "description": "Apermo Stash — a self-hosted WordPress bookmark collection with a token-protected REST API.",
             "support": {
                 "issues": "https://github.com/apermo/apermo-stash/issues",
-                "source": "https://github.com/apermo/apermo-stash/tree/v0.2.0"
+                "source": "https://github.com/apermo/apermo-stash/tree/v0.2.1"
             },
-            "time": "2026-05-10T21:50:56+00:00"
+            "time": "2026-05-25T15:47:52+00:00"
         },
         {
             "name": "apermo/sovereignty",
