@@ -5,7 +5,7 @@
     ":dependencyDashboard",
     ":semanticCommitTypeAll(chore)"
   ],
-  "schedule": ["before 06:00 on monday"],
+  "schedule": ["before 06:00"],
   "timezone": "Europe/Berlin",
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
