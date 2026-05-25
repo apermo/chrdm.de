@@ -83,8 +83,6 @@ class Translator {
 			$post_data['post_content'] = $translated_content;
 		}
 
-		// Re-slash: MSLS hands raw values to wp_insert_post, which wp_unslash's
-		// them and would otherwise strip backslashes from JSON block attributes.
 		return wp_slash( $post_data );
 	}
 
