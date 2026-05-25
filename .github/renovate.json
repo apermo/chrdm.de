@@ -22,6 +22,11 @@
     {
       "matchPackageNames": ["roave/security-advisories"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["roots/wordpress", "roots/wordpress-no-content"],
+      "groupName": "WordPress {{newMajor}}.{{newMinor}}",
+      "labels": ["dependencies", "wordpress-core"]
     }
   ]
 }
