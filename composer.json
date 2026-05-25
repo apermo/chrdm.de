@@ -42,7 +42,7 @@
     "wpackagist-plugin/two-factor": "^0.16",
     "wpackagist-plugin/wp-test-email": "^1.1",
     "wpackagist-plugin/duplicate-post": "^4.5",
-    "wpackagist-plugin/wordpress-seo": "^26.8",
+    "wpackagist-plugin/wordpress-seo": "^27.0",
     "wpackagist-plugin/when-last-login": "^1.2",
     "wpackagist-theme/twentytwentyfive": "^1.4",
     "wpackagist-plugin/redirection": "^5.7",
