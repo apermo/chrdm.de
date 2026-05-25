@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5cd6e4a7ba3f9ef1eb3a013d3c383b45",
+    "content-hash": "c1a29a15062b50db28cb826ea4bd39f2",
     "packages": [
         {
             "name": "apermo/sovereignty",
@@ -1440,6 +1440,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/progress-planner/"
+        },
+        {
+            "name": "wpackagist-plugin/redirection",
+            "version": "5.7.5",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/redirection/",
+                "reference": "tags/5.7.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/redirection.5.7.5.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/redirection/"
         },
         {
             "name": "wpackagist-plugin/speculation-rules",
