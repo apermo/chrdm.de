@@ -202,7 +202,7 @@ function msls_deepl_ensure_loaded(): void {
 	foreach ( $files as $file ) {
 		$full_path = trailingslashit( WPDEEPL_PATH ) . $file;
 		if ( file_exists( $full_path ) ) {
-			include_once $full_path;
+			require_once $full_path;
 		}
 	}
 }
