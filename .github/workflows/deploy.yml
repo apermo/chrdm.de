@@ -42,7 +42,7 @@ jobs:
         run: composer install --no-dev --optimize-autoloader --prefer-dist
 
       - name: Build sovereignty theme assets
-        uses: apermo/sovereignty/.github/actions/build@v1.4.1
+        uses: apermo/sovereignty/.github/actions/build@v1.4.2
         with:
           working-directory: web/app/themes/sovereignty
 
@@ -70,7 +70,7 @@ jobs:
           path: build
 
       - name: Deploy via rsync
-        uses: burnett01/rsync-deployments@7.0.1
+        uses: burnett01/rsync-deployments@7.1.0
         with:
           switches: -avzr --delete --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
           path: build/
@@ -81,7 +81,7 @@ jobs:
           remote_port: ${{ secrets.DEPLOY_PORT }}
 
       - name: Clear cache on server
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
