@@ -20,7 +20,7 @@
 # mu-plugins - ignore all, whitelist custom
 /web/app/mu-plugins/*
 !/web/app/mu-plugins/.gitkeep
-# !/web/app/mu-plugins/my-custom-mu-plugin/
+!/web/app/mu-plugins/msls-deepl-translate.php
 
 # Uploads
 /web/app/uploads/*
