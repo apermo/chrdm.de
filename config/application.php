@@ -125,6 +125,18 @@ if (defined('WP_CLI') && WP_CLI) {
 }
 
 /**
+ * Per-host configuration
+ */
+switch ($_SERVER['HTTP_HOST'] ?? '') {
+    case 'christoph-daum.com':
+        Config::define('HUM_SHORTLINK_BASE', 'https://en.chrdm.de');
+        break;
+    default:
+        Config::define('HUM_SHORTLINK_BASE', 'https://chrdm.de');
+        break;
+}
+
+/**
  * Load environment specific configuration
  */
 $env_config = __DIR__ . '/environments/' . $env_type . '.php';
