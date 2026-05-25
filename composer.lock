@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f84eed40f9a263c9bd24879fed8040b1",
+    "content-hash": "9b152964bad73eafb572830d87a1ca7f",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -107,83 +107,25 @@
         },
         {
             "name": "apermo/sovereignty",
-            "version": "1.4.0",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/sovereignty.git",
-                "reference": "3d642c1293ed29b5f24f075d311e03b345361f52"
+                "reference": "7f4cfd5d4e9d4099965183507a94997324c32fb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/3d642c1293ed29b5f24f075d311e03b345361f52",
-                "reference": "3d642c1293ed29b5f24f075d311e03b345361f52",
+                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/7f4cfd5d4e9d4099965183507a94997324c32fb3",
+                "reference": "7f4cfd5d4e9d4099965183507a94997324c32fb3",
                 "shasum": ""
             },
             "require": {
-                "composer/installers": "^2.2",
-                "php": ">=8.3"
-            },
-            "require-dev": {
-                "apermo/apermo-coding-standards": "^2.6.2",
-                "apermo/phpstan-wordpress-rules": "^0.2",
-                "brain/monkey": "^2.6",
-                "pfefferle/wordpress-activitypub": "^8.0",
-                "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^2.0",
-                "phpstan/phpstan-strict-rules": "^2.0",
-                "phpunit/phpunit": "^11.0",
-                "roave/security-advisories": "dev-latest",
-                "szepeviktor/phpstan-wordpress": "^2.0",
-                "wpackagist-plugin/indieweb-post-kinds": "*",
-                "wpackagist-plugin/pwa": "*",
-                "yoast/phpunit-polyfills": "^3.0",
-                "yoast/wordpress-seo": "^27.2"
+                "composer/installers": "~2.2",
+                "php": ">=7.4.0"
             },
             "type": "wordpress-theme",
             "extra": {
-                "installer-name": "sovereignty",
-                "installer-paths": {
-                    "vendor/{$vendor}/{$name}/": [
-                        "type:wordpress-plugin"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Apermo\\Sovereignty\\": "src/"
-                }
-            },
-            "scripts": {
-                "cs": [
-                    "phpcs --warning-severity=0"
-                ],
-                "cs:fix": [
-                    "phpcbf"
-                ],
-                "lint": [
-                    "@cs"
-                ],
-                "lint:fix": [
-                    "@cs:fix"
-                ],
-                "test": [
-                    "phpunit"
-                ],
-                "test:unit": [
-                    "phpunit --testsuite Unit"
-                ],
-                "test:integration": [
-                    "phpunit --testsuite Integration"
-                ],
-                "analyse": [
-                    "phpstan analyse -c phpstan.neon.dist --memory-limit=2G"
-                ],
-                "analyse:strict": [
-                    "phpstan analyse -c phpstan-strict.neon --memory-limit=2G"
-                ],
-                "generate-version": [
-                    "@php bin/generate-version.php"
-                ]
+                "installer-name": "sovereignty"
             },
             "license": [
                 "MIT"
@@ -199,12 +141,11 @@
                 }
             ],
             "description": "Pure Zen - Fork of Pfefferle's Autonomie Theme",
-            "homepage": "https://github.com/apermo/sovereignty",
             "support": {
-                "issues": "https://github.com/apermo/sovereignty/issues",
-                "source": "https://github.com/apermo/sovereignty"
+                "source": "https://github.com/apermo/sovereignty/tree/v1.0.0",
+                "issues": "https://github.com/apermo/sovereignty/issues"
             },
-            "time": "2026-05-24T21:34:10+00:00"
+            "time": "2026-01-27T21:59:40+00:00"
         },
         {
             "name": "composer/installers",
@@ -751,20 +692,20 @@
         },
         {
             "name": "roots/wordpress",
-            "version": "6.9.4",
+            "version": "7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roots/wordpress.git",
-                "reference": "2fa44383ade9e8ccbb986e95ca70a365c8221eb1"
+                "reference": "eb3d108f216618a858dcaed691e00e68f0ccff9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/roots/wordpress/zipball/2fa44383ade9e8ccbb986e95ca70a365c8221eb1",
-                "reference": "2fa44383ade9e8ccbb986e95ca70a365c8221eb1",
+                "url": "https://api.github.com/repos/roots/wordpress/zipball/eb3d108f216618a858dcaed691e00e68f0ccff9f",
+                "reference": "eb3d108f216618a858dcaed691e00e68f0ccff9f",
                 "shasum": ""
             },
             "require": {
-                "roots/wordpress-core-installer": "^3.0",
+                "roots/wordpress-core-installer": "^4.0",
                 "roots/wordpress-no-content": "self.version"
             },
             "type": "metapackage",
@@ -782,7 +723,7 @@
             ],
             "support": {
                 "issues": "https://github.com/roots/wordpress/issues",
-                "source": "https://github.com/roots/wordpress/tree/6.9.4"
+                "source": "https://github.com/roots/wordpress/tree/7.0"
             },
             "funding": [
                 {
@@ -790,24 +731,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-09T19:47:29+00:00"
+            "time": "2026-03-22T13:26:54+00:00"
         },
         {
             "name": "roots/wordpress-core-installer",
-            "version": "3.0.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roots/wordpress-core-installer.git",
-                "reference": "714d2e2a9e523f6e7bde4810d5a04aedf0ec217f"
+                "reference": "85d3589252eb93eee836facf33b54ce30c565bea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/roots/wordpress-core-installer/zipball/714d2e2a9e523f6e7bde4810d5a04aedf0ec217f",
-                "reference": "714d2e2a9e523f6e7bde4810d5a04aedf0ec217f",
+                "url": "https://api.github.com/repos/roots/wordpress-core-installer/zipball/85d3589252eb93eee836facf33b54ce30c565bea",
+                "reference": "85d3589252eb93eee836facf33b54ce30c565bea",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0 || ^2.0",
+                "composer-plugin-api": "^2.0",
                 "php": ">=7.2.24"
             },
             "conflict": {
@@ -817,7 +758,7 @@
                 "johnpbloch/wordpress-core-installer": "*"
             },
             "require-dev": {
-                "composer/composer": "^1.0 || ^2.0",
+                "composer/composer": "^2.0",
                 "phpunit/phpunit": "^8.5"
             },
             "type": "composer-plugin",
@@ -849,7 +790,7 @@
             ],
             "support": {
                 "issues": "https://github.com/roots/wordpress-core-installer/issues",
-                "source": "https://github.com/roots/wordpress-core-installer/tree/3.0.0"
+                "source": "https://github.com/roots/wordpress-core-installer/tree/v4.0.0"
             },
             "funding": [
                 {
@@ -857,27 +798,27 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-23T18:47:25+00:00"
+            "time": "2026-03-22T03:17:23+00:00"
         },
         {
             "name": "roots/wordpress-no-content",
-            "version": "6.9.4",
+            "version": "7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "6.9.4"
+                "reference": "7.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.w.org/release/wordpress-6.9.4-no-content.zip",
-                "reference": "6.9.4",
-                "shasum": "8ae812bb54223ef859cd3de37f1c6b1db20e0e6f"
+                "url": "https://downloads.w.org/release/wordpress-7.0-no-content.zip",
+                "reference": "7.0",
+                "shasum": "2ffdd31a747f68e3e5633064993997a7ce881975"
             },
             "require": {
-                "php": ">= 7.2.24"
+                "php": ">= 7.4"
             },
             "provide": {
-                "wordpress/core-implementation": "6.9.4"
+                "wordpress/core-implementation": "7.0"
             },
             "suggest": {
                 "ext-curl": "Performs remote request operations.",
@@ -928,7 +869,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-03-11T15:49:55+00:00"
+            "time": "2026-05-20T18:34:28+00:00"
         },
         {
             "name": "roots/wp-config",
