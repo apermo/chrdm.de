@@ -27,6 +27,9 @@
 !/web/app/uploads/.gitignore
 !/web/app/uploads/.htaccess
 
+# Languages (downloaded by inpsyde/wp-translation-downloader)
+/web/app/languages/
+
 # Environment files
 .env
 .env.*

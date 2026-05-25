@@ -47,7 +47,8 @@
     "wpackagist-theme/twentytwentyfive": "^1.4",
     "wpackagist-plugin/redirection": "^5.7",
     "apermo/apermo-stash": "^0.2.0",
-    "apermo/apermo-notify": "^0.1.1"
+    "apermo/apermo-notify": "^0.1.1",
+    "inpsyde/wp-translation-downloader": "^2.6"
   },
   "require-dev": {
     "apermo/apermo-coding-standards": "^1.0",
@@ -74,7 +75,8 @@
     "allow-plugins": {
       "composer/installers": true,
       "roots/wordpress-core-installer": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "inpsyde/wp-translation-downloader": true
     }
   },
   "minimum-stability": "dev",
@@ -85,7 +87,11 @@
       "web/app/plugins/{$name}/": ["type:wordpress-plugin"],
       "web/app/themes/{$name}/": ["type:wordpress-theme"]
     },
-    "wordpress-install-dir": "web/wp"
+    "wordpress-install-dir": "web/wp",
+    "wp-translation-downloader": {
+      "languages": ["de_DE"],
+      "directory": "web/app/languages"
+    }
   },
   "scripts": {
     "test": [
