@@ -51,7 +51,7 @@
     "inpsyde/wp-translation-downloader": "^2.6"
   },
   "require-dev": {
-    "apermo/apermo-coding-standards": "^1.0",
+    "apermo/apermo-coding-standards": "^3.0",
     "roave/security-advisories": "dev-latest"
   },
   "repositories": [
