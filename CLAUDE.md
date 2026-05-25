@@ -4,7 +4,7 @@ This file provides guidance for Claude Code when working with this repository.
 
 ## Project Overview
 
-WordPress multisite installation for christoph-daum.de using [Bedrock](https://roots.io/bedrock/) architecture. The project uses Composer for dependency management and GitHub Actions for automated deployments to Plesk shared hosting.
+WordPress multisite installation for christoph-daum.de using [Bedrock](https://roots.io/bedrock/) architecture. The project uses Composer for dependency management and GitHub Actions for automated deployments to cPanel shared hosting.
 
 ## Architecture
 
@@ -17,7 +17,7 @@ WordPress multisite installation for christoph-daum.de using [Bedrock](https://r
 ├── repos/                     # Local dev only - cloned theme/plugin repos
 │   ├── sovereignty/           # Theme repo clone
 │   └── custom-plugin/         # Plugin repo clone
-├── web/                       # Document root (point Plesk here)
+├── web/                       # Document root (point cPanel here)
 │   ├── app/                   # wp-content equivalent
 │   │   ├── mu-plugins/        # Must-use plugins
 │   │   ├── plugins/           # Symlinks (dev) or Composer-installed (prod)
@@ -157,7 +157,7 @@ Copy `.env.example` to `.env` and configure:
 | `DEPLOY_USER` | SSH username |
 | `DEPLOY_KEY` | SSH private key |
 | `DEPLOY_PORT` | SSH port (usually 22) |
-| `DEPLOY_PATH` | Absolute path to web directory |
+| `DEPLOY_PATH` | Absolute path to project root on server (e.g. `/home/neeehgky/chrdm-bedrock`) |
 
 ### Deployment Process
 
@@ -166,12 +166,17 @@ Copy `.env.example` to `.env` and configure:
 3. rsync deploys to production server
 4. Files excluded from sync: `.env`, `web/app/uploads/`, `web/.htaccess`
 
-### Plesk Document Root
+### cPanel Document Root
 
-Set document root to the `web/` subdirectory:
-1. Log into Plesk
-2. Go to Websites & Domains → domain → Hosting Settings
-3. Set Document root to: `httpdocs/web` (or your path + `/web`)
+The deploy lands at `DEPLOY_PATH` (e.g. `/home/neeehgky/chrdm-bedrock`). The document
+root for the domain must be set one level deeper, at the `web/` subdirectory:
+
+1. Log into cPanel
+2. Go to Domains → christoph-daum.de
+3. Set Document Root to: `chrdm-bedrock/web` (relative to home dir)
+
+The previous non-Bedrock install in `public_html/` is left in place as a rollback
+snapshot — revert the cPanel document root back to `public_html` to roll back.
 
 ## Coding Standards
 
