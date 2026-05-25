@@ -4,8 +4,58 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6aeb01e234799164f5a1d54846a65300",
+    "content-hash": "f84eed40f9a263c9bd24879fed8040b1",
     "packages": [
+        {
+            "name": "apermo/apermo-notify",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apermo/apermo-notify.git",
+                "reference": "799cc7e6274b62740cca1f592c9f4a0d33f8e9fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apermo/apermo-notify/zipball/799cc7e6274b62740cca1f592c9f4a0d33f8e9fa",
+                "reference": "799cc7e6274b62740cca1f592c9f4a0d33f8e9fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "apermo/apermo-coding-standards": "^3.0",
+                "apermo/phpstan-wordpress-rules": "^0.2",
+                "brain/monkey": "^2.6",
+                "phpstan/extension-installer": "^1.4",
+                "phpunit/phpunit": "^11.0",
+                "szepeviktor/phpstan-wordpress": "^2.0",
+                "yoast/phpunit-polyfills": "^3.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Apermo\\Notify\\": "src/",
+                    "apermo\\WPTools\\": "src/Lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Daum",
+                    "email": "me@christoph-daum.de"
+                }
+            ],
+            "description": "A WordPress apermo-notify plugin.",
+            "support": {
+                "issues": "https://github.com/apermo/apermo-notify/issues",
+                "source": "https://github.com/apermo/apermo-notify/tree/v0.1.1"
+            },
+            "time": "2026-05-24T09:40:50+00:00"
+        },
         {
             "name": "apermo/apermo-stash",
             "version": "v0.2.0",
