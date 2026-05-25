@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "apermo/apermo-notify",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-notify.git",
-                "reference": "799cc7e6274b62740cca1f592c9f4a0d33f8e9fa"
+                "reference": "e568fdeff91e68618dbef9bfc99eefd66187c6db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-notify/zipball/799cc7e6274b62740cca1f592c9f4a0d33f8e9fa",
-                "reference": "799cc7e6274b62740cca1f592c9f4a0d33f8e9fa",
+                "url": "https://api.github.com/repos/apermo/apermo-notify/zipball/e568fdeff91e68618dbef9bfc99eefd66187c6db",
+                "reference": "e568fdeff91e68618dbef9bfc99eefd66187c6db",
                 "shasum": ""
             },
             "require": {
@@ -52,22 +52,22 @@
             "description": "A WordPress apermo-notify plugin.",
             "support": {
                 "issues": "https://github.com/apermo/apermo-notify/issues",
-                "source": "https://github.com/apermo/apermo-notify/tree/v0.1.1"
+                "source": "https://github.com/apermo/apermo-notify/tree/v0.1.2"
             },
-            "time": "2026-05-24T09:40:50+00:00"
+            "time": "2026-05-25T15:07:21+00:00"
         },
         {
             "name": "apermo/apermo-stash",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-stash.git",
-                "reference": "98ed3e9e3a69166e8fefec70310d5020c166ab11"
+                "reference": "02a1e0d03ba5f9df8e981b31d715da11ceef0dc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-stash/zipball/98ed3e9e3a69166e8fefec70310d5020c166ab11",
-                "reference": "98ed3e9e3a69166e8fefec70310d5020c166ab11",
+                "url": "https://api.github.com/repos/apermo/apermo-stash/zipball/02a1e0d03ba5f9df8e981b31d715da11ceef0dc9",
+                "reference": "02a1e0d03ba5f9df8e981b31d715da11ceef0dc9",
                 "shasum": ""
             },
             "require": {
@@ -101,9 +101,9 @@
             "description": "Apermo Stash — a self-hosted WordPress bookmark collection with a token-protected REST API.",
             "support": {
                 "issues": "https://github.com/apermo/apermo-stash/issues",
-                "source": "https://github.com/apermo/apermo-stash/tree/v0.2.0"
+                "source": "https://github.com/apermo/apermo-stash/tree/v0.2.1"
             },
-            "time": "2026-05-10T21:50:56+00:00"
+            "time": "2026-05-25T15:47:52+00:00"
         },
         {
             "name": "apermo/sovereignty",
