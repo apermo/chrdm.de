@@ -44,7 +44,7 @@ jobs:
         run: composer install --prefer-dist
 
       - name: Check PHP syntax
-        run: find config web/app -name "*.php" -print0 | xargs -0 -n1 php -l
+        run: git ls-files -z '*.php' | xargs -0 -n1 -P 4 php -l
 
   security:
     name: Security Check
