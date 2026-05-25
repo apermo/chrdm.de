@@ -63,7 +63,13 @@ function msls_deepl_translate_post_data( array $post_data, \WP_Post $source_post
 		$post_data['post_content'] = $translated_content;
 	}
 
-	return $post_data;
+	// MslsRestApi::prepare_post_data() reads raw values from $source_post and
+	// hands them to wp_insert_post(), which runs wp_unslash() on its input.
+	// Without re-slashing here, every backslash in the post data is stripped —
+	// silently corrupting JSON-encoded block attributes (e.g. Code Block Pro's
+	// "code":"...\n..." becomes "code":"...n..."), which then fails Gutenberg's
+	// block validation.
+	return wp_slash( $post_data );
 }
 
 /**
