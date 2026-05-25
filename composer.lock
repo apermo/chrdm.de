@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "apermo/apermo-notify",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-notify.git",
-                "reference": "799cc7e6274b62740cca1f592c9f4a0d33f8e9fa"
+                "reference": "e568fdeff91e68618dbef9bfc99eefd66187c6db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-notify/zipball/799cc7e6274b62740cca1f592c9f4a0d33f8e9fa",
-                "reference": "799cc7e6274b62740cca1f592c9f4a0d33f8e9fa",
+                "url": "https://api.github.com/repos/apermo/apermo-notify/zipball/e568fdeff91e68618dbef9bfc99eefd66187c6db",
+                "reference": "e568fdeff91e68618dbef9bfc99eefd66187c6db",
                 "shasum": ""
             },
             "require": {
@@ -52,9 +52,9 @@
             "description": "A WordPress apermo-notify plugin.",
             "support": {
                 "issues": "https://github.com/apermo/apermo-notify/issues",
-                "source": "https://github.com/apermo/apermo-notify/tree/v0.1.1"
+                "source": "https://github.com/apermo/apermo-notify/tree/v0.1.2"
             },
-            "time": "2026-05-24T09:40:50+00:00"
+            "time": "2026-05-25T15:07:21+00:00"
         },
         {
             "name": "apermo/apermo-stash",
