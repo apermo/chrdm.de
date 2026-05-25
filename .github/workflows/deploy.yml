@@ -70,7 +70,7 @@ jobs:
           path: build
 
       - name: Deploy via rsync
-        uses: burnett01/rsync-deployments@7.0.1
+        uses: burnett01/rsync-deployments@8.0.5
         with:
           switches: -avzr --delete --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
           path: build/
