@@ -29,6 +29,10 @@
 
 # Languages (downloaded by inpsyde/wp-translation-downloader)
 /web/app/languages/
+# Lockfile tracks "already downloaded" state — but checking only the lockfile
+# (not the file system) causes the downloader to silently skip in fresh CI
+# checkouts where the lockfile is committed but languages/ is gitignored.
+wp-translation-downloader.lock
 
 # Environment files
 .env
