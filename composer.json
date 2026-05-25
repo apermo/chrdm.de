@@ -45,7 +45,8 @@
     "wpackagist-plugin/wordpress-seo": "^26.8",
     "wpackagist-plugin/when-last-login": "^1.2",
     "wpackagist-theme/twentytwentyfive": "^1.4",
-    "wpackagist-plugin/redirection": "^5.7"
+    "wpackagist-plugin/redirection": "^5.7",
+    "apermo/apermo-stash": "^0.2.0"
   },
   "require-dev": {
     "apermo/apermo-coding-standards": "^1.0",

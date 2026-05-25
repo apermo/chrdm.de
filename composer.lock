@@ -4,8 +4,57 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1a29a15062b50db28cb826ea4bd39f2",
+    "content-hash": "6aeb01e234799164f5a1d54846a65300",
     "packages": [
+        {
+            "name": "apermo/apermo-stash",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apermo/apermo-stash.git",
+                "reference": "98ed3e9e3a69166e8fefec70310d5020c166ab11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apermo/apermo-stash/zipball/98ed3e9e3a69166e8fefec70310d5020c166ab11",
+                "reference": "98ed3e9e3a69166e8fefec70310d5020c166ab11",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "apermo/apermo-coding-standards": "^3.0",
+                "apermo/phpstan-wordpress-rules": "^0.2",
+                "brain/monkey": "^2.6",
+                "phpstan/extension-installer": "^1.4",
+                "phpunit/phpunit": "^11.0",
+                "szepeviktor/phpstan-wordpress": "^2.0",
+                "yoast/phpunit-polyfills": "^3.0"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Apermo\\Stash\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Daum",
+                    "email": "me@christoph-daum.de"
+                }
+            ],
+            "description": "Apermo Stash — a self-hosted WordPress bookmark collection with a token-protected REST API.",
+            "support": {
+                "issues": "https://github.com/apermo/apermo-stash/issues",
+                "source": "https://github.com/apermo/apermo-stash/tree/v0.2.0"
+            },
+            "time": "2026-05-10T21:50:56+00:00"
+        },
         {
             "name": "apermo/sovereignty",
             "version": "v1.0.0",
