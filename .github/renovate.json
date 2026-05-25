@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "schedule": ["before 06:00"],
+  "timezone": "Europe/Berlin",
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchManagers": ["composer"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Composer minor + patch"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "matchPackageNames": ["roave/security-advisories"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["roots/wordpress", "roots/wordpress-no-content"],
+      "groupName": "WordPress {{newMajor}}.{{newMinor}}",
+      "labels": ["dependencies", "wordpress-core"]
+    }
+  ]
+}
