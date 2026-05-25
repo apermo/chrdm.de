@@ -93,6 +93,12 @@
     ],
     "post-root-package-install": [
       "php -r \"copy('.env.example', '.env');\""
+    ],
+    "post-install-cmd": [
+      "@composer install --no-dev --optimize-autoloader --working-dir=web/app/themes/sovereignty"
+    ],
+    "post-update-cmd": [
+      "@composer install --no-dev --optimize-autoloader --working-dir=web/app/themes/sovereignty"
     ]
   }
 }
