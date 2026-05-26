@@ -41,6 +41,11 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader --prefer-dist
 
+      - name: Build sovereignty theme assets
+        uses: apermo/sovereignty/.github/actions/build@v1.4.1
+        with:
+          working-directory: web/app/themes/sovereignty
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v7
         with:
