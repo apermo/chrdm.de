@@ -48,7 +48,8 @@
     "wpackagist-plugin/redirection": "^5.7",
     "apermo/apermo-stash": "^0.2.0",
     "apermo/apermo-notify": "^0.1.1",
-    "inpsyde/wp-translation-downloader": "^2.6"
+    "inpsyde/wp-translation-downloader": "^2.6",
+    "wpackagist-plugin/statify": "^1.8"
   },
   "require-dev": {
     "apermo/apermo-coding-standards": "^3.0",

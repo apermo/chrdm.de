@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d922dd7283f34703d699b339247e2050",
+    "content-hash": "6483da4be47743a1eac7f2c718571cce",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1694,6 +1694,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/speculation-rules/"
+        },
+        {
+            "name": "wpackagist-plugin/statify",
+            "version": "1.8.5",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/statify/",
+                "reference": "tags/1.8.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/statify.1.8.5.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/statify/"
         },
         {
             "name": "wpackagist-plugin/two-factor",
