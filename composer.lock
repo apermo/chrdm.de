@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "429e334cdf69145e3a6271eb49888c76",
+    "content-hash": "d922dd7283f34703d699b339247e2050",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1373,15 +1373,15 @@
         },
         {
             "name": "wpackagist-plugin/activitypub",
-            "version": "7.9.1",
+            "version": "8.3.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/activitypub/",
-                "reference": "tags/7.9.1"
+                "reference": "tags/8.3.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/activitypub.7.9.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/activitypub.8.3.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1535,15 +1535,15 @@
         },
         {
             "name": "wpackagist-plugin/friends",
-            "version": "3.6.0",
+            "version": "4.1.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/friends/",
-                "reference": "tags/3.6.0"
+                "reference": "tags/4.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/friends.3.6.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/friends.4.1.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1751,15 +1751,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "26.9",
+            "version": "27.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/26.9"
+                "reference": "tags/27.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.26.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.27.6.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1843,21 +1843,22 @@
     "packages-dev": [
         {
             "name": "apermo/apermo-coding-standards",
-            "version": "1.4.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-coding-standards.git",
-                "reference": "6c24dc9d51f3d800d741646147a44a79d87f5535"
+                "reference": "61f264eb411bb1a4ca581ca6c60740426596a85e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/6c24dc9d51f3d800d741646147a44a79d87f5535",
-                "reference": "6c24dc9d51f3d800d741646147a44a79d87f5535",
+                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/61f264eb411bb1a4ca581ca6c60740426596a85e",
+                "reference": "61f264eb411bb1a4ca581ca6c60740426596a85e",
                 "shasum": ""
             },
             "require": {
+                "automattic/vipwpcs": "^3.0",
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-                "php": ">=8.3",
+                "php": ">=7.4",
                 "phpcompatibility/phpcompatibility-wp": "^2.1",
                 "slevomat/coding-standard": "^8.0",
                 "squizlabs/php_codesniffer": "^3.10",
@@ -1865,12 +1866,28 @@
                 "yoast/yoastcs": "^3.0"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
                 "phpunit/phpunit": "^11.0"
             },
             "type": "phpcodesniffer-standard",
+            "autoload": {
+                "files": [
+                    "Apermo/polyfills.php"
+                ]
+            },
             "scripts": {
                 "test": [
                     "phpunit"
+                ],
+                "analyse": [
+                    "phpstan analyse"
+                ],
+                "post-install-cmd": [
+                    "git config core.hooksPath .githooks || true"
+                ],
+                "post-update-cmd": [
+                    "git config core.hooksPath .githooks || true"
                 ]
             },
             "license": [
@@ -1894,7 +1911,7 @@
                 "issues": "https://github.com/apermo/apermo-coding-standards/issues",
                 "source": "https://github.com/apermo/apermo-coding-standards"
             },
-            "time": "2026-02-20T07:45:04+00:00"
+            "time": "2026-05-02T12:32:03+00:00"
         },
         {
             "name": "automattic/vipwpcs",
