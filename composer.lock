@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "250dcc8dd3587aa3ab90e33658f220db",
+    "content-hash": "429e334cdf69145e3a6271eb49888c76",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -107,16 +107,16 @@
         },
         {
             "name": "apermo/sovereignty",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/sovereignty.git",
-                "reference": "08f446017941f8cabcc8c779f99183ba9f35ddba"
+                "reference": "e31317a80282d8ac65d41f3fb62407c654fc16f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/08f446017941f8cabcc8c779f99183ba9f35ddba",
-                "reference": "08f446017941f8cabcc8c779f99183ba9f35ddba",
+                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/e31317a80282d8ac65d41f3fb62407c654fc16f1",
+                "reference": "e31317a80282d8ac65d41f3fb62407c654fc16f1",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,7 @@
                 "issues": "https://github.com/apermo/sovereignty/issues",
                 "source": "https://github.com/apermo/sovereignty"
             },
-            "time": "2026-05-25T20:26:30+00:00"
+            "time": "2026-05-25T21:05:16+00:00"
         },
         {
             "name": "composer/installers",
@@ -1553,15 +1553,15 @@
         },
         {
             "name": "wpackagist-plugin/gatherpress",
-            "version": "0.32.3",
+            "version": "0.33.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/gatherpress/",
-                "reference": "tags/0.32.3"
+                "reference": "tags/0.33.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.32.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.33.3.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1697,15 +1697,15 @@
         },
         {
             "name": "wpackagist-plugin/two-factor",
-            "version": "0.14.2",
+            "version": "0.16.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/two-factor/",
-                "reference": "tags/0.14.2"
+                "reference": "tags/0.16.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/two-factor.0.14.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/two-factor.0.16.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
