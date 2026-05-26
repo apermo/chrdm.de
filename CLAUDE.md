@@ -161,9 +161,22 @@ Copy `.env.example` to `.env` and configure:
 
 ### Deployment Process
 
-1. Push to `main` branch triggers deployment
-2. GitHub Actions runs `composer install` (installs WP core, themes, plugins)
-3. rsync deploys to production server
+Deploys are triggered by pushing a tag matching `v*` (or via manual
+`workflow_dispatch` on the Deploy workflow). Merges to `main` do **not**
+trigger a deploy — multiple PRs can accumulate before a release.
+
+Example release using SemVer (`vMAJOR.MINOR.PATCH`):
+
+```bash
+git tag v1.2.3 -m "release notes"
+git push --tags
+```
+
+On a tag push (or manual dispatch):
+
+1. GitHub Actions runs `composer install` (installs WP core, themes, plugins)
+2. Sovereignty theme assets are built via the upstream composite action
+3. rsync deploys to the production server
 4. Files excluded from sync: `.env`, `web/app/uploads/`, `web/.htaccess`
 
 ### cPanel Document Root
