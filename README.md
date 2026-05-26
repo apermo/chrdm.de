@@ -58,9 +58,10 @@ Push to `main` branch triggers automatic deployment via GitHub Actions.
 - `DEPLOY_PORT`: SSH port
 - `DEPLOY_PATH`: Path to project on server
 
-## Plesk Setup
+## cPanel Setup
 
-1. Set document root to `web/` subdirectory
+1. Set document root to the `web/` subdirectory inside `DEPLOY_PATH`
+   (e.g. `path/to/project/web` relative to the home dir)
 2. Configure wildcard DNS for subdomains: `*.christoph-daum.de`
 3. Create database and update `.env`
 
