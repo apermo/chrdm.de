@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c345be61d64a389f185436693f99e08",
+    "content-hash": "5cd6e4a7ba3f9ef1eb3a013d3c383b45",
     "packages": [
         {
             "name": "apermo/sovereignty",
@@ -257,16 +257,16 @@
         },
         {
             "name": "lloc/multisite-language-switcher",
-            "version": "2.10.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lloc/Multisite-Language-Switcher.git",
-                "reference": "f04b60335851d0d906a5cf8e738da28726c08131"
+                "reference": "94ecc97ae3decb31a882ec9d964ef39ba8f78dc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lloc/Multisite-Language-Switcher/zipball/f04b60335851d0d906a5cf8e738da28726c08131",
-                "reference": "f04b60335851d0d906a5cf8e738da28726c08131",
+                "url": "https://api.github.com/repos/lloc/Multisite-Language-Switcher/zipball/94ecc97ae3decb31a882ec9d964ef39ba8f78dc3",
+                "reference": "94ecc97ae3decb31a882ec9d964ef39ba8f78dc3",
                 "shasum": ""
             },
             "require": {
@@ -287,6 +287,7 @@
                 "szepeviktor/phpstan-wordpress": "^2.0.0",
                 "wp-coding-standards/wpcs": "^3.0"
             },
+            "default-branch": true,
             "type": "wordpress-plugin",
             "autoload": {
                 "psr-4": {
@@ -315,7 +316,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lloc/Multisite-Language-Switcher/issues",
-                "source": "https://github.com/lloc/Multisite-Language-Switcher/tree/2.10.1"
+                "source": "https://github.com/lloc/Multisite-Language-Switcher/tree/master"
             },
             "funding": [
                 {
@@ -323,7 +324,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-08T10:05:44+00:00"
+            "time": "2026-05-25T11:42:18+00:00"
         },
         {
             "name": "oscarotero/env",
@@ -3752,6 +3753,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "lloc/multisite-language-switcher": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
