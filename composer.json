@@ -44,7 +44,10 @@
     "wpackagist-plugin/duplicate-post": "^4.5",
     "wpackagist-plugin/wordpress-seo": "^26.8",
     "wpackagist-plugin/when-last-login": "^1.2",
-    "wpackagist-theme/twentytwentyfive": "^1.4"
+    "wpackagist-theme/twentytwentyfive": "^1.4",
+    "wpackagist-plugin/redirection": "^5.7",
+    "apermo/apermo-stash": "^0.2.0",
+    "apermo/apermo-notify": "^0.1.1"
   },
   "require-dev": {
     "apermo/apermo-coding-standards": "^1.0",
@@ -90,6 +93,12 @@
     ],
     "post-root-package-install": [
       "php -r \"copy('.env.example', '.env');\""
+    ],
+    "post-install-cmd": [
+      "@composer install --no-dev --optimize-autoloader --working-dir=web/app/themes/sovereignty"
+    ],
+    "post-update-cmd": [
+      "@composer install --no-dev --optimize-autoloader --working-dir=web/app/themes/sovereignty"
     ]
   }
 }
