@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6483da4be47743a1eac7f2c718571cce",
+    "content-hash": "acad2728bfc4211e7c21577d8288a588",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1640,6 +1640,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/performance-lab/"
+        },
+        {
+            "name": "wpackagist-plugin/performant-translations",
+            "version": "1.2.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/performant-translations/",
+                "reference": "tags/1.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/performant-translations.1.2.0.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/performant-translations/"
         },
         {
             "name": "wpackagist-plugin/progress-planner",
