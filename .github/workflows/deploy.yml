@@ -69,6 +69,20 @@ jobs:
           name: build
           path: build
 
+      - name: Unlock files for sync
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            # The previous deploy locked directories to 555; re-add owner write
+            # so rsync can create, replace and delete entries. uploads/ is
+            # already writable and stays untouched.
+            find . -path ./web/app/uploads -prune -o -type d -exec chmod u+w {} +
+
       - name: Deploy via rsync
         uses: burnett01/rsync-deployments@8.0.5
         with:
@@ -80,7 +94,7 @@ jobs:
           remote_key: ${{ secrets.DEPLOY_KEY }}
           remote_port: ${{ secrets.DEPLOY_PORT }}
 
-      - name: Clear cache on server
+      - name: Lock down file permissions
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -89,9 +103,17 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
-            if [ -f ".env" ]; then
-              chmod 600 .env
-            fi
             if [ -d "web/app/cache" ]; then
               rm -rf web/app/cache/*
+            fi
+            # Make the deployed code tree read-only. Nothing but uploads/ needs
+            # runtime writes (DISALLOW_FILE_EDIT/MODS are set), so this blocks
+            # the common case of a compromised plugin dropping a webshell.
+            # uploads/ and .env are pruned so they keep their own permissions.
+            # When adding file-based object/page caching, whitelist the cache
+            # dir here the same way uploads/ is handled — see issue #33.
+            find . -path ./web/app/uploads -prune -o -name .env -prune -o -type d -exec chmod 555 {} +
+            find . -path ./web/app/uploads -prune -o -name .env -prune -o -type f -exec chmod 444 {} +
+            if [ -f ".env" ]; then
+              chmod 600 .env
             fi
