@@ -72,7 +72,7 @@ jobs:
       - name: Deploy via rsync
         uses: burnett01/rsync-deployments@8.0.5
         with:
-          switches: -avzr --delete --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
+          switches: -avzr --delay-updates --delete-delay --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
           path: build/
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
