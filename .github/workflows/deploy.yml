@@ -72,7 +72,7 @@ jobs:
       - name: Deploy via rsync
         uses: burnett01/rsync-deployments@8.0.5
         with:
-          switches: -avzr --delay-updates --delete-delay --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
+          switches: -avzr --delay-updates --delete-delay --chmod=D755,F644 --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
           path: build/
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
@@ -89,6 +89,9 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
+            if [ -f ".env" ]; then
+              chmod 600 .env
+            fi
             if [ -d "web/app/cache" ]; then
               rm -rf web/app/cache/*
             fi
