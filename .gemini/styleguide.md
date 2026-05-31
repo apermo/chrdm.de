@@ -33,10 +33,16 @@ parties, no cookie banner. This is enforced by the stack (`statify`, `embed-priv
 - The deploy is tag-triggered (tags matching `v[0-9]+.[0-9]+.[0-9]+`) or manual dispatch; merges
   to `main` do **not** deploy. Flag changes that would auto-deploy on push, or that loosen the
   tag pattern to fire on non-release tags.
-- The deploy syncs with `--chmod=D755,F644` and tightens `.env` to `600`. Flag changes that
-  broaden writable paths without justification, or that would let rsync `--delete` wipe runtime
-  state (uploads, caches). (A stricter read-only lockdown of the code tree — `555`/`444` with
-  only `web/app/uploads/` writable — is proposed in PR #34; update this section when it lands.)
+- The deploy runs **unlock → rsync → lock**: a pre-rsync step re-adds owner write (`chmod u+w`)
+  to the code-tree dirs that the previous deploy locked to `555` so rsync can write; rsync syncs
+  with a transient `--chmod=D755,F644`; a post-rsync step then locks the tree back down to `555`
+  dirs / `444` files. Only `web/app/uploads/` stays writable (`755`/`644`) and `.env` is tightened
+  to `600`. Flag changes that drop the unlock or lock step, broaden writable paths beyond
+  `uploads/` without justification, or that would let rsync `--delete` wipe runtime state
+  (uploads, caches).
+- Known trade-off: with the code tree (including `web/`) at `555`, WordPress cannot rewrite
+  `web/.htaccess` at runtime (e.g. on a permalink change) — that needs a manual unlock. Flag
+  changes that silently widen permissions to work around this instead of handling it deliberately.
 - `.env`, `web/app/uploads/`, and `web/.htaccess` must stay excluded from rsync. Flag removal of
   these exclusions.
 - Flag secrets referenced outside GitHub Secrets, or secrets echoed into logs.
