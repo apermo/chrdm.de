@@ -48,7 +48,18 @@ cd repos/sovereignty
 
 ## Deployment
 
-Push to `main` branch triggers automatic deployment via GitHub Actions.
+Deploys run via GitHub Actions and are triggered by pushing a **SemVer tag**
+(`vMAJOR.MINOR.PATCH`), or by manual `workflow_dispatch`. Merges to `main` do **not** deploy —
+releases are cut explicitly:
+
+```bash
+git tag v1.2.3 -m "release notes"
+git push origin v1.2.3
+```
+
+The workflow builds (Composer + theme assets), then deploys to the cPanel host via rsync using an
+unlock → sync → read-only-lock sequence: the deployed code tree is left `555`/`444`, with only
+`web/app/uploads/` writable and `.env` tightened to `600`. See [CLAUDE.md](CLAUDE.md) for details.
 
 ### Required GitHub Secrets
 
@@ -82,9 +93,32 @@ design. **Keep the site consent-free:** do not add plugins, embeds, fonts, or sc
 non-essential cookies or require consent without revisiting this decision (see
 [CLAUDE.md](CLAUDE.md)).
 
+## Standards & hardening
+
+The site follows the [Website Specification](https://specification.website) (see
+[Credits](#credits)). The adoptions live as must-use plugins in `web/app/mu-plugins/` (namespaced
+`Apermo\…`):
+
+- **Security headers** — HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`,
+  Cross-Origin-Opener/Resource-Policy, `X-Frame-Options`.
+- **`/.well-known/security.txt`** (RFC 9116) and a **`/.well-known/change-password`** redirect.
+- **`robots.txt` Content-Signal** declaring AI-usage preferences (`ai-train=no`) plus an
+  AI-crawler opt-out.
+- **hreflang `x-default`** for the multilingual `.de` / `.com` setup.
+
+Deploys additionally lock the code tree read-only on the server as defense-in-depth (see
+[Deployment](#deployment)).
+
 ## Documentation
 
 See [CLAUDE.md](CLAUDE.md) for detailed development guidelines.
+
+## Credits
+
+Security, SEO, privacy and i18n hardening follows the
+[**Website Specification**](https://specification.website) by
+[Joost de Valk](https://github.com/jdevalk) — a platform-agnostic, sourced checklist of what a
+good website does ([jdevalk/specification.website](https://github.com/jdevalk/specification.website)).
 
 ## Prerequisites for Theme/Plugins
 

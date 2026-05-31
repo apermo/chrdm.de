@@ -91,6 +91,23 @@ Install via Composer from wpackagist:
 composer require wpackagist-plugin/plugin-name
 ```
 
+### Must-Use Plugins (mu-plugins)
+
+Small site-specific glue lives as **single-file** must-use plugins in `web/app/mu-plugins/`.
+Conventions:
+
+- One file per concern, each **whitelisted in `.gitignore`** (the directory is ignore-all +
+  per-file allow).
+- Namespace **`Apermo\<Feature>`** (e.g. `Apermo\SecurityHeaders`). Keep this consistent across
+  all mu-plugins.
+- They follow the **`Apermo` PHPCS ruleset** (see [Coding Standards](#coding-standards)), which
+  differs from vanilla WPCS: fully-qualified native calls in namespaced code (`\header()`),
+  **no Yoda conditions**, trailing commas in multi-line calls, third-person docblock summaries.
+
+Several mu-plugins implement the [Website Specification](https://specification.website)
+adoptions (security headers, `robots.txt` Content-Signal, hreflang `x-default`); the
+`/.well-known/` files are static under `web/.well-known/`.
+
 ## Development Setup
 
 ```bash
