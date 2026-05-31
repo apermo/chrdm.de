@@ -52,12 +52,26 @@ parties, no cookie banner. This is enforced by the stack (`statify`, `embed-priv
 ## PHP
 
 - PHP 8.3 required. Use strict typing where possible.
-- Follow the [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/);
-  PHPCS is configured via `phpcs.xml.dist`.
+- Code style is the **`Apermo` PHPCS ruleset** (`phpcs.xml.dist`, scanning `config/` and
+  `web/app/mu-plugins/`) — WPCS-derived but with deliberate deviations. Do **not** flag these as
+  errors: fully-qualified native calls in namespaced code (`\header()`), **no Yoda conditions**
+  (`$x === 'y'`, not `'y' === $x`), and trailing commas after the last argument in multi-line
+  calls.
 - All output must be escaped (`esc_html()`, `esc_attr()`, `esc_url()`, `wp_kses_post()`).
 - All user input must be sanitized and validated; nonce verification is required for form
   submissions.
 - Use post-increment (`$i++`) over pre-increment (`++$i`).
+
+## Must-use plugins (`web/app/mu-plugins/`)
+
+- Site-specific glue lives as **single-file** mu-plugins, each whitelisted individually in
+  `.gitignore` (the directory is ignore-all + per-file allow). Flag a new mu-plugin that is not
+  whitelisted (it would be silently untracked).
+- Namespace must be **`Apermo\<Feature>`** — flag `Chrdm\…` or other vendor namespaces for
+  consistency.
+- Several implement [specification.website](https://specification.website) adoptions (security
+  headers, `robots.txt` Content-Signal, hreflang `x-default`). The consent-free constraint above
+  still applies.
 
 ## Code Style
 
