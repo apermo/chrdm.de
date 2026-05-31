@@ -4,7 +4,7 @@
  * Description: Adds Content-Signal AI-usage preferences and AI-crawler rules to robots.txt.
  */
 
-namespace Chrdm\RobotsContentSignal;
+namespace Apermo\RobotsContentSignal;
 
 add_filter( 'robots_txt', __NAMESPACE__ . '\\filter', 99, 2 );
 
