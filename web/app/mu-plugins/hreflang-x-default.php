@@ -4,7 +4,7 @@
  * Description: Adds an x-default alternate to MSLS hreflang output when several translations exist.
  */
 
-namespace Chrdm\HreflangXDefault;
+namespace Apermo\HreflangXDefault;
 
 add_filter( 'msls_output_get_alternate_links_arr', __NAMESPACE__ . '\\add_x_default' );
 
