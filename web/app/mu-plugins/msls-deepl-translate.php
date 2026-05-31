@@ -4,7 +4,7 @@
  * Description: Translates title and content via DeepL when using MSLS quick-create.
  */
 
-namespace Chrdm\MslsDeepl;
+namespace Apermo\MslsDeepl;
 
 use lloc\Msls\MslsBlogCollection;
 use lloc\Msls\MslsRestApi;
