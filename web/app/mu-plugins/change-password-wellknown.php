@@ -4,7 +4,7 @@
  * Description: Redirects /.well-known/change-password to the WordPress profile screen.
  */
 
-namespace Chrdm\ChangePassword;
+namespace Apermo\ChangePassword;
 
 add_action( 'init', __NAMESPACE__ . '\\maybe_redirect' );
 
