@@ -105,8 +105,9 @@ Conventions:
   **no Yoda conditions**, trailing commas in multi-line calls, third-person docblock summaries.
 
 Several mu-plugins implement the [Website Specification](https://specification.website)
-adoptions (security headers, `robots.txt` Content-Signal, hreflang `x-default`); the
-`/.well-known/` files are static under `web/.well-known/`.
+adoptions (security headers, `robots.txt` Content-Signal, hreflang `x-default`, and the
+`/.well-known/change-password` redirect); only `/.well-known/security.txt` is a static file under
+`web/.well-known/`.
 
 ## Development Setup
 
