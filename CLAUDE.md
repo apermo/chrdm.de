@@ -6,6 +6,20 @@ This file provides guidance for Claude Code when working with this repository.
 
 WordPress multisite installation for christoph-daum.de using [Bedrock](https://roots.io/bedrock/) architecture. The project uses Composer for dependency management and GitHub Actions for automated deployments to cPanel shared hosting.
 
+## Privacy — consent-free by design (hard constraint)
+
+The site is **consent-free by design**: it sets no non-essential cookies and loads no
+consent-requiring third parties, so it runs **without a cookie-consent banner**. This is enforced
+by the stack — `statify` (cookieless analytics), `embed-privacy` (third-party embeds blocked until
+opt-in) and `antispam-bee` (no external service) — plus a strict no-tracking policy (no ad,
+retargeting or data-broker tags). Global Privacy Control is satisfied because no personal data is
+sold or shared.
+
+**Do not break this.** Do not introduce plugins, blocks, embeds, web fonts, or scripts that set
+non-essential cookies or require consent (e.g. Google Fonts loaded from Google, Google
+Analytics, Meta Pixel, unblocked third-party embeds) without explicitly revisiting this decision
+with the user first. Prefer self-hosted, cookieless alternatives.
+
 ## Architecture
 
 ### Directory Structure

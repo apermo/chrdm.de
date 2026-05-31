@@ -17,6 +17,8 @@ parties, no cookie banner. This is enforced by the stack (`statify`, `embed-priv
 - Flag any change that introduces plugins, blocks, embeds, web fonts, or scripts that set
   non-essential cookies or require consent (e.g. Google Fonts loaded from Google, Google
   Analytics, Meta Pixel, unblocked third-party embeds).
+- Flag changes that would sell or share personal data, or ignore Global Privacy Control
+  (`Sec-GPC`), which the site honours by design.
 - Prefer self-hosted, cookieless alternatives. Treat regressions here as high severity.
 
 ## Configuration & Bedrock
