@@ -77,6 +77,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
+            set -eu
             cd ${{ secrets.DEPLOY_PATH }}
             # The previous deploy locked directories to 555; re-add owner write
             # so rsync can create, replace and delete entries. uploads/ is
@@ -102,6 +103,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
+            set -eu
             cd ${{ secrets.DEPLOY_PATH }}
             if [ -d "web/app/cache" ]; then
               rm -rf web/app/cache/*
@@ -110,6 +112,9 @@ jobs:
             # runtime writes (DISALLOW_FILE_EDIT/MODS are set), so this blocks
             # the common case of a compromised plugin dropping a webshell.
             # uploads/ and .env are pruned so they keep their own permissions.
+            # web/.htaccess is rsync-excluded but still locked to 444 here on
+            # purpose (it falls under the find); runtime permalink rewrites need
+            # a manual unlock — see the trade-off in .gemini/styleguide.md.
             # When adding file-based object/page caching, whitelist the cache
             # dir here the same way uploads/ is handled — see issue #33.
             find . -path ./web/app/uploads -prune -o -name .env -prune -o -type d -exec chmod 555 {} +
