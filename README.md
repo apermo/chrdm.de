@@ -65,6 +65,22 @@ Push to `main` branch triggers automatic deployment via GitHub Actions.
 2. Configure wildcard DNS for subdomains: `*.christoph-daum.de`
 3. Create database and update `.env`
 
+## Privacy — consent-free by design
+
+This site sets **no non-essential cookies and loads no consent-requiring third parties**, so it
+needs **no cookie-consent banner**. The stance is enforced by the plugin stack:
+
+- **statify** — cookieless, aggregated analytics (no personal data, no tracking cookies).
+- **embed-privacy** — blocks third-party embeds (YouTube, etc.) until the visitor opts in
+  per-embed, so no third-party cookies load on page view.
+- **antispam-bee** — privacy-friendly spam filtering with no external service.
+- No advertising, retargeting, or data-broker tags.
+
+Because nothing sells or shares personal data, Global Privacy Control (`Sec-GPC`) is honoured by
+design. **Keep the site consent-free:** do not add plugins, embeds, fonts, or scripts that set
+non-essential cookies or require consent without revisiting this decision (see
+[CLAUDE.md](CLAUDE.md)).
+
 ## Documentation
 
 See [CLAUDE.md](CLAUDE.md) for detailed development guidelines.
