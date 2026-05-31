@@ -30,11 +30,13 @@ parties, no cookie banner. This is enforced by the stack (`statify`, `embed-priv
 
 ## Deployment & CI (`.github/workflows/`)
 
-- The deploy is tag-triggered (`v*`) or manual dispatch; merges to `main` do **not** deploy.
-  Flag changes that would auto-deploy on push.
-- The deployed code tree is locked read-only (`555`/`444`), with only `web/app/uploads/`
-  writable. Flag changes that broaden writable paths without justification, or that would let
-  rsync `--delete` wipe runtime state (uploads, caches).
+- The deploy is tag-triggered (tags matching `v[0-9]+.[0-9]+.[0-9]+`) or manual dispatch; merges
+  to `main` do **not** deploy. Flag changes that would auto-deploy on push, or that loosen the
+  tag pattern to fire on non-release tags.
+- The deploy syncs with `--chmod=D755,F644` and tightens `.env` to `600`. Flag changes that
+  broaden writable paths without justification, or that would let rsync `--delete` wipe runtime
+  state (uploads, caches). (A stricter read-only lockdown of the code tree — `555`/`444` with
+  only `web/app/uploads/` writable — is proposed in PR #34; update this section when it lands.)
 - `.env`, `web/app/uploads/`, and `web/.htaccess` must stay excluded from rsync. Flag removal of
   these exclusions.
 - Flag secrets referenced outside GitHub Secrets, or secrets echoed into logs.
@@ -75,6 +77,6 @@ parties, no cookie banner. This is enforced by the stack (`statify`, `embed-priv
 
 ## Commits
 
-- This project uses [Conventional Commits](https://www.conventionalcommits.org/) with a 50-char
-  subject / 72-char body limit, enforced by git hooks and CI.
+- This project follows [Conventional Commits](https://www.conventionalcommits.org/) with a
+  50-char subject / 72-char body limit (convention, not currently CI-enforced).
 - Each commit should address a single concern and be atomic (cherry-pickable, revertable).
