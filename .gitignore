@@ -23,6 +23,7 @@
 !/web/app/mu-plugins/msls-deepl-translate.php
 !/web/app/mu-plugins/change-password-wellknown.php
 !/web/app/mu-plugins/security-headers.php
+!/web/app/mu-plugins/robots-content-signal.php
 
 # Uploads
 /web/app/uploads/*
