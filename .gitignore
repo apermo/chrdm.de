@@ -21,6 +21,7 @@
 /web/app/mu-plugins/*
 !/web/app/mu-plugins/.gitkeep
 !/web/app/mu-plugins/msls-deepl-translate.php
+!/web/app/mu-plugins/change-password-wellknown.php
 
 # Uploads
 /web/app/uploads/*
