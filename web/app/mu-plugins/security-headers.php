@@ -4,7 +4,7 @@
  * Description: Sends hardened HTTP security response headers on front-end, admin and login responses.
  */
 
-namespace Chrdm\SecurityHeaders;
+namespace Apermo\SecurityHeaders;
 
 add_action( 'send_headers', __NAMESPACE__ . '\\send', 99 );
 add_action( 'login_init', __NAMESPACE__ . '\\send', 99 );
