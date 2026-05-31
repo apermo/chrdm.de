@@ -68,13 +68,14 @@ Push to `main` branch triggers automatic deployment via GitHub Actions.
 ## Privacy — consent-free by design
 
 This site sets **no non-essential cookies and loads no consent-requiring third parties**, so it
-needs **no cookie-consent banner**. The stance is enforced by the plugin stack:
+needs **no cookie-consent banner**. The stance is enforced by the plugin stack and a strict
+no-tracking policy:
 
 - **statify** — cookieless, aggregated analytics (no personal data, no tracking cookies).
 - **embed-privacy** — blocks third-party embeds (YouTube, etc.) until the visitor opts in
   per-embed, so no third-party cookies load on page view.
 - **antispam-bee** — privacy-friendly spam filtering with no external service.
-- No advertising, retargeting, or data-broker tags.
+- **No tracking tags** — no advertising, retargeting, or data-broker tags load anywhere.
 
 Because nothing sells or shares personal data, Global Privacy Control (`Sec-GPC`) is honoured by
 design. **Keep the site consent-free:** do not add plugins, embeds, fonts, or scripts that set
