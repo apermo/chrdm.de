@@ -1,0 +1,7 @@
+# Security contact for christoph-daum.de / .com — RFC 9116
+# https://specification.website/spec/security/security-txt/
+
+Contact: mailto:christoph.daum@coding-pioneers.com
+Expires: 2027-06-01T00:00:00Z
+Preferred-Languages: de, en
+Canonical: https://christoph-daum.de/.well-known/security.txt
