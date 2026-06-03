@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acad2728bfc4211e7c21577d8288a588",
+    "content-hash": "8773a87aa7ddc5fbbd4decd12c0e61cc",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -107,16 +107,16 @@
         },
         {
             "name": "apermo/sovereignty",
-            "version": "1.4.2",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/sovereignty.git",
-                "reference": "e31317a80282d8ac65d41f3fb62407c654fc16f1"
+                "reference": "60eeb47d76d7c85e775af9ce7dd1b0e89356d620"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/e31317a80282d8ac65d41f3fb62407c654fc16f1",
-                "reference": "e31317a80282d8ac65d41f3fb62407c654fc16f1",
+                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/60eeb47d76d7c85e775af9ce7dd1b0e89356d620",
+                "reference": "60eeb47d76d7c85e775af9ce7dd1b0e89356d620",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,7 @@
                 "issues": "https://github.com/apermo/sovereignty/issues",
                 "source": "https://github.com/apermo/sovereignty"
             },
-            "time": "2026-05-25T21:05:16+00:00"
+            "time": "2026-06-03T19:46:05+00:00"
         },
         {
             "name": "composer/installers",
