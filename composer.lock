@@ -1391,15 +1391,15 @@
         },
         {
             "name": "wpackagist-plugin/antispam-bee",
-            "version": "2.11.11",
+            "version": "2.11.12",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/antispam-bee/",
-                "reference": "tags/2.11.11"
+                "reference": "tags/2.11.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/antispam-bee.2.11.11.zip"
+                "url": "https://downloads.wordpress.org/plugin/antispam-bee.2.11.12.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1661,15 +1661,15 @@
         },
         {
             "name": "wpackagist-plugin/progress-planner",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/progress-planner/",
-                "reference": "tags/1.9.0"
+                "reference": "tags/1.9.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/progress-planner.1.9.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/progress-planner.1.9.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1787,15 +1787,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "27.6",
+            "version": "27.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/27.6"
+                "reference": "tags/27.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.27.6.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.27.7.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
