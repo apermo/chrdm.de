@@ -38,13 +38,18 @@ fi
 # artifact: it is not committed and is generated in CI for production deploys, so
 # a freshly symlinked theme renders unstyled until built locally.
 if [ -f "$REPOS_DIR/sovereignty/package.json" ]; then
-    echo "Building sovereignty theme assets..."
-    (
-        cd "$REPOS_DIR/sovereignty"
-        composer install --no-interaction
-        npm install --no-audit --no-fund
-        npm run build
-    )
+    if command -v composer >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
+        echo "Building sovereignty theme assets..."
+        (
+            cd "$REPOS_DIR/sovereignty"
+            composer install --no-interaction
+            npm install --no-audit --no-fund
+            npm run build
+        )
+    else
+        echo "Warning: 'composer' or 'npm' not found. Skipping theme asset build."
+        echo "Install them and build manually: cd repos/sovereignty && npm install && npm run build"
+    fi
 fi
 
 # Add custom plugins here as needed:
