@@ -126,6 +126,24 @@ jobs:
               chmod 600 .env
             fi
 
+      - name: Purge Cachify cache
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: |
+            set -eu
+            cd ${{ secrets.DEPLOY_PATH }}
+            # rsync updates files but does not invalidate the page cache, so
+            # anonymous visitors keep getting pre-deploy pages until purged.
+            # Flush every site in the network; a single site failing must not
+            # fail the deploy. wp-cli.yml already pins --path to web/wp.
+            for url in $(wp site list --field=url); do
+              wp cachify flush --all-methods --url="$url" || true
+            done
+
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
