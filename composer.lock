@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8773a87aa7ddc5fbbd4decd12c0e61cc",
+    "content-hash": "6402e632a320f077e24f5ecaebf815c7",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -107,16 +107,16 @@
         },
         {
             "name": "apermo/sovereignty",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/sovereignty.git",
-                "reference": "60eeb47d76d7c85e775af9ce7dd1b0e89356d620"
+                "reference": "45cf356252c0429b8f7e66d862b4573385b90cc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/60eeb47d76d7c85e775af9ce7dd1b0e89356d620",
-                "reference": "60eeb47d76d7c85e775af9ce7dd1b0e89356d620",
+                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/45cf356252c0429b8f7e66d862b4573385b90cc3",
+                "reference": "45cf356252c0429b8f7e66d862b4573385b90cc3",
                 "shasum": ""
             },
             "require": {
@@ -135,6 +135,7 @@
                 "roave/security-advisories": "dev-latest",
                 "szepeviktor/phpstan-wordpress": "^2.0",
                 "wpackagist-plugin/indieweb-post-kinds": "*",
+                "wpackagist-plugin/multisite-language-switcher": "*",
                 "wpackagist-plugin/pwa": "*",
                 "yoast/phpunit-polyfills": "^3.0",
                 "yoast/wordpress-seo": "^27.2"
@@ -201,7 +202,7 @@
                 "issues": "https://github.com/apermo/sovereignty/issues",
                 "source": "https://github.com/apermo/sovereignty"
             },
-            "time": "2026-06-03T19:46:05+00:00"
+            "time": "2026-06-04T04:39:02+00:00"
         },
         {
             "name": "composer/installers",
