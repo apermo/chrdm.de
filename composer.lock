@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c14b1e7d0606d011da8bf3470932df3",
+    "content-hash": "b976c11c38f2adc6257b077ce5637570",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1374,15 +1374,15 @@
         },
         {
             "name": "wpackagist-plugin/activitypub",
-            "version": "8.3.0",
+            "version": "9.0.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/activitypub/",
-                "reference": "tags/8.3.0"
+                "reference": "tags/9.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/activitypub.8.3.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/activitypub.9.0.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
