@@ -1,3 +1,6 @@
+# Release version written by the deploy pipeline
+/VERSION
+
 # Dependency directories
 /vendor/
 

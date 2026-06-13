@@ -151,6 +151,18 @@ if ($sentry_dsn) {
 
     $sentry_enable_logs = env('WP_SENTRY_ENABLE_LOGS');
     Config::define('WP_SENTRY_ENABLE_LOGS', $sentry_enable_logs !== null ? (bool) $sentry_enable_logs : true);
+
+    // Release: written into a VERSION file by the deploy pipeline so events are
+    // attributed to the deployed git tag; overridable via env. Without it the
+    // plugin falls back to the active theme version.
+    $sentry_release = env('WP_SENTRY_VERSION');
+    $sentry_version_file = $root_dir . '/VERSION';
+    if (!$sentry_release && is_readable($sentry_version_file)) {
+        $sentry_release = trim((string) @file_get_contents($sentry_version_file));
+    }
+    if ($sentry_release) {
+        Config::define('WP_SENTRY_VERSION', $sentry_release);
+    }
 }
 
 /**

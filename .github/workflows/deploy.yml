@@ -14,6 +14,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -45,6 +47,22 @@ jobs:
         uses: apermo/sovereignty/.github/actions/build@v1.5.3
         with:
           working-directory: web/app/themes/sovereignty
+
+      - name: Determine release version
+        id: version
+        run: |
+          set -eu
+          # Tag deploys use the tag (e.g. v1.7.0); manual dispatches fall back
+          # to the short SHA. The VERSION file ships in the artifact so the
+          # running app tags Sentry events with the same string the
+          # sentry-release job reports.
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            version="$GITHUB_REF_NAME"
+          else
+            version="$(git rev-parse --short HEAD)"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "$version" > VERSION
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v7
@@ -143,6 +161,33 @@ jobs:
             for url in $(wp site list --field=url); do
               wp cachify flush --all-methods --url="$url" || true
             done
+
+  sentry-release:
+    name: Create Sentry Release
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    # Only tag deploys are real releases; workflow_dispatch on a branch is skipped.
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          # Full history so set_commits can associate this release's commits.
+          fetch-depth: 0
+
+      - name: Create Sentry release and production deploy
+        uses: getsentry/action-release@v3
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: christoph-daum
+          SENTRY_PROJECT: chrdmde
+          # EU data region — without this sentry-cli defaults to the US host.
+          SENTRY_URL: https://de.sentry.io
+        with:
+          environment: production
+          version: ${{ needs.build.outputs.version }}
+          set_commits: auto
 
   release:
     name: Create GitHub Release
