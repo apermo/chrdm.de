@@ -156,8 +156,9 @@ if ($sentry_dsn) {
     // attributed to the deployed git tag; overridable via env. Without it the
     // plugin falls back to the active theme version.
     $sentry_release = env('WP_SENTRY_VERSION');
-    if (!$sentry_release && file_exists($root_dir . '/VERSION')) {
-        $sentry_release = trim((string) file_get_contents($root_dir . '/VERSION'));
+    $sentry_version_file = $root_dir . '/VERSION';
+    if (!$sentry_release && is_readable($sentry_version_file)) {
+        $sentry_release = trim((string) @file_get_contents($sentry_version_file));
     }
     if ($sentry_release) {
         Config::define('WP_SENTRY_VERSION', $sentry_release);
