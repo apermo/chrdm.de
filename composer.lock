@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b976c11c38f2adc6257b077ce5637570",
+    "content-hash": "3e401e3ba6b08a0c8ae215fbcbd15979",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1821,6 +1821,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/wp-force-login/"
+        },
+        {
+            "name": "wpackagist-plugin/wp-sentry-integration",
+            "version": "8.11.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/wp-sentry-integration/",
+                "reference": "tags/8.11.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-sentry-integration.8.11.1.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/wp-sentry-integration/"
         },
         {
             "name": "wpackagist-plugin/wp-test-email",
