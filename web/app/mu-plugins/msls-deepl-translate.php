@@ -8,6 +8,7 @@ namespace Apermo\MslsDeepl;
 
 use lloc\Msls\MslsBlogCollection;
 use lloc\Msls\MslsRestApi;
+use Throwable;
 use WP_Post;
 
 add_action( 'rest_api_init', [ Translator::class, 'register' ], 99 );
@@ -54,6 +55,28 @@ class Translator {
 			return $post_data;
 		}
 
+		try {
+			$post_data = self::translate( $post_data, $source_blog_id, $target_blog_id );
+		} catch ( Throwable $exception ) {
+			// A DeepL or WP_Filesystem failure must not 500 the quick-create;
+			// fall back to creating the draft from the untranslated source.
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional: surface the failure in the host error log.
+			\error_log( 'MSLS DeepL quick-create translation failed: ' . $exception->getMessage() );
+		}
+
+		return wp_slash( $post_data );
+	}
+
+	/**
+	 * Runs the DeepL translation for the post title and content.
+	 *
+	 * @param array<string, mixed> $post_data      The post data for wp_insert_post.
+	 * @param int                  $source_blog_id The source blog ID.
+	 * @param int                  $target_blog_id The target blog ID.
+	 *
+	 * @return array<string, mixed> Post data with translated title and content.
+	 */
+	private static function translate( array $post_data, int $source_blog_id, int $target_blog_id ): array {
 		$source_lang = MslsBlogCollection::get_blog_language( $source_blog_id );
 		$target_lang = MslsBlogCollection::get_blog_language( $target_blog_id );
 
@@ -83,7 +106,7 @@ class Translator {
 			$post_data['post_content'] = $translated_content;
 		}
 
-		return wp_slash( $post_data );
+		return $post_data;
 	}
 
 	/**
