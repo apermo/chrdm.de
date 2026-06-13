@@ -129,6 +129,31 @@ Config::define('SAVEQUERIES', env('SAVEQUERIES') ?: false);
 ini_set('display_errors', '0');
 
 /**
+ * Sentry error monitoring (server-side only).
+ *
+ * PHP-only by design: no browser DSN is set, so no third-party JavaScript loads
+ * on the frontend and no client data leaves the browser, keeping the site
+ * consent-free. The DSN lives only in production's .env, so staging and local
+ * development stay silent without further configuration. PII is disabled, so
+ * visitor IPs and identities are never sent; administrators are enriched
+ * separately by the sentry-admin-context mu-plugin.
+ */
+$sentry_dsn = env('WP_SENTRY_PHP_DSN');
+if ($sentry_dsn) {
+    Config::define('WP_SENTRY_PHP_DSN', $sentry_dsn);
+    Config::define('WP_SENTRY_ENV', env('WP_SENTRY_ENV') ?: $env_type);
+    Config::define('WP_SENTRY_SEND_DEFAULT_PII', false);
+
+    // Tunable from .env without a redeploy; a null check (not ?:) keeps an
+    // explicit 0.0 sample rate or a false log toggle from falling back.
+    $sentry_traces_rate = env('WP_SENTRY_TRACES_SAMPLE_RATE');
+    Config::define('WP_SENTRY_TRACES_SAMPLE_RATE', $sentry_traces_rate !== null ? (float) $sentry_traces_rate : 1.0);
+
+    $sentry_enable_logs = env('WP_SENTRY_ENABLE_LOGS');
+    Config::define('WP_SENTRY_ENABLE_LOGS', $sentry_enable_logs !== null ? (bool) $sentry_enable_logs : true);
+}
+
+/**
  * Allow WordPress CLI to work
  */
 if (defined('WP_CLI') && WP_CLI) {

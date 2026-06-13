@@ -50,7 +50,8 @@
     "apermo/apermo-notify": "^0.1.1",
     "inpsyde/wp-translation-downloader": "^2.6",
     "wpackagist-plugin/statify": "^1.8",
-    "wpackagist-plugin/performant-translations": "^1.2"
+    "wpackagist-plugin/performant-translations": "^1.2",
+    "wpackagist-plugin/wp-sentry-integration": "^8.11"
   },
   "require-dev": {
     "apermo/apermo-coding-standards": "^3.0",
