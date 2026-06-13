@@ -143,8 +143,14 @@ if ($sentry_dsn) {
     Config::define('WP_SENTRY_PHP_DSN', $sentry_dsn);
     Config::define('WP_SENTRY_ENV', env('WP_SENTRY_ENV') ?: $env_type);
     Config::define('WP_SENTRY_SEND_DEFAULT_PII', false);
-    Config::define('WP_SENTRY_TRACES_SAMPLE_RATE', 1.0);
-    Config::define('WP_SENTRY_ENABLE_LOGS', true);
+
+    // Tunable from .env without a redeploy; a null check (not ?:) keeps an
+    // explicit 0.0 sample rate or a false log toggle from falling back.
+    $sentry_traces_rate = env('WP_SENTRY_TRACES_SAMPLE_RATE');
+    Config::define('WP_SENTRY_TRACES_SAMPLE_RATE', $sentry_traces_rate !== null ? (float) $sentry_traces_rate : 1.0);
+
+    $sentry_enable_logs = env('WP_SENTRY_ENABLE_LOGS');
+    Config::define('WP_SENTRY_ENABLE_LOGS', $sentry_enable_logs !== null ? (bool) $sentry_enable_logs : true);
 }
 
 /**
