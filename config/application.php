@@ -107,6 +107,17 @@ Config::define('COOKIE_DOMAIN', env('COOKIE_DOMAIN') ?: '');
 Config::define('SUNRISE', 'on');
 
 /**
+ * Force direct filesystem access.
+ *
+ * Deployed files are owned by the account user but the content directories
+ * are read-only, so WordPress's filesystem-method probe fails its write test
+ * and falls back to the FTP transport. With no FTP credentials that transport
+ * fatals on a null connection whenever code merely reads a file via
+ * WP_Filesystem (e.g. wpdeepl reading languages.csv during MSLS quick-create).
+ */
+Config::define('FS_METHOD', env('FS_METHOD') ?: 'direct');
+
+/**
  * Debugging settings
  */
 Config::define('WP_DEBUG', env('WP_DEBUG') ?: false);
