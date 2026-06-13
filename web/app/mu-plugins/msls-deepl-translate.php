@@ -1,5 +1,7 @@
 <?php
 /**
+ * Translates MSLS quick-create drafts via DeepL.
+ *
  * Plugin Name: MSLS DeepL Translate
  * Description: Translates title and content via DeepL when using MSLS quick-create.
  */
@@ -180,40 +182,19 @@ class Translator {
 			return;
 		}
 
-		if ( ! \defined( 'WPDEEPL_DEBUG' ) ) {
-			\define( 'WPDEEPL_DEBUG', false );
-		}
-		if ( ! \defined( 'WPDEEPL_NAME' ) ) {
-			\define( 'WPDEEPL_NAME', 'wpdeepl/wpdeepl.php' );
-		}
-		if ( ! \defined( 'WPDEEPL_SLUG' ) ) {
-			\define( 'WPDEEPL_SLUG', 'wpdeepl' );
-		}
-		if ( ! \defined( 'WPDEEPL_PATH' ) ) {
-			\define( 'WPDEEPL_PATH', \realpath( $deepl_path ) );
-		}
-		if ( ! \defined( 'WPDEEPL_DIR' ) ) {
-			\define( 'WPDEEPL_DIR', \realpath( $deepl_path ) );
-		}
-		if ( ! \defined( 'WPDEEPL_URL' ) ) {
-			\define( 'WPDEEPL_URL', plugins_url( '', $deepl_path . 'wpdeepl.php' ) );
-		}
-
-		$upload_dir = wp_upload_dir();
-		if ( ! \defined( 'WPDEEPL_FILES' ) ) {
-			\define( 'WPDEEPL_FILES', trailingslashit( $upload_dir['basedir'] ) . 'wpdeepl' );
-		}
-		if ( ! \defined( 'WPDEEPL_FILES_URL' ) ) {
-			\define( 'WPDEEPL_FILES_URL', trailingslashit( $upload_dir['baseurl'] ) . 'wpdeepl' );
-		}
-
+		$upload_dir          = wp_upload_dir();
 		$wpdeepl_plugin_data = get_file_data( $deepl_path . 'wpdeepl.php', [ 'Version' => 'Version' ], false );
-		if ( ! \defined( 'WPDEEPL_VERSION' ) ) {
-			\define( 'WPDEEPL_VERSION', $wpdeepl_plugin_data['Version'] );
-		}
-		if ( ! \defined( 'WPDEEPL_FLAVOR' ) ) {
-			\define( 'WPDEEPL_FLAVOR', 'free' );
-		}
+
+		self::define_if_missing( 'WPDEEPL_DEBUG', false );
+		self::define_if_missing( 'WPDEEPL_NAME', 'wpdeepl/wpdeepl.php' );
+		self::define_if_missing( 'WPDEEPL_SLUG', 'wpdeepl' );
+		self::define_if_missing( 'WPDEEPL_PATH', \realpath( $deepl_path ) );
+		self::define_if_missing( 'WPDEEPL_DIR', \realpath( $deepl_path ) );
+		self::define_if_missing( 'WPDEEPL_URL', plugins_url( '', $deepl_path . 'wpdeepl.php' ) );
+		self::define_if_missing( 'WPDEEPL_FILES', trailingslashit( $upload_dir['basedir'] ) . 'wpdeepl' );
+		self::define_if_missing( 'WPDEEPL_FILES_URL', trailingslashit( $upload_dir['baseurl'] ) . 'wpdeepl' );
+		self::define_if_missing( 'WPDEEPL_VERSION', $wpdeepl_plugin_data['Version'] );
+		self::define_if_missing( 'WPDEEPL_FLAVOR', 'free' );
 
 		$files = [
 			'deepl-configuration.class.php',
@@ -229,6 +210,18 @@ class Translator {
 			if ( \file_exists( $full_path ) ) {
 				require_once $full_path;
 			}
+		}
+	}
+
+	/**
+	 * Defines a constant unless it already exists.
+	 *
+	 * @param string $name  Constant name.
+	 * @param mixed  $value Constant value.
+	 */
+	private static function define_if_missing( string $name, mixed $value ): void {
+		if ( ! \defined( $name ) ) {
+			\define( $name, $value );
 		}
 	}
 }
