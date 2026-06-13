@@ -34,6 +34,24 @@ if [ ! -L "$THEMES_DIR/sovereignty" ]; then
     ln -s ../../../repos/sovereignty "$THEMES_DIR/sovereignty"
 fi
 
+# Build theme assets. The compiled CSS (assets/css/*.css, style.css) is a build
+# artifact: it is not committed and is generated in CI for production deploys, so
+# a freshly symlinked theme renders unstyled until built locally.
+if [ -f "$REPOS_DIR/sovereignty/package.json" ]; then
+    if command -v composer >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
+        echo "Building sovereignty theme assets..."
+        (
+            cd "$REPOS_DIR/sovereignty"
+            composer install --no-interaction
+            npm install --no-audit --no-fund
+            npm run build
+        )
+    else
+        echo "Warning: 'composer' or 'npm' not found. Skipping theme asset build."
+        echo "Install them and build manually: cd repos/sovereignty && npm install && npm run build"
+    fi
+fi
+
 # Add custom plugins here as needed:
 # Example:
 # if [ ! -d "$REPOS_DIR/my-plugin" ]; then
