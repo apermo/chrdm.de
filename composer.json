@@ -19,7 +19,7 @@
     "roots/wordpress": "7.*",
     "roots/wp-config": "^1.0",
     "apermo/sovereignty": "^1.5.3",
-    "wpackagist-plugin/activitypub": "^8.0",
+    "wpackagist-plugin/activitypub": "^9.0",
     "wpackagist-plugin/antispam-bee": "^2.11",
     "wpackagist-plugin/basepress": "^2.17",
     "wpackagist-plugin/cachify": "^2.4",
