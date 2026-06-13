@@ -21,7 +21,9 @@ add_filter( 'wp_sentry_user_context', __NAMESPACE__ . '\\enrich_admin_context' )
  * @return array Possibly enriched user context.
  */
 function enrich_admin_context( array $user ): array {
-	if ( ! current_user_can( 'manage_options' ) ) {
+	// mu-plugins load before pluggable functions, so an error captured very
+	// early in bootstrap could invoke this filter before current_user_can exists.
+	if ( ! \function_exists( 'current_user_can' ) || ! current_user_can( 'manage_options' ) ) {
 		return $user;
 	}
 
