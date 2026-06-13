@@ -1,5 +1,7 @@
 <?php
 /**
+ * Translates MSLS quick-create drafts via DeepL.
+ *
  * Plugin Name: MSLS DeepL Translate
  * Description: Translates title and content via DeepL when using MSLS quick-create.
  */
@@ -8,6 +10,7 @@ namespace Apermo\MslsDeepl;
 
 use lloc\Msls\MslsBlogCollection;
 use lloc\Msls\MslsRestApi;
+use Throwable;
 use WP_Post;
 
 add_action( 'rest_api_init', [ Translator::class, 'register' ], 99 );
@@ -46,24 +49,50 @@ class Translator {
 	 * @return array
 	 */
 	public static function translate_post_data( array $post_data, WP_Post $source_post, int $source_blog_id, int $target_blog_id ): array {
-		if ( ! function_exists( 'deepl_translate' ) ) {
+		if ( ! \function_exists( 'deepl_translate' ) ) {
 			self::ensure_wpdeepl_loaded();
 		}
 
-		if ( ! function_exists( 'deepl_translate' ) ) {
-			return $post_data;
+		if ( \function_exists( 'deepl_translate' ) ) {
+			try {
+				$post_data = self::translate( $post_data, $source_blog_id, $target_blog_id );
+			} catch ( Throwable $exception ) {
+				// A DeepL or WP_Filesystem failure must not 500 the quick-create;
+				// fall back to creating the draft from the untranslated source.
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional: surface the failure in the host error log.
+				\error_log( 'MSLS DeepL quick-create translation failed: ' . $exception->getMessage() );
+			}
 		}
 
+		// wp_insert_post() expects slashed data; the source arrives unslashed,
+		// so slash the result on every path, translated or not.
+		return wp_slash( $post_data );
+	}
+
+	/**
+	 * Runs the DeepL translation for the post title and content.
+	 *
+	 * @param array<string, mixed> $post_data      The post data for wp_insert_post.
+	 * @param int                  $source_blog_id The source blog ID.
+	 * @param int                  $target_blog_id The target blog ID.
+	 *
+	 * @return array<string, mixed> Post data with translated title and content.
+	 */
+	private static function translate( array $post_data, int $source_blog_id, int $target_blog_id ): array {
 		$source_lang = MslsBlogCollection::get_blog_language( $source_blog_id );
 		$target_lang = MslsBlogCollection::get_blog_language( $target_blog_id );
 
-		$source_code = strtoupper( substr( $source_lang, 0, 2 ) );
-		$target_code = strtoupper( substr( $target_lang, 0, 2 ) );
+		$source_code = \strtoupper( \substr( $source_lang, 0, 2 ) );
+		$target_code = \strtoupper( \substr( $target_lang, 0, 2 ) );
 
 		// Translate title (plain text).
 		$title_response = deepl_translate( $source_code, $target_code, [ 'post_title' => $post_data['post_title'] ] );
 
-		if ( is_array( $title_response ) && ! empty( $title_response['success'] ) && isset( $title_response['translations']['post_title'] ) ) {
+		if (
+			\is_array( $title_response )
+			&& ! empty( $title_response['success'] )
+			&& isset( $title_response['translations']['post_title'] )
+		) {
 			$post_data['post_title'] = $title_response['translations']['post_title'];
 		}
 
@@ -72,18 +101,22 @@ class Translator {
 		$content   = self::extract_preserved_blocks( $post_data['post_content'], $preserved );
 
 		// Wrap remaining block comments so DeepL's HTML parser leaves them intact.
-		$content = preg_replace( '/<!--(.+?)-->/', '<x><!--$1--></x>', $content );
+		$content = \preg_replace( '/<!--(.+?)-->/', '<x><!--$1--></x>', $content );
 
 		$content_response = deepl_translate( $source_code, $target_code, [ 'post_content' => $content ] );
 
-		if ( is_array( $content_response ) && ! empty( $content_response['success'] ) && isset( $content_response['translations']['post_content'] ) ) {
+		if (
+			\is_array( $content_response )
+			&& ! empty( $content_response['success'] )
+			&& isset( $content_response['translations']['post_content'] )
+		) {
 			$translated_content        = $content_response['translations']['post_content'];
-			$translated_content        = preg_replace( '#<x>\s*(<!--.+?-->)\s*</x>#s', '$1', $translated_content );
+			$translated_content        = \preg_replace( '#<x>\s*(<!--.+?-->)\s*</x>#s', '$1', $translated_content );
 			$translated_content        = self::restore_preserved_blocks( $translated_content, $preserved );
 			$post_data['post_content'] = $translated_content;
 		}
 
-		return wp_slash( $post_data );
+		return $post_data;
 	}
 
 	/**
@@ -96,17 +129,17 @@ class Translator {
 	 */
 	private static function extract_preserved_blocks( string $content, array &$preserved ): string {
 		foreach ( self::PRESERVED_BLOCK_TYPES as $block_name ) {
-			$quoted  = preg_quote( $block_name, '#' );
+			$quoted  = \preg_quote( $block_name, '#' );
 			$pattern = '#<!-- ' . $quoted . '\b.*?<!-- /' . $quoted . ' -->#s';
 
-			$content = preg_replace_callback(
+			$content = \preg_replace_callback(
 				$pattern,
-				function ( $matches ) use ( &$preserved ) {
-					$token       = '<!--MSLS_PRESERVE_' . count( $preserved ) . '-->';
+				static function ( $matches ) use ( &$preserved ) {
+					$token       = '<!--MSLS_PRESERVE_' . \count( $preserved ) . '-->';
 					$preserved[] = $matches[0];
 					return $token;
 				},
-				$content
+				$content,
 			);
 		}
 		return $content;
@@ -125,13 +158,13 @@ class Translator {
 			return $content;
 		}
 
-		return preg_replace_callback(
+		return \preg_replace_callback(
 			'/<!--MSLS_PRESERVE_(\d+)-->/',
-			function ( $matches ) use ( $preserved ) {
+			static function ( $matches ) use ( $preserved ) {
 				$index = (int) $matches[1];
 				return $preserved[ $index ] ?? $matches[0];
 			},
-			$content
+			$content,
 		);
 	}
 
@@ -139,50 +172,29 @@ class Translator {
 	 * Loads the DeepL plugin files needed for translation in REST API context.
 	 */
 	private static function ensure_wpdeepl_loaded(): void {
-		if ( function_exists( 'deepl_translate' ) ) {
+		if ( \function_exists( 'deepl_translate' ) ) {
 			return;
 		}
 
-		$deepl_path = WP_PLUGIN_DIR . '/wpdeepl/';
+		$deepl_path = \WP_PLUGIN_DIR . '/wpdeepl/';
 
-		if ( ! file_exists( $deepl_path . 'wpdeepl.php' ) ) {
+		if ( ! \file_exists( $deepl_path . 'wpdeepl.php' ) ) {
 			return;
 		}
 
-		if ( ! defined( 'WPDEEPL_DEBUG' ) ) {
-			define( 'WPDEEPL_DEBUG', false );
-		}
-		if ( ! defined( 'WPDEEPL_NAME' ) ) {
-			define( 'WPDEEPL_NAME', 'wpdeepl/wpdeepl.php' );
-		}
-		if ( ! defined( 'WPDEEPL_SLUG' ) ) {
-			define( 'WPDEEPL_SLUG', 'wpdeepl' );
-		}
-		if ( ! defined( 'WPDEEPL_PATH' ) ) {
-			define( 'WPDEEPL_PATH', realpath( $deepl_path ) );
-		}
-		if ( ! defined( 'WPDEEPL_DIR' ) ) {
-			define( 'WPDEEPL_DIR', realpath( $deepl_path ) );
-		}
-		if ( ! defined( 'WPDEEPL_URL' ) ) {
-			define( 'WPDEEPL_URL', plugins_url( '', $deepl_path . 'wpdeepl.php' ) );
-		}
-
-		$upload_dir = wp_upload_dir();
-		if ( ! defined( 'WPDEEPL_FILES' ) ) {
-			define( 'WPDEEPL_FILES', trailingslashit( $upload_dir['basedir'] ) . 'wpdeepl' );
-		}
-		if ( ! defined( 'WPDEEPL_FILES_URL' ) ) {
-			define( 'WPDEEPL_FILES_URL', trailingslashit( $upload_dir['baseurl'] ) . 'wpdeepl' );
-		}
-
+		$upload_dir          = wp_upload_dir();
 		$wpdeepl_plugin_data = get_file_data( $deepl_path . 'wpdeepl.php', [ 'Version' => 'Version' ], false );
-		if ( ! defined( 'WPDEEPL_VERSION' ) ) {
-			define( 'WPDEEPL_VERSION', $wpdeepl_plugin_data['Version'] );
-		}
-		if ( ! defined( 'WPDEEPL_FLAVOR' ) ) {
-			define( 'WPDEEPL_FLAVOR', 'free' );
-		}
+
+		self::define_if_missing( 'WPDEEPL_DEBUG', false );
+		self::define_if_missing( 'WPDEEPL_NAME', 'wpdeepl/wpdeepl.php' );
+		self::define_if_missing( 'WPDEEPL_SLUG', 'wpdeepl' );
+		self::define_if_missing( 'WPDEEPL_PATH', \realpath( $deepl_path ) );
+		self::define_if_missing( 'WPDEEPL_DIR', \realpath( $deepl_path ) );
+		self::define_if_missing( 'WPDEEPL_URL', plugins_url( '', $deepl_path . 'wpdeepl.php' ) );
+		self::define_if_missing( 'WPDEEPL_FILES', trailingslashit( $upload_dir['basedir'] ) . 'wpdeepl' );
+		self::define_if_missing( 'WPDEEPL_FILES_URL', trailingslashit( $upload_dir['baseurl'] ) . 'wpdeepl' );
+		self::define_if_missing( 'WPDEEPL_VERSION', $wpdeepl_plugin_data['Version'] );
+		self::define_if_missing( 'WPDEEPL_FLAVOR', 'free' );
 
 		$files = [
 			'deepl-configuration.class.php',
@@ -194,10 +206,22 @@ class Translator {
 		];
 
 		foreach ( $files as $file ) {
-			$full_path = trailingslashit( WPDEEPL_PATH ) . $file;
-			if ( file_exists( $full_path ) ) {
+			$full_path = trailingslashit( \WPDEEPL_PATH ) . $file;
+			if ( \file_exists( $full_path ) ) {
 				require_once $full_path;
 			}
+		}
+	}
+
+	/**
+	 * Defines a constant unless it already exists.
+	 *
+	 * @param string $name  Constant name.
+	 * @param mixed  $value Constant value.
+	 */
+	private static function define_if_missing( string $name, mixed $value ): void {
+		if ( ! \defined( $name ) ) {
+			\define( $name, $value );
 		}
 	}
 }
