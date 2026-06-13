@@ -53,19 +53,19 @@ class Translator {
 			self::ensure_wpdeepl_loaded();
 		}
 
-		if ( ! \function_exists( 'deepl_translate' ) ) {
-			return $post_data;
+		if ( \function_exists( 'deepl_translate' ) ) {
+			try {
+				$post_data = self::translate( $post_data, $source_blog_id, $target_blog_id );
+			} catch ( Throwable $exception ) {
+				// A DeepL or WP_Filesystem failure must not 500 the quick-create;
+				// fall back to creating the draft from the untranslated source.
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional: surface the failure in the host error log.
+				\error_log( 'MSLS DeepL quick-create translation failed: ' . $exception->getMessage() );
+			}
 		}
 
-		try {
-			$post_data = self::translate( $post_data, $source_blog_id, $target_blog_id );
-		} catch ( Throwable $exception ) {
-			// A DeepL or WP_Filesystem failure must not 500 the quick-create;
-			// fall back to creating the draft from the untranslated source.
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional: surface the failure in the host error log.
-			\error_log( 'MSLS DeepL quick-create translation failed: ' . $exception->getMessage() );
-		}
-
+		// wp_insert_post() expects slashed data; the source arrives unslashed,
+		// so slash the result on every path, translated or not.
 		return wp_slash( $post_data );
 	}
 
