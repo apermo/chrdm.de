@@ -140,6 +140,13 @@ jobs:
             # dir here the same way uploads/ is handled — see issue #33.
             find . -path ./web/app/uploads -prune -o -name .env -prune -o -type d -exec chmod 555 {} +
             find . -path ./web/app/uploads -prune -o -name .env -prune -o -type f -exec chmod 444 {} +
+            # AutoSSL/Let's Encrypt renews certs via HTTP DCV by creating
+            # web/.well-known/acme-challenge and dropping a token there. The
+            # read-only hardening above locks .well-known to 555, so the write
+            # fails and every domain's cert silently stops renewing. Re-open
+            # just this one directory to 755 (owner-writable); security.txt
+            # inside it stays 444 from the find above.
+            chmod 755 web/.well-known
             if [ -f ".env" ]; then
               chmod 600 .env
             fi
