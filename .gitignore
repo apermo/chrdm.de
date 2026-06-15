@@ -13,6 +13,7 @@
 # Themes - ignore all, whitelist custom
 /web/app/themes/*
 !/web/app/themes/.gitkeep
+!/web/app/themes/glotpress-blank/
 # !/web/app/themes/my-custom-theme/
 
 # Plugins - ignore all, whitelist custom

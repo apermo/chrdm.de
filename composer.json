@@ -51,7 +51,9 @@
     "inpsyde/wp-translation-downloader": "^2.6",
     "wpackagist-plugin/statify": "^1.8",
     "wpackagist-plugin/performant-translations": "^1.2",
-    "wpackagist-plugin/wp-sentry-integration": "^8.11"
+    "wpackagist-plugin/wp-sentry-integration": "^8.11",
+    "wpackagist-plugin/glotpress": "^4.0",
+    "wearerequired/traduttore": "^3.2"
   },
   "require-dev": {
     "apermo/apermo-coding-standards": "^3.0",

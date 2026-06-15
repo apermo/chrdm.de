@@ -1,0 +1,13 @@
+/*
+Theme Name: GlotPress Blank
+Theme URI: https://github.com/apermo/chrdm.de
+Author: Christoph Daum
+Author URI: https://christoph-daum.de
+Description: Minimal blank theme for the translate.chrdm.de subsite. GlotPress renders its own UI and Traduttore exposes a REST API, both independent of the active theme; this theme exists only to satisfy WordPress's active-theme requirement and intentionally renders no front end.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.3
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: glotpress-blank
+*/
