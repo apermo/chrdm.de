@@ -95,7 +95,12 @@
     "wordpress-install-dir": "web/wp",
     "wp-translation-downloader": {
       "languages": ["de_DE"],
-      "directory": "web/app/languages"
+      "directory": "web/app/languages",
+      "api": {
+        "names": {
+          "apermo/sovereignty": "https://translate.chrdm.de/glotpress/api/translations/sovereignty"
+        }
+      }
     }
   },
   "scripts": {
