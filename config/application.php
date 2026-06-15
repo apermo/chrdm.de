@@ -166,6 +166,21 @@ if ($sentry_dsn) {
 }
 
 /**
+ * Traduttore translation server (translate.chrdm.de subsite only).
+ *
+ * The sync secret authenticates GitHub webhook pushes and lives only in
+ * production's .env, so staging and local development stay inert and no empty
+ * constant leaks onto sites where the plugin is inactive. Traduttore shells out
+ * to WP-CLI for its clone/make-pot/build pipeline, so it needs the binary path
+ * on this host; that constant is only defined alongside the secret.
+ */
+$traduttore_secret = env('TRADUTTORE_GITHUB_SYNC_SECRET');
+if ($traduttore_secret) {
+    Config::define('TRADUTTORE_GITHUB_SYNC_SECRET', $traduttore_secret);
+    Config::define('TRADUTTORE_WP_BIN', env('TRADUTTORE_WP_BIN') ?: '/usr/local/bin/wp');
+}
+
+/**
  * Allow WordPress CLI to work
  */
 if (defined('WP_CLI') && WP_CLI) {
