@@ -30,6 +30,7 @@
 !/web/app/mu-plugins/robots-content-signal.php
 !/web/app/mu-plugins/hreflang-x-default.php
 !/web/app/mu-plugins/sentry-admin-context.php
+!/web/app/mu-plugins/traduttore-content-dir.php
 
 # Uploads
 /web/app/uploads/*
