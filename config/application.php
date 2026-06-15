@@ -181,9 +181,16 @@ if ($traduttore_secret) {
 }
 
 /**
- * Allow WordPress CLI to work
+ * Allow WordPress CLI to work.
+ *
+ * WP-CLI has no HTTP request, so multisite bootstrap fatals unless HTTP_HOST is
+ * set. Default it to the network's main domain — but only when WP-CLI has not
+ * already set it from --url. Overwriting it unconditionally clobbers --url and
+ * forces every command onto the main site, which makes subsite targeting
+ * impossible (e.g. draining the translate.chrdm.de Traduttore queue or running
+ * `wp traduttore` against that subsite).
  */
-if (defined('WP_CLI') && WP_CLI) {
+if (defined('WP_CLI') && WP_CLI && empty($_SERVER['HTTP_HOST'])) {
     $_SERVER['HTTP_HOST'] = Config::get('DOMAIN_CURRENT_SITE');
 }
 
