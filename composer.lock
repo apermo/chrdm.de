@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9138db1d24e8830bb6a509e96aa1fbf4",
+    "content-hash": "603d9270479a995e4d876a75dc88e79a",
     "packages": [
         {
             "name": "apermo/apermo-notify",
