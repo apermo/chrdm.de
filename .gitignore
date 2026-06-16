@@ -31,6 +31,7 @@
 !/web/app/mu-plugins/hreflang-x-default.php
 !/web/app/mu-plugins/sentry-admin-context.php
 !/web/app/mu-plugins/traduttore-content-dir.php
+!/web/app/mu-plugins/apermo-translation-format.php
 
 # Uploads
 /web/app/uploads/*
