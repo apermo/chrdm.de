@@ -119,10 +119,11 @@ exposes a TranslationsPress API; this site consumes them at deploy time via
 
 The only translation config in this repo is `composer.json` →
 `extra.wp-translation-downloader.api.names`, which maps a package to
-`https://translate.chrdm.de/glotpress/api/translations/<slug>` (note the `/glotpress/` base). Today only
-the `sovereignty` theme is wired there; the plugins are onboarded separately and may instead self-consume
-via the Traduttore Registry (see docs). Third-party plugins and core still translate from wp.org.
-Locales: **`de_DE` only**.
+`https://translate.chrdm.de/glotpress/api/translations/<slug>` (note the `/glotpress/` base). All three of
+our packages are wired there — the `sovereignty` theme and the `apermo-stash` / `apermo-notify` plugins —
+so chrdm.de consumes their packs at build time. Third-party plugins and core still translate from wp.org.
+Locales: **`de_DE` only**. The runtime Traduttore Registry is a deferred option, only relevant if the
+plugins ever run on installs outside chrdm.de (#102/#103) — not the planned path; see docs.
 
 Approved translations go live **only on a deploy** — rebuild the pack and run
 `gh workflow run deploy.yml`. Full architecture, server config, onboarding steps, WP-CLI commands, and

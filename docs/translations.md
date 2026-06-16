@@ -31,7 +31,7 @@ chrdm.de deploy: composer install
 ## Consumer wiring (the only translation code in this repo)
 
 `composer.json` → `extra.wp-translation-downloader.api.names` maps a package to the Traduttore endpoint;
-everything else still comes from wp.org. **Today only the `sovereignty` theme is wired here:**
+everything else still comes from wp.org. **All three of our packages are wired here:**
 
 ```json
 "wp-translation-downloader": {
@@ -39,24 +39,28 @@ everything else still comes from wp.org. **Today only the `sovereignty` theme is
   "directory": "web/app/languages",
   "api": {
     "names": {
-      "apermo/sovereignty": "https://translate.chrdm.de/glotpress/api/translations/sovereignty"
+      "apermo/sovereignty": "https://translate.chrdm.de/glotpress/api/translations/sovereignty",
+      "apermo/apermo-stash": "https://translate.chrdm.de/glotpress/api/translations/apermo-stash",
+      "apermo/apermo-notify": "https://translate.chrdm.de/glotpress/api/translations/apermo-notify"
     }
   }
 }
 ```
 
-The plugins (`apermo-stash`, `apermo-notify`) are **not** wired here yet — they're onboarded separately
-(build-time via this same `api.names` map, #90) and will more likely self-consume on any install via the
-runtime Traduttore Registry (next section; #102, #103). Add an entry per package as each is onboarded.
+This is chrdm.de-only, build-time consumption (#90). The runtime Traduttore Registry (next section) is a
+deferred future option, only relevant if the plugins ever run on installs outside chrdm.de (#102, #103) —
+not the planned path. Add an entry per package as each is onboarded.
 
 The endpoint includes the **`/glotpress/`** base — the bare `/api/translations/…` path is a 404. After
 changing `api.names`, run `composer install` locally and commit `composer.lock` (the `extra` block only
 bumps the lock's content-hash; no packages change). `wp-translation-downloader.lock` is gitignored —
 the server regenerates it on deploy.
 
-## Runtime consumption — Traduttore Registry (installs outside chrdm.de)
+## Runtime consumption — Traduttore Registry (deferred; installs outside chrdm.de)
 
-The `api.names` wiring above is **build-time and project-scoped**: it only delivers translations to a
+This is a **deferred future option** (#102, #103) — only pursued if a plugin ever needs to run off
+chrdm.de; the planned path is the `api.names` wiring above. The `api.names` wiring is **build-time and
+project-scoped**: it only delivers translations to a
 project whose `composer.json` opts in (i.e. chrdm.de). A plugin/theme installed on **another site** —
 manually, as a ZIP, or via a different Composer project — gets nothing from it.
 
