@@ -98,7 +98,9 @@
       "directory": "web/app/languages",
       "api": {
         "names": {
-          "apermo/sovereignty": "https://translate.chrdm.de/glotpress/api/translations/sovereignty"
+          "apermo/sovereignty": "https://translate.chrdm.de/glotpress/api/translations/sovereignty",
+          "apermo/apermo-stash": "https://translate.chrdm.de/glotpress/api/translations/apermo-stash",
+          "apermo/apermo-notify": "https://translate.chrdm.de/glotpress/api/translations/apermo-notify"
         }
       }
     }
