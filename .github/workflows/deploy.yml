@@ -129,6 +129,19 @@ jobs:
             if [ -d "web/app/cache" ]; then
               rm -rf web/app/cache/*
             fi
+            # performant-translations loads a compiled .l10n.php in preference
+            # to the .mo. A stale .l10n.php from a previous build survives the
+            # deploy and shadows the freshly downloaded translations, so the
+            # site keeps serving outdated strings. Rebuild the caches from the
+            # deployed .po files now, while the tree is still writable; they get
+            # locked read-only below, so perf-trans serves them without ever
+            # regenerating at runtime on the read-only tree.
+            if command -v wp >/dev/null 2>&1 && [ -d "web/app/languages" ]; then
+              find web/app/languages -name '*.l10n.php' -delete
+              for d in web/app/languages web/app/languages/themes web/app/languages/plugins; do
+                [ -d "$d" ] && wp i18n make-php "$d" || true
+              done
+            fi
             # Make the deployed code tree read-only. Nothing but uploads/ needs
             # runtime writes (DISALLOW_FILE_EDIT/MODS are set), so this blocks
             # the common case of a compromised plugin dropping a webshell.
