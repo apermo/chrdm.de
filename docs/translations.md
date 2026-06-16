@@ -52,6 +52,40 @@ changing `api.names`, run `composer install` locally and commit `composer.lock` 
 bumps the lock's content-hash; no packages change). `wp-translation-downloader.lock` is gitignored —
 the server regenerates it on deploy.
 
+## Runtime consumption — Traduttore Registry (installs outside chrdm.de)
+
+The `api.names` wiring above is **build-time and project-scoped**: it only delivers translations to a
+project whose `composer.json` opts in (i.e. chrdm.de). A plugin/theme installed on **another site** —
+manually, as a ZIP, or via a different Composer project — gets nothing from it.
+
+For a package to fetch its **own** translations on **any** install, embed
+[`wearerequired/traduttore-registry`](https://github.com/wearerequired/traduttore-registry) and register
+its source at runtime. WordPress then treats the pack like a wp.org-hosted one: it appears under
+Dashboard → Updates, downloads to `wp-content/languages/plugins/` (or `…/themes/`), and auto-updates
+(~twice daily). The packs are the same Traduttore packs — only the *registration* differs.
+
+In the plugin/theme code, on `init` (guarded so it degrades gracefully if the lib is absent):
+
+```php
+if ( function_exists( 'Required\\Traduttore_Registry\\add_project' ) ) {
+    \Required\Traduttore_Registry\add_project(
+        'plugin',                                                       // or 'theme'
+        'apermo-stash',                                                 // must equal the slug
+        'https://translate.chrdm.de/glotpress/api/translations/apermo-stash/'
+    );
+}
+```
+
+- **Bundle the library** (`composer require wearerequired/traduttore-registry`, then ship `vendor/`) for
+  ZIP / non-Composer installs; a plain `require` of the project autoloader is enough where the host site
+  is Composer-managed. Load the autoloader before the `add_project()` call.
+- This is **runtime code in the package** — a deliberate trade-off vs. the build-time `api.names` model.
+  The two can coexist (chrdm.de pulls at build time *and* the package self-registers everywhere else).
+
+Tracked as #102 (apermo-stash), #103 (apermo-notify), #104 (template-wordpress scaffolding). Decide per
+package by distribution: chrdm.de-only → `api.names` only; arbitrary installs → embed the registry;
+wp.org-published → use translate.wordpress.org instead of self-hosting.
+
 ## Server configuration (on the translate subsite)
 
 Set in production `.env` (read by `config/application.php`, which defines the constants guarded so they
