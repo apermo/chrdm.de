@@ -109,6 +109,23 @@ adoptions (security headers, `robots.txt` Content-Signal, hreflang `x-default`, 
 `/.well-known/change-password` redirect); only `/.well-known/security.txt` is a static file under
 `web/.well-known/`.
 
+## Translations (GlotPress + Traduttore)
+
+Custom code (the `sovereignty` theme, `apermo-stash`, `apermo-notify`) is translated on a self-hosted
+**GlotPress + Traduttore** platform running on the `translate.chrdm.de` multisite subsite. Pushing to a
+repo extracts strings; translations are done in the GlotPress UI; Traduttore builds language packs and
+exposes a TranslationsPress API; this site consumes them at deploy time via
+`inpsyde/wp-translation-downloader`.
+
+The only translation config in this repo is `composer.json` →
+`extra.wp-translation-downloader.api.names`, mapping each apermo package to
+`https://translate.chrdm.de/glotpress/api/translations/<slug>` (note the `/glotpress/` base). Third-party
+plugins and core still translate from wp.org. Locales: **`de_DE` only**.
+
+Approved translations go live **only on a deploy** — rebuild the pack and run
+`gh workflow run deploy.yml`. Full architecture, server config, onboarding steps, WP-CLI commands, and
+gotchas are in **[docs/translations.md](docs/translations.md)**.
+
 ## Development Setup
 
 ```bash
