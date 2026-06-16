@@ -30,8 +30,8 @@ chrdm.de deploy: composer install
 
 ## Consumer wiring (the only translation code in this repo)
 
-`composer.json` → `extra.wp-translation-downloader.api.names` maps each apermo package to the Traduttore
-endpoint; everything else still comes from wp.org:
+`composer.json` → `extra.wp-translation-downloader.api.names` maps a package to the Traduttore endpoint;
+everything else still comes from wp.org. **Today only the `sovereignty` theme is wired here:**
 
 ```json
 "wp-translation-downloader": {
@@ -39,13 +39,15 @@ endpoint; everything else still comes from wp.org:
   "directory": "web/app/languages",
   "api": {
     "names": {
-      "apermo/sovereignty":   "https://translate.chrdm.de/glotpress/api/translations/sovereignty",
-      "apermo/apermo-stash":  "https://translate.chrdm.de/glotpress/api/translations/apermo-stash",
-      "apermo/apermo-notify": "https://translate.chrdm.de/glotpress/api/translations/apermo-notify"
+      "apermo/sovereignty": "https://translate.chrdm.de/glotpress/api/translations/sovereignty"
     }
   }
 }
 ```
+
+The plugins (`apermo-stash`, `apermo-notify`) are **not** wired here yet — they're onboarded separately
+(build-time via this same `api.names` map, #90) and will more likely self-consume on any install via the
+runtime Traduttore Registry (next section; #102, #103). Add an entry per package as each is onboarded.
 
 The endpoint includes the **`/glotpress/`** base — the bare `/api/translations/…` path is a 404. After
 changing `api.names`, run `composer install` locally and commit `composer.lock` (the `extra` block only
