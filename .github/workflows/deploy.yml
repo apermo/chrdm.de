@@ -108,7 +108,7 @@ jobs:
       - name: Deploy via rsync
         uses: burnett01/rsync-deployments@8.0.5
         with:
-          switches: -avzr --delay-updates --delete-delay --chmod=D755,F644 --exclude='.env' --exclude='web/app/uploads/' --exclude='web/.htaccess'
+          switches: -avzr --delay-updates --delete-delay --chmod=D755,F644 --exclude='.env' --exclude='web/app/uploads/' --exclude='web/app/cache/' --exclude='web/.htaccess'
           path: build/
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
@@ -126,9 +126,12 @@ jobs:
           script: |
             set -eu
             cd ${{ secrets.DEPLOY_PATH }}
-            if [ -d "web/app/cache" ]; then
-              rm -rf web/app/cache/*
-            fi
+            # Cachify HDD method writes static page cache to web/app/cache. The
+            # dir is rsync-excluded so it survives deploys, but rsync does not
+            # invalidate it, so clear stale entries here. Ensure it exists so
+            # the cache-dir prune below has a target on a fresh server.
+            mkdir -p web/app/cache
+            rm -rf web/app/cache/*
             # performant-translations loads a compiled .l10n.php in preference
             # to the .mo. A stale .l10n.php from a previous build survives the
             # deploy and shadows the freshly downloaded translations, so the
@@ -149,10 +152,10 @@ jobs:
             # web/.htaccess is rsync-excluded but still locked to 444 here on
             # purpose (it falls under the find); runtime permalink rewrites need
             # a manual unlock — see the trade-off in .gemini/styleguide.md.
-            # When adding file-based object/page caching, whitelist the cache
-            # dir here the same way uploads/ is handled — see issue #33.
-            find . -path ./web/app/uploads -prune -o -name .env -prune -o -type d -exec chmod 555 {} +
-            find . -path ./web/app/uploads -prune -o -name .env -prune -o -type f -exec chmod 444 {} +
+            # web/app/cache holds the Cachify HDD page cache and must stay
+            # owner-writable at runtime, so it is pruned like uploads/ (#33).
+            find . -path ./web/app/uploads -prune -o -path ./web/app/cache -prune -o -name .env -prune -o -type d -exec chmod 555 {} +
+            find . -path ./web/app/uploads -prune -o -path ./web/app/cache -prune -o -name .env -prune -o -type f -exec chmod 444 {} +
             # AutoSSL/Let's Encrypt renews certs via HTTP DCV by creating
             # web/.well-known/acme-challenge and dropping a token there. The
             # read-only hardening above locks .well-known to 555, so the write
