@@ -2036,7 +2036,7 @@
         },
         {
             "name": "wpackagist-plugin/wpdeepl",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wpdeepl/",
@@ -2044,7 +2044,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wpdeepl.zip?timestamp=1772628435"
+                "url": "https://downloads.wordpress.org/plugin/wpdeepl.zip?timestamp=1781596947"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
