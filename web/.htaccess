@@ -9,6 +9,48 @@ RewriteRule ^([_0-9a-zA-Z-]+/)?files/(.+) wp-includes/ms-files.php?file=$2 [L]
 # Add trailing slash to /wp-admin
 RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
 
+# Cachify HDD method: serve the static page cache before WordPress boots.
+# The absolute cache path is prod-specific and this file is rsync-excluded, so
+# the live copy on the server is authoritative and maintained manually; this
+# block is kept here for parity. Only matches GET requests for text/html with
+# no query string and no auth cookie, so ActivityPub (application/activity+json)
+# falls through to PHP.
+# BEGIN CACHIFY
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+
+  # set hostname directory
+  RewriteCond %{HTTPS} on
+  RewriteRule .* - [E=CACHIFY_HOST:https-%{HTTP_HOST}]
+  RewriteCond %{HTTPS} off
+  RewriteRule .* - [E=CACHIFY_HOST:%{HTTP_HOST}]
+
+  # set subdirectory
+  RewriteCond %{REQUEST_URI} /$
+  RewriteRule .* - [E=CACHIFY_DIR:%{REQUEST_URI}]
+  RewriteCond %{REQUEST_URI} ^$
+  RewriteRule .* - [E=CACHIFY_DIR:/]
+
+  # gzip
+  RewriteRule .* - [E=CACHIFY_SUFFIX:]
+  <IfModule mod_mime.c>
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteRule .* - [E=CACHIFY_SUFFIX:.gz]
+    AddType text/html .gz
+    AddEncoding gzip .gz
+  </IfModule>
+
+  # Main Rules
+  RewriteCond %{HTTP_ACCEPT} .*text/html.*
+  RewriteCond %{REQUEST_METHOD} GET
+  RewriteCond %{QUERY_STRING} ^$
+  RewriteCond %{REQUEST_URI} !^/(wp-admin|wp-content/cache)/.*
+  RewriteCond %{HTTP_COOKIE} !(wp-postpass|wordpress_logged_in|comment_author)_
+  RewriteCond /home/neeehgky/chrdm-bedrock/web/app/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} -f
+  RewriteRule ^(.*) /app/cache/cachify/%{ENV:CACHIFY_HOST}%{ENV:CACHIFY_DIR}index.html%{ENV:CACHIFY_SUFFIX} [L]
+</IfModule>
+# END CACHIFY
+
 # WordPress front controller
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
