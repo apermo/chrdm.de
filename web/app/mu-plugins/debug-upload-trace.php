@@ -8,7 +8,10 @@ namespace Apermo\DebugUploadTrace;
 
 use function Sentry\captureMessage;
 
-add_filter( 'wp_generate_attachment_metadata', __NAMESPACE__ . '\\start', 1, 2 );
+// `add_attachment` fires before metadata generation, so begin() arms the timer
+// and the fatal handler *before* sub-size generation; `wp_generate_attachment_metadata`
+// is a filter on the result and fires only after all sizes succeed.
+add_action( 'add_attachment', __NAMESPACE__ . '\\begin', 1, 1 );
 add_filter( 'image_make_intermediate_size', __NAMESPACE__ . '\\after_size', 9999, 1 );
 add_filter( 'wp_generate_attachment_metadata', __NAMESPACE__ . '\\finish', 9999, 2 );
 
@@ -59,24 +62,18 @@ function to_sentry( string $message ): void {
 }
 
 /**
- * Marks the start of metadata generation and arms the fatal-error reporter.
+ * Starts the timer and arms the fatal-error reporter before sub-size generation.
  *
- * The value is typed `mixed` rather than `array`: this is a filter callback,
- * so a misbehaving callback earlier in the chain could pass a non-array, and a
- * strict hint would then crash the very uploads this plugin exists to diagnose.
- *
- * @param mixed $metadata      Attachment metadata being generated.
- * @param int   $attachment_id Attachment post ID.
- * @return mixed Unmodified attachment metadata.
+ * @param int $attachment_id Attachment post ID.
  */
-function start( mixed $metadata, int $attachment_id ): mixed {
+function begin( int $attachment_id ): void {
 	$GLOBALS['_dut_start']              = \microtime( true );
 	$GLOBALS['_dut_current_attachment'] = $attachment_id;
 	$file                               = get_attached_file( $attachment_id );
 
 	trace(
 		\sprintf(
-			'START att=%d file=%s sapi=%s max_exec=%s mem_limit=%s',
+			'BEGIN att=%d file=%s sapi=%s max_exec=%s mem_limit=%s',
 			$attachment_id,
 			\basename( (string) $file ),
 			\php_sapi_name(),
@@ -85,16 +82,14 @@ function start( mixed $metadata, int $attachment_id ): mixed {
 		),
 	);
 
-	// Fires only on a normal PHP shutdown — i.e. a PHP-level fatal (timeout or
-	// memory exhaustion), NOT an external SIGKILL. Register once per request so
-	// bulk (multi-attachment) requests don't log/alert the fatal more than once.
+	// report_fatal() fires only on a normal PHP shutdown — i.e. a PHP-level
+	// fatal (timeout or memory exhaustion), NOT an external SIGKILL. Register
+	// once per request so bulk (multi-attachment) requests don't double-report.
 	static $registered = false;
 	if ( ! $registered ) {
 		\register_shutdown_function( __NAMESPACE__ . '\\report_fatal' );
 		$registered = true;
 	}
-
-	return $metadata;
 }
 
 /**
