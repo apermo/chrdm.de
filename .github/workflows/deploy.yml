@@ -44,7 +44,7 @@ jobs:
         run: composer install --no-dev --optimize-autoloader --prefer-dist
 
       - name: Build sovereignty theme assets
-        uses: apermo/sovereignty/.github/actions/build@v2.0.0
+        uses: apermo/sovereignty/.github/actions/build@v2.0.1
         with:
           working-directory: web/app/themes/sovereignty
 
