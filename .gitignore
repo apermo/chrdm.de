@@ -32,6 +32,7 @@
 !/web/app/mu-plugins/sentry-admin-context.php
 !/web/app/mu-plugins/traduttore-content-dir.php
 !/web/app/mu-plugins/disable-hum-legacy-ftl.php
+!/web/app/mu-plugins/debug-upload-trace.php
 
 # Uploads
 /web/app/uploads/*
