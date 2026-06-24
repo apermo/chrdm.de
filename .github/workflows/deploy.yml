@@ -33,7 +33,7 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -106,7 +106,7 @@ jobs:
             find . -path ./web/app/uploads -prune -o -type d -exec chmod u+w {} +
 
       - name: Deploy via rsync
-        uses: burnett01/rsync-deployments@8.0.5
+        uses: burnett01/rsync-deployments@v9
         with:
           switches: -avzr --delay-updates --delete-delay --chmod=D755,F644 --exclude='.env' --exclude='web/app/uploads/' --exclude='web/app/cache/' --exclude='web/.htaccess'
           path: build/
