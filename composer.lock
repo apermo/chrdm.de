@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "603d9270479a995e4d876a75dc88e79a",
+    "content-hash": "44a4b0cccffcce83c2a34321d74498e1",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1970,15 +1970,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "27.9",
+            "version": "28.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/27.9"
+                "reference": "tags/28.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.27.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
