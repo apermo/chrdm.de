@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44a4b0cccffcce83c2a34321d74498e1",
+    "content-hash": "d71c45be61f78127cb4f099302a98b41",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1700,15 +1700,15 @@
         },
         {
             "name": "wpackagist-plugin/friends",
-            "version": "4.2.0",
+            "version": "4.2.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/friends/",
-                "reference": "tags/4.2.0"
+                "reference": "tags/4.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/friends.4.2.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/friends.4.2.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1718,15 +1718,15 @@
         },
         {
             "name": "wpackagist-plugin/gatherpress",
-            "version": "0.33.3",
+            "version": "0.34.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/gatherpress/",
-                "reference": "tags/0.33.3"
+                "reference": "tags/0.34.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.33.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.34.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1862,15 +1862,15 @@
         },
         {
             "name": "wpackagist-plugin/redirection",
-            "version": "5.8.1",
+            "version": "5.9.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/redirection/",
-                "reference": "tags/5.8.1"
+                "reference": "tags/5.9.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/redirection.5.8.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/redirection.5.9.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
