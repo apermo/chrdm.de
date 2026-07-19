@@ -33,6 +33,7 @@
 !/web/app/mu-plugins/traduttore-content-dir.php
 !/web/app/mu-plugins/disable-hum-legacy-ftl.php
 !/web/app/mu-plugins/debug-upload-trace.php
+!/web/app/mu-plugins/rest-hardening.php
 
 # Uploads
 /web/app/uploads/*
