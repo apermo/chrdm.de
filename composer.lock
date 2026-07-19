@@ -109,16 +109,16 @@
         },
         {
             "name": "apermo/sovereignty",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/sovereignty.git",
-                "reference": "88657678532bae58c6674f88d97e94a09a2a2f4d"
+                "reference": "f9ebf00291ab922f4953f4ad9716291e0bc9b601"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/88657678532bae58c6674f88d97e94a09a2a2f4d",
-                "reference": "88657678532bae58c6674f88d97e94a09a2a2f4d",
+                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/f9ebf00291ab922f4953f4ad9716291e0bc9b601",
+                "reference": "f9ebf00291ab922f4953f4ad9716291e0bc9b601",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +208,7 @@
                 "issues": "https://github.com/apermo/sovereignty/issues",
                 "source": "https://github.com/apermo/sovereignty"
             },
-            "time": "2026-06-21T21:31:03+00:00"
+            "time": "2026-07-19T10:56:14+00:00"
         },
         {
             "name": "composer/installers",
@@ -2080,16 +2080,16 @@
     "packages-dev": [
         {
             "name": "apermo/apermo-coding-standards",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-coding-standards.git",
-                "reference": "61f264eb411bb1a4ca581ca6c60740426596a85e"
+                "reference": "2521e46501553863a78c893fd121811064acce7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/61f264eb411bb1a4ca581ca6c60740426596a85e",
-                "reference": "61f264eb411bb1a4ca581ca6c60740426596a85e",
+                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/2521e46501553863a78c893fd121811064acce7c",
+                "reference": "2521e46501553863a78c893fd121811064acce7c",
                 "shasum": ""
             },
             "require": {
@@ -2098,8 +2098,8 @@
                 "php": ">=7.4",
                 "phpcompatibility/phpcompatibility-wp": "^2.1",
                 "slevomat/coding-standard": "^8.0",
-                "squizlabs/php_codesniffer": "^3.10",
-                "wp-coding-standards/wpcs": "^3.0",
+                "squizlabs/php_codesniffer": "^3.13.5",
+                "wp-coding-standards/wpcs": "^3.4",
                 "yoast/yoastcs": "^3.0"
             },
             "require-dev": {
@@ -2148,7 +2148,7 @@
                 "issues": "https://github.com/apermo/apermo-coding-standards/issues",
                 "source": "https://github.com/apermo/apermo-coding-standards"
             },
-            "time": "2026-05-02T12:32:03+00:00"
+            "time": "2026-07-17T17:10:33+00:00"
         },
         {
             "name": "automattic/vipwpcs",
@@ -4185,16 +4185,16 @@
         },
         {
             "name": "wp-coding-standards/wpcs",
-            "version": "3.3.0",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "7795ec6fa05663d716a549d0b44e47ffc8b0d4a6"
+                "reference": "469c18ceab4d642b15bad4c65ebf3b307bfd55ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/7795ec6fa05663d716a549d0b44e47ffc8b0d4a6",
-                "reference": "7795ec6fa05663d716a549d0b44e47ffc8b0d4a6",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/469c18ceab4d642b15bad4c65ebf3b307bfd55ab",
+                "reference": "469c18ceab4d642b15bad4c65ebf3b307bfd55ab",
                 "shasum": ""
             },
             "require": {
@@ -4204,8 +4204,8 @@
                 "ext-xmlreader": "*",
                 "php": ">=7.2",
                 "phpcsstandards/phpcsextra": "^1.5.0",
-                "phpcsstandards/phpcsutils": "^1.1.0",
-                "squizlabs/php_codesniffer": "^3.13.4"
+                "phpcsstandards/phpcsutils": "^1.2.2",
+                "squizlabs/php_codesniffer": "^3.13.5"
             },
             "require-dev": {
                 "php-parallel-lint/php-console-highlighter": "^1.0.0",
@@ -4247,7 +4247,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-11-25T12:08:04+00:00"
+            "time": "2026-07-16T13:05:29+00:00"
         },
         {
             "name": "yoast/yoastcs",
