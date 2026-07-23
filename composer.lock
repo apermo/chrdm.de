@@ -1538,15 +1538,15 @@
         },
         {
             "name": "wpackagist-plugin/activitypub",
-            "version": "9.0.2",
+            "version": "9.1.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/activitypub/",
-                "reference": "tags/9.0.2"
+                "reference": "tags/9.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/activitypub.9.0.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/activitypub.9.1.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1682,15 +1682,15 @@
         },
         {
             "name": "wpackagist-plugin/embed-privacy",
-            "version": "1.12.4",
+            "version": "1.13.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/embed-privacy/",
-                "reference": "tags/1.12.4"
+                "reference": "tags/1.13.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/embed-privacy.1.12.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/embed-privacy.1.13.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1718,15 +1718,15 @@
         },
         {
             "name": "wpackagist-plugin/gatherpress",
-            "version": "0.34.0",
+            "version": "0.34.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/gatherpress/",
-                "reference": "tags/0.34.0"
+                "reference": "tags/0.34.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.34.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.34.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1970,15 +1970,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "28.0",
+            "version": "28.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/28.0"
+                "reference": "tags/28.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
