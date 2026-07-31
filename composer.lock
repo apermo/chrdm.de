@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d71c45be61f78127cb4f099302a98b41",
+    "content-hash": "f252bdc341920468359d8e9685adea4c",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1898,15 +1898,15 @@
         },
         {
             "name": "wpackagist-plugin/statify",
-            "version": "1.8.5",
+            "version": "2.0.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/statify/",
-                "reference": "tags/1.8.5"
+                "reference": "tags/2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/statify.1.8.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/statify.2.0.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"

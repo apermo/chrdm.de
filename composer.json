@@ -49,7 +49,7 @@
     "apermo/apermo-stash": "^0.2.0",
     "apermo/apermo-notify": "^0.1.1",
     "inpsyde/wp-translation-downloader": "^2.6",
-    "wpackagist-plugin/statify": "^1.8",
+    "wpackagist-plugin/statify": "^2.0",
     "wpackagist-plugin/performant-translations": "^1.2",
     "wpackagist-plugin/wp-sentry-integration": "^8.11",
     "wpackagist-plugin/glotpress": "^4.0",
