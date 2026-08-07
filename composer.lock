@@ -1538,15 +1538,15 @@
         },
         {
             "name": "wpackagist-plugin/activitypub",
-            "version": "9.1.0",
+            "version": "9.2.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/activitypub/",
-                "reference": "tags/9.1.0"
+                "reference": "tags/9.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/activitypub.9.1.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/activitypub.9.2.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1898,15 +1898,15 @@
         },
         {
             "name": "wpackagist-plugin/statify",
-            "version": "2.0.0",
+            "version": "2.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/statify/",
-                "reference": "tags/2.0.0"
+                "reference": "tags/2.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/statify.2.0.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/statify.2.0.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1970,15 +1970,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "28.1",
+            "version": "28.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/28.1"
+                "reference": "tags/28.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
