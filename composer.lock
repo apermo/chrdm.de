@@ -1538,15 +1538,15 @@
         },
         {
             "name": "wpackagist-plugin/activitypub",
-            "version": "9.2.1",
+            "version": "9.2.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/activitypub/",
-                "reference": "tags/9.2.1"
+                "reference": "tags/9.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/activitypub.9.2.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/activitypub.9.2.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1682,15 +1682,15 @@
         },
         {
             "name": "wpackagist-plugin/embed-privacy",
-            "version": "1.13.0",
+            "version": "1.14.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/embed-privacy/",
-                "reference": "tags/1.13.0"
+                "reference": "tags/1.14.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/embed-privacy.1.13.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/embed-privacy.1.14.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -2080,16 +2080,16 @@
     "packages-dev": [
         {
             "name": "apermo/apermo-coding-standards",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/apermo-coding-standards.git",
-                "reference": "ee9c5c2802dea835324c8f2608bd57eb12cf5205"
+                "reference": "5250ddab5b041cefb163cba71e0e62136e842533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/ee9c5c2802dea835324c8f2608bd57eb12cf5205",
-                "reference": "ee9c5c2802dea835324c8f2608bd57eb12cf5205",
+                "url": "https://api.github.com/repos/apermo/apermo-coding-standards/zipball/5250ddab5b041cefb163cba71e0e62136e842533",
+                "reference": "5250ddab5b041cefb163cba71e0e62136e842533",
                 "shasum": ""
             },
             "require": {
@@ -2098,7 +2098,7 @@
                 "php": ">=7.4",
                 "phpcompatibility/phpcompatibility-wp": "^2.1",
                 "slevomat/coding-standard": "^8.0",
-                "squizlabs/php_codesniffer": "^3.13.5",
+                "squizlabs/php_codesniffer": "^3.13.6",
                 "wp-coding-standards/wpcs": "^3.4.1",
                 "yoast/yoastcs": "^3.0"
             },
@@ -2148,7 +2148,7 @@
                 "issues": "https://github.com/apermo/apermo-coding-standards/issues",
                 "source": "https://github.com/apermo/apermo-coding-standards"
             },
-            "time": "2026-07-29T09:30:49+00:00"
+            "time": "2026-08-12T14:28:48+00:00"
         },
         {
             "name": "automattic/vipwpcs",
@@ -4106,16 +4106,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.13.5",
+            "version": "3.13.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4"
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
                 "shasum": ""
             },
             "require": {
@@ -4181,7 +4181,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-11-04T16:30:35+00:00"
+            "time": "2026-08-06T00:17:32+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
