@@ -1970,15 +1970,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "28.2",
+            "version": "28.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/28.2"
+                "reference": "tags/28.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.3.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -2006,15 +2006,15 @@
         },
         {
             "name": "wpackagist-plugin/wp-sentry-integration",
-            "version": "8.11.1",
+            "version": "8.12.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-sentry-integration/",
-                "reference": "tags/8.11.1"
+                "reference": "tags/8.12.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-sentry-integration.8.11.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/wp-sentry-integration.8.12.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
