@@ -8,8 +8,8 @@
 
 namespace Apermo\MslsDeepl;
 
-use lloc\Msls\MslsBlogCollection;
-use lloc\Msls\MslsRestApi;
+use lloc\Msls\Blog\Collection as MslsBlogCollection;
+use lloc\Msls\RestApi\RestApi as MslsRestApi;
 use Throwable;
 use WP_Post;
 
@@ -32,6 +32,9 @@ class Translator {
 
 	/**
 	 * Replaces the default "From xx:" prefix with DeepL translation.
+	 *
+	 * MSLS registers the prefix callback under its real class name, and ::class
+	 * resolves at compile time, so the pre-3.0 alias would not match here.
 	 */
 	public static function register(): void {
 		remove_filter( 'msls_quick_create_post_data', [ MslsRestApi::class, 'prefix_source_language' ] );
