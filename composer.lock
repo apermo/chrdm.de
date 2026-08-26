@@ -109,16 +109,16 @@
         },
         {
             "name": "apermo/sovereignty",
-            "version": "2.0.2",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apermo/sovereignty.git",
-                "reference": "f9ebf00291ab922f4953f4ad9716291e0bc9b601"
+                "reference": "40ac57e7dfda1cfe2048b8af6af57edb4cc728ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/f9ebf00291ab922f4953f4ad9716291e0bc9b601",
-                "reference": "f9ebf00291ab922f4953f4ad9716291e0bc9b601",
+                "url": "https://api.github.com/repos/apermo/sovereignty/zipball/40ac57e7dfda1cfe2048b8af6af57edb4cc728ce",
+                "reference": "40ac57e7dfda1cfe2048b8af6af57edb4cc728ce",
                 "shasum": ""
             },
             "require": {
@@ -138,7 +138,7 @@
                 "roave/security-advisories": "dev-latest",
                 "szepeviktor/phpstan-wordpress": "^2.0",
                 "wpackagist-plugin/indieweb-post-kinds": "*",
-                "wpackagist-plugin/multisite-language-switcher": "*",
+                "wpackagist-plugin/multisite-language-switcher": "^3.0",
                 "wpackagist-plugin/pwa": "*",
                 "yoast/phpunit-polyfills": "^3.0",
                 "yoast/wordpress-seo": "^27.2"
@@ -208,7 +208,7 @@
                 "issues": "https://github.com/apermo/sovereignty/issues",
                 "source": "https://github.com/apermo/sovereignty"
             },
-            "time": "2026-07-19T10:56:14+00:00"
+            "time": "2026-08-26T05:40:29+00:00"
         },
         {
             "name": "composer/installers",
