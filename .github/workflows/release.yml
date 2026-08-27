@@ -109,4 +109,26 @@ jobs:
           # tag, so the version string and the tag-only jobs behave exactly
           # as they do for a hand-pushed tag.
           gh workflow run deploy.yml --ref "$next"
-          echo "Deploy dispatched for $next."
+
+          # `gh workflow run` reports success for the dispatch being accepted,
+          # not for a run actually starting. Without this check a silent no-op
+          # would leave the tag and the GitHub Release in place, this job
+          # green, and nothing deployed — the failure mode hardest to notice.
+          run_id=""
+          for _ in $(seq 1 12); do
+            sleep 5
+            run_id="$(gh run list --workflow deploy.yml --branch "$next" \
+                        --limit 1 --json databaseId --jq '.[0].databaseId // empty')"
+            if [ -n "$run_id" ]; then
+              break
+            fi
+          done
+
+          if [ -z "$run_id" ]; then
+            echo "::error::Deploy dispatch for $next produced no run — $next is tagged but NOT deployed. Re-run the Deploy workflow against the tag."
+            echo "**$next is tagged but not deployed** — the deploy dispatch produced no run." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          echo "Deploy run $run_id started for $next."
+          echo "Deploy run [$run_id]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run_id) started." >> "$GITHUB_STEP_SUMMARY"
