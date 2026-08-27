@@ -114,6 +114,16 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist
 
+      - name: Build sovereignty theme assets
+        # The theme ships no style.css — it is compiled from src/ by this
+        # action, so WordPress cannot activate the theme without it. Running
+        # the same pinned action the deploy uses also means a sovereignty
+        # release whose asset build breaks now fails the merge rather than
+        # the deploy.
+        uses: apermo/sovereignty/.github/actions/build@v2.0.2
+        with:
+          working-directory: web/app/themes/sovereignty
+
       - name: Write CI environment
         run: |
           set -eu
