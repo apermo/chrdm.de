@@ -9,8 +9,11 @@
   "timezone": "Europe/Berlin",
   "labels": ["dependencies"],
   "rangeStrategy": "update-lockfile",
+  "platformAutomerge": true,
+  "automergeStrategy": "merge",
   "packageRules": [
     {
+      "description": "Default: batch into one PR for manual review. Later rules pull the whitelisted subset out into its own automerging PR.",
       "matchManagers": ["composer"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "Composer minor + patch"
@@ -27,6 +30,99 @@
       "matchPackageNames": ["roots/wordpress", "roots/wordpress-no-content"],
       "groupName": "WordPress {{newMajor}}.{{newMinor}}",
       "labels": ["dependencies", "wordpress-core"]
+    },
+
+    {
+      "description": "Tier B — patch-only automerge for everything visitor-facing or privacy-critical. Bugfix releases are safe; feature releases get read by a human. minimumReleaseAge lets a bad plugin release be superseded before it can ever auto-deploy.",
+      "matchManagers": ["composer"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "Automerged dependencies",
+      "automerge": true,
+      "minimumReleaseAge": "3 days",
+      "labels": ["dependencies", "automerge"]
+    },
+    {
+      "description": "Tier A — minor + patch automerge. First-party code (reviewed, tested and released upstream by us, written for this site), bootstrap libraries, WordPress Performance Team plugins, admin-only utilities and low-blast-radius plugins. Includes the sovereignty build-action pin so it cannot drift from the sovereignty package.",
+      "matchPackageNames": [
+        "apermo/sovereignty",
+        "apermo/apermo-stash",
+        "apermo/apermo-notify",
+        "apermo/apermo-coding-standards",
+        "composer/installers",
+        "vlucas/phpdotenv",
+        "oscarotero/env",
+        "roots/bedrock-autoloader",
+        "roots/bedrock-disallow-indexing",
+        "roots/wp-config",
+        "inpsyde/wp-translation-downloader",
+        "wpackagist-plugin/performance-lab",
+        "wpackagist-plugin/webp-uploads",
+        "wpackagist-plugin/dominant-color-images",
+        "wpackagist-plugin/speculation-rules",
+        "wpackagist-plugin/performant-translations",
+        "wpackagist-plugin/optimum-gravatar-cache",
+        "wpackagist-plugin/duplicate-post",
+        "wpackagist-plugin/when-last-login",
+        "wpackagist-plugin/wp-test-email",
+        "wpackagist-plugin/individual-multisite-author",
+        "wpackagist-plugin/progress-planner",
+        "wpackagist-plugin/hum",
+        "wpackagist-plugin/code-block-pro",
+        "wpackagist-theme/twentytwentyfive"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Automerged dependencies",
+      "automerge": true,
+      "minimumReleaseAge": "3 days",
+      "labels": ["dependencies", "automerge"]
+    },
+    {
+      "description": "Runner tooling — a bad bump fails CI loudly and never reaches production. Kept out of the manual GitHub Actions group so that group never mixes automerging and non-automerging updates in one PR.",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["actions/**", "shivammathur/setup-php"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "Automerged dependencies",
+      "automerge": true,
+      "minimumReleaseAge": "3 days",
+      "labels": ["dependencies", "automerge"]
+    },
+    {
+      "description": "WordPress core patches are security releases validated by millions of installs within hours, so they wait a day rather than three. Kept in their own group so the wordpress-core label and the shorter age actually apply; core minor bumps stay manual.",
+      "matchPackageNames": ["roots/wordpress", "roots/wordpress-no-content"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "WordPress {{newMajor}}.{{newMinor}}",
+      "automerge": true,
+      "minimumReleaseAge": "1 day",
+      "labels": ["dependencies", "wordpress-core", "automerge"]
+    },
+
+    {
+      "description": "Never automerge: two-factor and wp-force-login can lock us out or expose a subsite; gatherpress is 0.x, where a minor is a breaking release. Forced back into the manual group so they never ride along in an automerging PR.",
+      "matchPackageNames": [
+        "wpackagist-plugin/two-factor",
+        "wpackagist-plugin/wp-force-login",
+        "wpackagist-plugin/gatherpress"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Composer minor + patch",
+      "automerge": false,
+      "labels": ["dependencies"]
+    },
+    {
+      "description": "Never automerge the deploy path. The rsync call carries --delete-delay, so a behaviour change there can delete production files.",
+      "matchPackageNames": [
+        "appleboy/ssh-action",
+        "burnett01/rsync-deployments",
+        "getsentry/action-release"
+      ],
+      "groupName": "GitHub Actions",
+      "automerge": false,
+      "labels": ["dependencies"]
+    },
+    {
+      "description": "Never automerge a major, anywhere.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }

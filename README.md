@@ -57,6 +57,12 @@ git tag v1.2.3 -m "release notes"
 git push origin v1.2.3
 ```
 
+Dependency-only batches release themselves. The `Release` workflow runs every morning just after
+Renovate's merge window, and if everything on `main` since the last tag is a `chore(deps)` commit it
+cuts the next **patch** tag and dispatches the deploy. Any other commit on `main` makes it skip with a
+warning, so your own work always goes out through the manual tag above. That split means a `vX.Y.Z`
+patch tag is dependencies only, while `vX.Y.0` is a hand-cut release.
+
 The workflow builds (Composer + theme assets), then deploys to the cPanel host via rsync using an
 unlock → sync → read-only-lock sequence: the deployed code tree is left `555`/`444`, with only
 `web/app/uploads/` writable and `.env` tightened to `600`. See [CLAUDE.md](CLAUDE.md) for details.
