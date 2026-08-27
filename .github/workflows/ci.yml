@@ -179,8 +179,26 @@ jobs:
         run: |
           set -eu
           wp theme enable sovereignty --network --activate
-          wp plugin activate --all --network
-          wp plugin list --status=active-network --format=count
+
+          # One invocation per plugin, not `--all`: a plugin that redirects on
+          # activation (activitypub does) ends the WP-CLI process, and with
+          # `--all` that silently abandons every plugin after it. Individual
+          # exit codes are ignored for the same reason — the activation may
+          # well have succeeded before the redirect aborted the command — so
+          # the real assertion is that nothing is left inactive afterwards.
+          expected="$(wp plugin list --status=inactive --format=count)"
+          for plugin in $(wp plugin list --status=inactive --field=name); do
+            wp plugin activate "$plugin" --network || true
+          done
+
+          remaining="$(wp plugin list --status=inactive --format=count)"
+          if [ "$remaining" -ne 0 ]; then
+            echo "::error::$remaining of $expected plugins failed to activate"
+            wp plugin list --status=inactive --fields=name,status,version
+            exit 1
+          fi
+          echo "network-activated $expected plugins"
+
           # Bootstrapping WordPress once more surfaces fatals raised by code
           # that only runs after activation (init hooks, option upgrades).
           wp eval 'echo "bootstrap ok\n";'
