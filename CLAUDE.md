@@ -231,6 +231,43 @@ On a tag push (or manual dispatch):
 3. rsync deploys to the production server
 4. Files excluded from sync: `.env`, `web/app/uploads/`, `web/.htaccess`
 
+### Automated Dependency Releases
+
+Renovate merges a whitelisted tier of updates on its own (see
+`.github/renovate.json`), and `.github/workflows/release.yml` turns the batch
+into a release every morning at 06:00 UTC, right after Renovate's
+`before 06:00` Europe/Berlin window.
+
+- It cuts the next **patch** tag, so `vX.Y.Z` means dependencies only and
+  `vX.Y.0` means a hand-cut release. It tags **annotated**, so the dependency
+  list becomes the GitHub Release body.
+- It **skips** whenever any non-`chore(deps)` commit sits on `main` since the
+  last tag. Your own work therefore always ships through the manual tag above —
+  and dependency batches queue behind it until you tag, so don't sit on merged
+  feature work.
+- `workflow_dispatch` accepts a `dry_run` input to see what would be released.
+- The deploy is dispatched rather than triggered by the tag push, because a tag
+  pushed with `GITHUB_TOKEN` does not fire a `push` trigger.
+
+Automerge requires `allow_auto_merge` on the repo and the `Smoke Test` check in
+`main`'s required contexts. The whitelist tiers and the reasoning behind each
+exclusion are documented inline in `.github/renovate.json`.
+
+### CI Checks
+
+Three required checks gate `main`:
+
+| Check | What it does |
+|-------|--------------|
+| `Validate` | `composer validate --strict` + `php -l` over every tracked PHP file |
+| `Security Check` | `composer audit` |
+| `Smoke Test` | Installs a real multisite, builds the theme, activates every plugin, serves the tree and asserts the front page, login and admin respond with no PHP fatal |
+
+`Smoke Test` is what makes automerge defensible — it is the only check that
+catches a dependency update that fatals at runtime. `Security Check` goes red
+when a new advisory lands anywhere in the tree, unrelated to the diff, which
+also stalls automerge until the advisory clears.
+
 ### cPanel Document Root
 
 The deploy lands at `DEPLOY_PATH` (e.g. `/path/to/project`). The document
