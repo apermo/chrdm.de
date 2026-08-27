@@ -64,7 +64,35 @@ jobs:
         run: composer install --prefer-dist
 
       - name: Check for security vulnerabilities
-        run: composer audit
+        run: |
+          set -uo pipefail
+          # Packagist's advisory API intermittently answers HTTP 500, which
+          # composer reports as a failed download rather than a finding. As a
+          # required check that turns an upstream hiccup into a blocked merge
+          # — and now into a stalled Renovate automerge batch — so it is
+          # retried rather than trusted first time.
+          #
+          # Retrying on *any* failure, not just a transport error: a real
+          # advisory simply fails all three attempts and still fails the step,
+          # which keeps the check honest without depending on composer's exit
+          # codes or error wording staying stable across versions.
+          for attempt in 1 2 3; do
+            # Status captured straight off composer, not out of an `if`:
+            # inside `if composer audit; then` the following $? is the `if`
+            # statement's own result, which is always 0 and would let a real
+            # advisory exit the step green.
+            composer audit
+            status=$?
+            if [ "$status" -eq 0 ]; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "::warning::composer audit failed (exit $status), attempt $attempt of 3 — retrying"
+              sleep $(( attempt * 15 ))
+            fi
+          done
+          echo "::error::composer audit failed three times (last exit $status)"
+          exit "$status"
 
   smoke:
     name: Smoke Test
