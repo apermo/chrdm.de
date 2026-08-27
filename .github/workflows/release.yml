@@ -1,0 +1,112 @@
+name: Release
+
+on:
+  schedule:
+    # 06:00 UTC — 08:00 CEST / 07:00 CET, just after Renovate's
+    # "before 06:00" Europe/Berlin window has merged the night's batch.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Report what would be released without creating a tag.
+        type: boolean
+        default: false
+
+concurrency:
+  # Never race a manual `git push --tags`.
+  group: release
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  release:
+    name: Cut dependency release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          # Always release from main, whatever ref a manual dispatch used.
+          ref: main
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Cut tag and trigger deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          last="$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*')"
+          range="$last..HEAD"
+          echo "Last release: $last"
+
+          if [ "$(git rev-list --count --no-merges "$range")" -eq 0 ]; then
+            echo "Nothing new since \`$last\`." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          # The safety guard: this workflow only ever ships batches Renovate
+          # produced. Anything else on main is your work, and stays yours to
+          # release — the process degrades to the manual `git tag` path.
+          human="$(git log --no-merges --format='%s' "$range" | grep -cv '^chore(deps)' || true)"
+          if [ "$human" -gt 0 ]; then
+            {
+              echo "### Release skipped"
+              echo
+              echo "$human non-dependency commit(s) on \`main\` since \`$last\`. Tag manually:"
+              echo
+              git log --no-merges --format='- %s' "$range" | grep -v '^- chore(deps)'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::Human changes on main since $last — release manually."
+            exit 0
+          fi
+
+          # Automated dependency releases take the patch digit; minor stays
+          # reserved for hand-cut feature releases, so any x.y.Z tag is known
+          # to contain nothing but dependency bumps.
+          core="${last#v}"
+          rest="${core#*.}"
+          next="v${core%%.*}.${rest%%.*}.$(( ${rest#*.} + 1 ))"
+
+          if git rev-parse -q --verify "refs/tags/$next" >/dev/null; then
+            echo "::error::$next already exists"
+            exit 1
+          fi
+
+          {
+            echo "Automated dependency release."
+            echo
+            git log --no-merges --format='- %s' "$range"
+          } > "$RUNNER_TEMP/notes.md"
+
+          {
+            echo "### $next"
+            echo
+            cat "$RUNNER_TEMP/notes.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            echo "Dry run — no tag created." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Annotated, so deploy.yml's `release` job reuses this body as the
+          # GitHub Release notes instead of falling back to --generate-notes.
+          git tag -a "$next" -F "$RUNNER_TEMP/notes.md"
+          git push origin "$next"
+
+          # A tag pushed with GITHUB_TOKEN does not fire deploy.yml's
+          # `push: tags` trigger — GitHub suppresses recursive workflow
+          # triggers. workflow_dispatch is the documented exception, and
+          # dispatching against the tag ref keeps github.ref pointing at the
+          # tag, so the version string and the tag-only jobs behave exactly
+          # as they do for a hand-pushed tag.
+          gh workflow run deploy.yml --ref "$next"
+          echo "Deploy dispatched for $next."
