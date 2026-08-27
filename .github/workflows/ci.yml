@@ -210,7 +210,12 @@ jobs:
             wp plugin list --status=inactive --fields=name,status,version
             exit 1
           fi
-          echo "network-activated $expected plugins"
+          echo "activated $expected plugins"
+
+          # wp-force-login exists to bounce anonymous visitors to wp-login.php,
+          # so the front page cannot be checked anonymously while it is on. It
+          # is activated above first, so an activation fatal is still caught.
+          wp plugin deactivate wp-force-login
 
           # Bootstrapping WordPress once more surfaces fatals raised by code
           # that only runs after activation (init hooks, option upgrades).
@@ -239,10 +244,13 @@ jobs:
 
           fail=0
           check() {
-            code=$(curl -s -o "$RUNNER_TEMP/body.html" -w '%{http_code}' "$1")
+            code=$(curl -s -o "$RUNNER_TEMP/body.html" \
+                        -D "$RUNNER_TEMP/headers.txt" -w '%{http_code}' "$1")
             case "$code" in
               $2) echo "OK   $1 -> $code" ;;
-              *)  echo "::error::$1 returned $code, expected $2"; fail=1 ;;
+              *)  echo "::error::$1 returned $code, expected $2"
+                  grep -i '^location:' "$RUNNER_TEMP/headers.txt" || true
+                  fail=1 ;;
             esac
             # WordPress swallows fatals into a generic error page that can
             # still answer 200, so the body has to be checked as well.
