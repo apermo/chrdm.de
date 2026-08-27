@@ -120,7 +120,7 @@ jobs:
         # the same pinned action the deploy uses also means a sovereignty
         # release whose asset build breaks now fails the merge rather than
         # the deploy.
-        uses: apermo/sovereignty/.github/actions/build@v2.0.2
+        uses: apermo/sovereignty/.github/actions/build@v2.1.0
         with:
           working-directory: web/app/themes/sovereignty
 
