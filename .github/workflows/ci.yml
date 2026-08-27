@@ -187,6 +187,19 @@ jobs:
           # well have succeeded before the redirect aborted the command — so
           # the real assertion is that nothing is left inactive afterwards.
           expected="$(wp plugin list --status=inactive --format=count)"
+
+          # Activated on the network's main site, not network-wide. Network
+          # plugins are included before wp_cookie_constants() runs, and
+          # several of these call wp_get_current_user() at include time, which
+          # fatals on an undefined AUTH_COOKIE. Per-site activation loads them
+          # in the normal active_plugins phase, which is how they run in
+          # production and on almost every real install.
+          for plugin in $(wp plugin list --status=inactive --field=name); do
+            wp plugin activate "$plugin" || true
+          done
+
+          # Whatever refused is declared Network-only in its header, so it can
+          # only be activated the other way.
           for plugin in $(wp plugin list --status=inactive --field=name); do
             wp plugin activate "$plugin" --network || true
           done
