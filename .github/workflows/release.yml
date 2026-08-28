@@ -2,9 +2,14 @@ name: Release
 
 on:
   schedule:
-    # 06:00 UTC — 08:00 CEST / 07:00 CET, just after Renovate's
-    # "before 06:00" Europe/Berlin window has merged the night's batch.
-    - cron: '0 6 * * *'
+    # Just after Renovate's "before 06:00" Europe/Berlin window has merged
+    # the night's batch. Deliberately off the top of the hour: GitHub delays
+    # or silently drops schedule events under load, and :00 is the most
+    # contended slot — the first '0 6 * * *' firing never ran at all.
+    - cron: '23 6 * * *'   # 08:23 CEST / 07:23 CET
+    # Second attempt, so one dropped firing does not cost a day's release.
+    # Free when the first already ran: the guard finds nothing new and exits.
+    - cron: '23 9 * * *'   # 11:23 CEST / 10:23 CET
   workflow_dispatch:
     inputs:
       dry_run:
