@@ -66,10 +66,12 @@
       "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
     },
     {
+      "name": "apermo/sovereignty",
       "type": "vcs",
       "url": "https://github.com/apermo/sovereignty"
     },
     {
+      "name": "apermo/apermo-coding-standards",
       "type": "vcs",
       "url": "https://github.com/apermo/apermo-coding-standards"
     }
