@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60bc11d93cf94cbe5b55924a023d79bf",
+    "content-hash": "eb727a5e4e26d00d182619a2f1788847",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1816,7 +1816,7 @@
         },
         {
             "name": "wpackagist-plugin/basepress",
-            "version": "2.17.0.2",
+            "version": "2.17.0.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/basepress/",
@@ -1824,7 +1824,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/basepress.zip?timestamp=1768285739"
+                "url": "https://downloads.wordpress.org/plugin/basepress.zip?timestamp=1786508732"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
