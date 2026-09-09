@@ -1780,15 +1780,15 @@
         },
         {
             "name": "wpackagist-plugin/activitypub",
-            "version": "9.2.2",
+            "version": "9.3.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/activitypub/",
-                "reference": "tags/9.2.2"
+                "reference": "tags/9.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/activitypub.9.2.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/activitypub.9.3.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1942,15 +1942,15 @@
         },
         {
             "name": "wpackagist-plugin/friends",
-            "version": "4.2.1",
+            "version": "4.3.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/friends/",
-                "reference": "tags/4.2.1"
+                "reference": "tags/4.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/friends.4.2.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/friends.4.3.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -2212,15 +2212,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "28.3",
+            "version": "28.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/28.3"
+                "reference": "tags/28.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.4.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
