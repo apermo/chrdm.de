@@ -235,8 +235,14 @@ On a tag push (or manual dispatch):
 
 Renovate merges a whitelisted tier of updates on its own (see
 `.github/renovate.json`), and `.github/workflows/release.yml` turns the batch
-into a release every morning at 06:00 UTC, right after Renovate's
-`before 06:00` Europe/Berlin window.
+into a release.
+
+It fires when the `CI` workflow completes successfully on `main`, so a release
+follows a merge within minutes. The two `schedule` crons are only a fallback
+for a merge whose CI run never reported — GitHub creates scheduled runs three
+to six hours after the cron, which is why they are not the primary trigger.
+Batching does not depend on them: Renovate's `before 06:00` Europe/Berlin
+window and its group rules collapse the night's updates into one PR.
 
 - It cuts the next **patch** tag, so `vX.Y.Z` means dependencies only and
   `vX.Y.0` means a hand-cut release. It tags **annotated**, so the dependency

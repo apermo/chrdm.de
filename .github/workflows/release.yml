@@ -1,14 +1,22 @@
 name: Release
 
 on:
+  # Primary trigger. GitHub creates scheduled runs 3-6 hours after the cron
+  # (measured: created_at equals run_started_at, and the job itself finishes
+  # in seconds, so the lateness is GitHub's scheduler, not our queue). Firing
+  # off CI instead releases within minutes of a merge.
+  #
+  # This does not weaken batching: Renovate is the batcher, not this cron. Its
+  # "before 06:00" schedule and group rules collapse the night's updates into
+  # one PR, so one merge still means one release.
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
   schedule:
-    # Just after Renovate's "before 06:00" Europe/Berlin window has merged
-    # the night's batch. Deliberately off the top of the hour: GitHub delays
-    # or silently drops schedule events under load, and :00 is the most
-    # contended slot — the first '0 6 * * *' firing never ran at all.
+    # Fallback only, for a merge whose CI run never reported. Late is fine
+    # here; the guard makes a redundant firing a no-op.
     - cron: '23 6 * * *'   # 08:23 CEST / 07:23 CET
-    # Second attempt, so one dropped firing does not cost a day's release.
-    # Free when the first already ran: the guard finds nothing new and exits.
     - cron: '23 9 * * *'   # 11:23 CEST / 10:23 CET
   workflow_dispatch:
     inputs:
@@ -29,6 +37,11 @@ jobs:
   release:
     name: Cut dependency release
     runs-on: ubuntu-latest
+    # Never release off a red main. Schedule and manual dispatch carry no
+    # conclusion, so they fall through to the guard in the step below.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
 
     steps:
       - name: Checkout main
