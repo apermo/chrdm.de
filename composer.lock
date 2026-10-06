@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb727a5e4e26d00d182619a2f1788847",
+    "content-hash": "5d91aee233bbf823861118d4b812b56c",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -1910,15 +1910,15 @@
         },
         {
             "name": "wpackagist-plugin/contact-form-7",
-            "version": "6.1.7",
+            "version": "6.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/contact-form-7/",
-                "reference": "tags/6.1.7"
+                "reference": "tags/6.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/contact-form-7.6.1.7.zip"
+                "url": "https://downloads.wordpress.org/plugin/contact-form-7.6.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -2198,15 +2198,15 @@
         },
         {
             "name": "wpackagist-plugin/two-factor",
-            "version": "0.16.0",
+            "version": "0.17.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/two-factor/",
-                "reference": "tags/0.16.0"
+                "reference": "tags/0.17.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/two-factor.0.16.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/two-factor.0.17.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -2252,15 +2252,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "28.5",
+            "version": "28.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/28.5"
+                "reference": "tags/28.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.6.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
