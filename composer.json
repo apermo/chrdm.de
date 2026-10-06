@@ -39,7 +39,7 @@
     "wpackagist-plugin/progress-planner": "^1.9",
     "wpackagist-plugin/speculation-rules": "^1.6",
     "wpackagist-plugin/wpdeepl": "^2.5",
-    "wpackagist-plugin/two-factor": "^0.16",
+    "wpackagist-plugin/two-factor": "^0.17",
     "wpackagist-plugin/wp-test-email": "^1.1",
     "wpackagist-plugin/duplicate-post": "^4.5",
     "wpackagist-plugin/wordpress-seo": "^28.0",
