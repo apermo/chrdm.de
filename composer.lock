@@ -1982,15 +1982,15 @@
         },
         {
             "name": "wpackagist-plugin/friends",
-            "version": "4.3.1",
+            "version": "4.4.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/friends/",
-                "reference": "tags/4.3.1"
+                "reference": "tags/4.4.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/friends.4.3.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/friends.4.4.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -2252,15 +2252,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "28.6",
+            "version": "28.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/28.6"
+                "reference": "tags/28.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.6.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.28.7.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
