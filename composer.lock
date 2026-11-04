@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d91aee233bbf823861118d4b812b56c",
+    "content-hash": "926b4fc0899d26d3f810ec985ba3497b",
     "packages": [
         {
             "name": "apermo/apermo-notify",
@@ -2000,15 +2000,15 @@
         },
         {
             "name": "wpackagist-plugin/gatherpress",
-            "version": "0.35.2",
+            "version": "0.36.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/gatherpress/",
-                "reference": "tags/0.35.2"
+                "reference": "tags/0.36.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.35.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/gatherpress.0.36.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
